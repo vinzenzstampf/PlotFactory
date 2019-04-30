@@ -343,13 +343,13 @@ def selectBins(ch='mem', lep=1, isData=False):
 ######################################################################################
 def map_FR(ch='mem',mode='sfr',isData=True, subtract=False):
 
+    plotDir = makeFolder('map_FR_%s'%ch)
+    sys.stdout = Logger(plotDir + 'map_FR_%s' %ch)
+    print '\n\tplotDir:', plotDir
+
     sfr = False; dfr = False; print '\n\tmode: %s, \tch: %s, \tisData: %s, \tsubtract: %s' %(mode, ch, isData, subtract)
     if mode == 'sfr': sfr = True
     if mode == 'dfr': dfr = True
-
-    plotDir = makeFolder('map_FR_%s'%ch)
-    print '\n\tplotDir:', plotDir
-    sys.stdout = Logger(plotDir + 'map_FR_%s' %ch)
 
     mode021 = False; mode012 = False; mshReg = ''
     cuts_FR_021 = ''; cuts_FR_012 = ''
@@ -936,18 +936,18 @@ def checkTTLratio(ch='mmm',eta_split=True,mode='sfr',dbg=False):
 ###########################################################################################################################################################################################
 def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, verbose=True, output=False, fr=False):
     
-    sfr = False; dfr = False; print '\n\tmode: %s, \tch: %s, \tisData: %s, \tlabel: %s, \tsubtract: %s' %(mode, ch, isData, label, subtract)
-    if mode == 'sfr': sfr = True
-    if mode == 'dfr': dfr = True
     input = 'MC' if isData == False else 'DATA'
 
     oldPlotDir = eos+'plots/DDE/'
-    print '\n\tcopy from: %s' %oldPlotDir
-
     plotDir = makeFolder('closureTest_%s'%ch)
     copyfile(oldPlotDir+'%s_T2Lratio_%s_ptCone_eta.root'%(input,ch), plotDir+'%s_T2Lratio_%s_ptCone_eta.root'%(input,ch) )
-    print '\n\tplotDir:', plotDir
     sys.stdout = Logger(plotDir + 'closureTest_%s' %ch)
+    print '\n\tplotDir:', plotDir
+
+    print '\n\tcopy from: %s' %oldPlotDir
+    sfr = False; dfr = False; print '\n\tmode: %s, \tch: %s, \tisData: %s, \tlabel: %s, \tsubtract: %s' %(mode, ch, isData, label, subtract)
+    if mode == 'sfr': sfr = True
+    if mode == 'dfr': dfr = True
 
     ### PREPARE CUTS AND FILES
     SFR, DFR, dirs = selectCuts(ch)
@@ -1021,7 +1021,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
     ### PREPARE TREES
     t = None
     t = rt.TChain('tree')
-#    t.Add(DYBB_dir + suffix)
+    #t.Add(DYBB_dir + suffix)
 #    t.Add(DY10_dir + suffix)
 #    t.Add(DY50_dir + suffix)
     t.Add(DY50_ext_dir + suffix)
@@ -1033,10 +1033,12 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
     #fin = rt.TFile(data_B_mem + suffix); tr = fin.Get('tree'); tr.AddFriend('ft = tree', plotDir+'label.root')
 #    t.Add(skim_mem); 
     #t.Add(data_B_mem + suffix)
-    try: t.AddFriend('ftdata = tree', oldPlotDir + 'friend_tree_label_%s_0.root'%ch)
-    except: 
-        makeLabel(data_B_mmm, ch, '0')
-        t.AddFriend('ftdata = tree', oldPlotDir + 'friend_tree_label_%s_0.root'%ch)
+    t.Add(data_B_mmm + suffix)
+    t.AddFriend('ftdata = tree', oldPlotDir + 'friend_tree_label_%s_0.root'%ch)
+    #try: t.AddFriend('ftdata = tree', oldPlotDir + 'friend_tree_label_%s_0.root'%ch)
+    #except: 
+    #    makeLabel(data_B_mmm, ch, '0')
+    #    t.AddFriend('ftdata = tree', oldPlotDir + 'friend_tree_label_%s_0.root'%ch)
     t.AddFriend('ftdy = tree',   oldPlotDir + 'friend_tree_label_%s_1.root'%ch)
     #t.AddFriend('fttt = tree',   oldPlotDir + 'friend_tree_label_%s_2.root'%ch)
 #    t.AddFriend('ft = tree', plotDir+'label.root')
@@ -1063,13 +1065,14 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
     counters_tt   = dict(pckobj_tt)
     sumweights_tt = counters_tt['Sum Norm Weights']
 
-    #DY_SCALE = lumi * xsec_dy / sumweights_dy
-    #print '\n\tlumi: %0.2f, DY: xsec: %0.2f, sumweights: %0.2f, SCALE: %0.2f' %(lumi, xsec_dy, sumweights_dy, DY_SCALE)
+    DY_SCALE = lumi * xsec_dy / sumweights_dy
+    print '\n\tlumi: %0.2f, DY: xsec: %0.2f, sumweights: %0.2f, SCALE: %0.2f' %(lumi, xsec_dy, sumweights_dy, DY_SCALE)
     TT_SCALE = lumi * xsec_tt / sumweights_tt
     print '\n\tlumi: %0.2f, TT: xsec: %0.2f, sumweights: %0.2f, SCALE: %0.2f' %(lumi, xsec_tt, sumweights_tt, TT_SCALE)
 
     ### initialize DF placeholders to avoid empty calls
     dfLNT_021 = None; dfLNTConv_021 = None; dfT_021 = None; dfTdata_021 = None; dfTConv_021 = None
+    dfLNT_012 = None; dfLNTConv_012 = None; dfT_012 = None; dfTdata_012 = None; dfTConv_012 = None
 
     '''PREPARE DATAFRAMES'''
 
@@ -1096,11 +1099,11 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
 
     dfT0_021  = dfL_021.Filter(tight_021)
     dfT_021   = dfT0_021.Define('t_021_evt_wht', 'weight * lhe_weight')
-    dfTTT_021 = dfT_021.Filter('fttt.label == 2')
+    #dfTTT_021 = dfT_021.Filter('fttt.label == 2')
     if isData == True: 
         dfTdata_021 = dfT_021.Filter('ftdata.label == 0')
         if mode021 == True: print '\n\tdata 021 defined.'
-    #if label == True: dfTConv_021 = dfT_021.Filter('ftdy.label == 1 && ( (abs(l1_gen_match_pdgid) != 22 && l1_gen_match_isPromptFinalState == 1) ||  abs(l1_gen_match_pdgid) == 22 )') 
+    if label == True: dfTConv_021 = dfT_021.Filter('ftdy.label == 1 && ( (abs(l1_gen_match_pdgid) != 22 && l1_gen_match_isPromptFinalState == 1) ||  abs(l1_gen_match_pdgid) == 22 )') 
     if mode021 == True: print '\n\ttight df 021 defined.'
 
     if mode021 == True: print '\n\ttight df 021 events:', dfT_021.Count().GetValue()
@@ -1128,7 +1131,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
 
     dfT0_012 = dfL_012.Filter(tight_012)
     dfT_012 = dfT0_012.Define('t_012_evt_wht', 'weight * lhe_weight')
-    dfTTT_012 = dfT_012.Filter('fttt.label == 2')
+    #dfTTT_012 = dfT_012.Filter('fttt.label == 2')
     if isData == True: 
         dfTdata_012 = dfT_012.Filter('run > 1')
         if mode012 == True: print '\n\tdata 012 defined.'
@@ -1176,7 +1179,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
     VARS ['BGM_dimu']   = [len(b_M)-1,      b_M,      'hnl_m_12'       , ';m(l_{1},  l_{2}) [GeV]; Counts'] 
     VARS ['BGM_01']     = [len(b_M)-1,      b_M,      'hnl_m_01'       , ';m(l_{0},  l_{1}) [GeV]; Counts'] 
     VARS ['BGM_02']     = [len(b_M)-1,      b_M,      'hnl_m_02'       , ';m(l_{0},  l_{2}) [GeV]; Counts']
-#    VARS ['dphi_01']    = [len(b_dphi)-1,   b_dphi,   'hnl_dphi_01'    , ';#Delta#Phi(l_{0},  l_{1}); Counts']
+    VARS ['dphi_01']    = [len(b_dphi)-1,   b_dphi,   'hnl_dphi_hnvis0'    , ';#Delta#Phi(l_{0},  l_{1}); Counts']
 
     _H_OBS_012 = OrderedDict();   _H_OBS_021 = OrderedDict();   dfT_021_L  = OrderedDict()
     _H_WHD_012 = OrderedDict();   _H_WHD_021 = OrderedDict();   dfT_012_L  = OrderedDict()   
@@ -1198,7 +1201,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
             dfT_021_L ['data'] = dfTdata_021
             if fr == True: dfLNT_021_L ['FR'] = dfLNTdata_021
         if label == True:  dfT_021_L['Conv'] = dfTConv_021
-        dfT_021_L ['TT'] = dfTTT_021
+        #dfT_021_L ['TT'] = dfTTT_021
         KEYS = dfT_021_L.keys(); keys = dfLNT_021_L.keys()
 
         for v in VARS.keys():
@@ -1219,8 +1222,8 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
         if isData == True:  
             dfT_012_L ['data'] = dfTdata_012
             if fr == True: dfLNT_012_L ['FR'] = dfLNTdata_012
-        #if label == True:  dfT_012_L['Conv'] = dfTConv_012
-        dfT_012_L ['TT'] = dfTTT_012
+        if label == True:  dfT_012_L['Conv'] = dfTConv_012
+        #dfT_012_L ['TT'] = dfTTT_012
         KEYS = dfT_012_L.keys(); keys = dfLNT_012_L.keys()
 
         for v in VARS.keys():
@@ -1321,8 +1324,8 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
                     H_OBS_012[v][DF].SetLineColor(rt.kBlack)
                     H_OBS_012[v][DF].SetMarkerSize(0)
                     H_OBS_012[v][DF].SetMarkerColor(rt.kBlack)
-            H_OBS_012[v]['TT'].Scale(TT_SCALE)  ## SCALING MC
-            whd.Add(H_OBS_012[v]['TT'])
+            #H_OBS_012[v]['TT'].Scale(TT_SCALE)  ## SCALING MC
+            #whd.Add(H_OBS_012[v]['TT'])
             if fr == True:
                 H_OBS_012[v]['Conv'].Scale(DY_SCALE)  ## SCALING MC
                 whd.Add(H_OBS_012[v]['Conv'])
@@ -2058,3 +2061,6 @@ def makeLabel(sample_dir, ch='mmm', lbl='1'):
         bL.push_back(br)
     df.Snapshot('tree', plotDir + 'friend_tree_label_%s_%s.root'%(ch,lbl), bL)
 
+def multiDraw(dataFrameHisto):
+    h = dataFrameHisto.GetPtr()
+    return h
