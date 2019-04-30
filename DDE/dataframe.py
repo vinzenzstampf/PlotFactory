@@ -75,14 +75,14 @@ W_dir_mem       = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_mem/WJetsToLNu/
 W_ext_dir_mem   = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_mem/WJetsToLNu_ext/'
 data_B_mem      = eos+'ntuples/HN3Lv2.0/data/mem/2017B/Single_mu_2017B/'
 ###########################################################################################################################################################################################
-DYBBDir_mmm     = '/work/dezhu/4_production/production_20190411_Bkg_mmm/DYBB_Chunk1/'
-DY50Dir_mmm     = '/work/dezhu/4_production/production_20190411_Bkg_mmm/DYJetsToLL_M50_Chunk1/'
-DY50_extDir_mmm = '/work/dezhu/4_production/production_20190411_Bkg_mmm/DYJetsToLL_M50_ext_Chunk1/'
-DY10Dir_mmm     = '/work/dezhu/4_production/production_20190411_Bkg_mmm/DYJetsToLL_M10to50_Chunk1/'
-TT_dir_mmm      = '/work/dezhu/4_production/production_20190411_Bkg_mmm/TTJets_Chunk1/'  
-W_dir_mmm       = '/work/dezhu/4_production/production_20190411_Bkg_mmm/WJetsToLNu_Chunk1/'
-W_ext_dir_mmm   = '/work/dezhu/4_production/production_20190411_Bkg_mmm/WJetsToLNu_ext_Chunk1/'
-data_B_mmm      = '/work/dezhu/4_production/production_20190412_Data_mmm/ntuples/Single_mu_2017B/Single_mu_2017B/HNLTreeProducer/tree.root'
+DYBBDir_mmm     = '/work/dezhu/4_production/production_20190411_Bkg_mmm/ntuples/DYBB/'
+DY50Dir_mmm     = '/work/dezhu/4_production/production_20190411_Bkg_mmm/ntuples/DYJetsToLL_M50/'
+DY50_extDir_mmm = '/work/dezhu/4_production/production_20190411_Bkg_mmm/ntuples/DYJetsToLL_M50_ext/'
+DY10Dir_mmm     = '/work/dezhu/4_production/production_20190411_Bkg_mmm/ntuples/DYJetsToLL_M10to50/'
+TT_dir_mmm      = '/work/dezhu/4_production/production_20190411_Bkg_mmm/ntuples/TTJets/'  
+W_dir_mmm       = '/work/dezhu/4_production/production_20190411_Bkg_mmm/ntuples/WJetsToLNu/'
+W_ext_dir_mmm   = '/work/dezhu/4_production/production_20190411_Bkg_mmm/ntuples/WJetsToLNu_ext/'
+data_B_mmm      = '/work/dezhu/4_production/production_20190411_Data_mmm/ntuples/Single_mu_2017B/'
 #######################################################################################################################################################################################################
 DYBBDir_eee     = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_eee/partial/DYBB/'
 DY50Dir_eee     = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_eee/partial/DYJetsToLL_M50/'
@@ -209,9 +209,10 @@ DFR_MEM_T   =  DFR_MEM_L + ' && ' + l1_e_tight + ' && ' + l2_m_tight
               ##                 SINGLE FAKE RATE                   ##  
 ###########################################################################################################################################################################################
 ### SFR:: LOOSE CUTS OBTAINED THROUGH CDF HEAVY/LIGHT COMPARISON 
-SFR_MMM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.42 && abs(l1_eta) < 1.2) || (l1_reliso_rho_03 < 0.35 && abs(l1_eta) > 1.2) )'  # dR 03
+#SFR_MMM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.42 && abs(l1_eta) < 1.2) || (l1_reliso_rho_03 < 0.35 && abs(l1_eta) > 1.2) )'  # dR 03
+SFR_MMM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.6 && abs(l1_eta) < 1.2) || (l1_reliso_rho_03 < 0.95 && abs(l1_eta) > 1.2 && abs(l1_eta) < 2.1) || (l1_reliso_rho_03 < 0.4 && abs(l1_eta) > 2.1) )'  # dR 03 (29.4.19)
 #SFR_MEM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.6  && abs(l1_eta) < 0.8) || (l1_reliso_rho_03 < 0.35 && abs(l1_eta) > 0.8) )'  # dR 03
-SFR_MEM_L_CUT = ' && ( (l1_reliso_rho_04 < 0.4  && abs(l1_eta) < 0.8) || (l1_reliso_rho_04 < 0.7 && abs(l1_eta) > 0.8 && abs(l1_eta) < 1.479) || (l1_reliso_rho_04 < 0.3 && abs(l1_eta) > 1.479) )'  # dR 04
+#SFR_MEM_L_CUT = ' && ( (l1_reliso_rho_04 < 0.4  && abs(l1_eta) < 0.8) || (l1_reliso_rho_04 < 0.7 && abs(l1_eta) > 0.8 && abs(l1_eta) < 1.479) || (l1_reliso_rho_04 < 0.3 && abs(l1_eta) > 1.479) )'  # dR 04
 
 ### DY - SELECTION
 ### SFR::MMM 
@@ -352,8 +353,7 @@ def map_FR(ch='mem',mode='sfr',isData=True, subtract=False):
 
     mode021 = False; mode012 = False; mshReg = ''
     cuts_FR_021 = ''; cuts_FR_012 = ''
-    input = 'MC'
-    if isData == True: input = 'DATA'
+    input = 'MC' if isData == False else 'DATA'
 
     ### PREPARE CUTS AND FILES
     SFR, DFR, dirs = selectCuts(ch)
@@ -394,14 +394,6 @@ def map_FR(ch='mem',mode='sfr',isData=True, subtract=False):
             mode012 = True
             cuts_FR_012 = cuts_FR + ' && ' + SFR_EEM_012_L
             tight_021 = SFR_EEM_021_T
-
-        if ch == 'mmm':
-            cuts_FR_012 = cuts_FR + ' && ' + SFR_MMM_012_L
-            cuts_FR_021 = cuts_FR + ' && ' + SFR_MMM_021_L
-            tight_021 = SFR_MMM_021_T
-            tight_012 = SFR_MMM_012_T
-            mode012 = True
-            mode021 = True
 
         if ch == 'mem':
 
@@ -464,8 +456,8 @@ def map_FR(ch='mem',mode='sfr',isData=True, subtract=False):
     ### PREPARE TREES
     t = None
     t = rt.TChain('tree')
-#    t.Add(data_B_mmm)
-    t.Add(data_B_mem + suffix)
+    t.Add(data_B_mmm + suffix)
+#    t.Add(data_B_mem + suffix)
 #    t.Add(DYBB_dir + suffix)
 #    t.Add(DY10_dir + suffix)
 #    t.Add(DY50_dir + suffix)
@@ -492,7 +484,7 @@ def map_FR(ch='mem',mode='sfr',isData=True, subtract=False):
         print '\n\tabs_l1_eta defined.'
         if subtract == True:
             dfLdata_021      = dfL_021.Filter('run > 1')
-            dfLConv_021      = dfL_021.Filter('abs(l1_gen_match_pdgid) == 22 || (abs(l1_gen_match_pdgid) != 22 && l1_gen_match_isPromptFinalState == 1)') 
+            dfLConv_021      = dfL_021.Filter('abs(l1_gen_match_pdgid) == 22 || (abs(l1_gen_match_pdgid) != 22 && l1_gen_match_isPrompt == 1)') 
  
         print '\n\tloose df 021 events:', dfL_021.Count().GetValue()
  
@@ -500,7 +492,7 @@ def map_FR(ch='mem',mode='sfr',isData=True, subtract=False):
         if subtract == True:
             dfTdata_021      = dfT_021.Filter('run > 1')
             print '\n\tdata 021 defined.'
-            dfTConv_021   = dfT_021.Filter('abs(l1_gen_match_pdgid) == 22 || (abs(l1_gen_match_pdgid) != 22 && l1_gen_match_isPromptFinalState == 1)') 
+            dfTConv_021   = dfT_021.Filter('abs(l1_gen_match_pdgid) == 22 || (abs(l1_gen_match_pdgid) != 22 && l1_gen_match_isPrompt == 1)') 
         print '\n\ttight df 021 defined.'
 
         if subtract == False: T_021 = dfT_021; L_021 = dfL_021
@@ -530,7 +522,7 @@ def map_FR(ch='mem',mode='sfr',isData=True, subtract=False):
         print '\n\tabs_l1_eta defined.'
         if subtract == True:
             dfLdata_012      = dfL_012.Filter('run > 1')
-            dfLConv_012      = dfL_012.Filter('abs(l2_gen_match_pdgid) == 22 || (abs(l2_gen_match_pdgid) != 22 && l2_gen_match_isPromptFinalState == 1)') 
+            dfLConv_012      = dfL_012.Filter('abs(l2_gen_match_pdgid) == 22 || (abs(l2_gen_match_pdgid) != 22 && l2_gen_match_isPrompt == 1)') 
  
         print '\n\tloose df 012 events:', dfL_012.Count().GetValue()
  
@@ -538,7 +530,7 @@ def map_FR(ch='mem',mode='sfr',isData=True, subtract=False):
         if subtract == True:
             dfTdata_012      = dfT_012.Filter('run > 1')
             print '\n\tdata 012 defined.'
-            dfTConv_012   = dfT_012.Filter('abs(l2_gen_match_pdgid) == 22 || (abs(l2_gen_match_pdgid) != 22 && l2_gen_match_isPromptFinalState == 1)') 
+            dfTConv_012   = dfT_012.Filter('abs(l2_gen_match_pdgid) == 22 || (abs(l2_gen_match_pdgid) != 22 && l2_gen_match_isPrompt == 1)') 
         print '\n\ttight df 012 defined.'
 
         if subtract == False: T_012 = dfT_012; L_012 = dfL_012
@@ -722,7 +714,7 @@ def checkTTLratio(ch='mmm',eta_split=True,mode='sfr',dbg=False):
             cuts_FR_012 = cuts_FR + ' && ' + SFR_MMM_012_L
             cuts_FR_021 = cuts_FR + ' && ' + SFR_MMM_021_L
             tight_021 = SFR_MMM_021_T
-            tight_012 = SFR_MMM_021_T
+            tight_012 = SFR_MMM_012_T
             mode012 = True
             mode021 = True
 
@@ -743,15 +735,15 @@ def checkTTLratio(ch='mmm',eta_split=True,mode='sfr',dbg=False):
 
     ### PREPARE TREES
     t = None
-#    t = rt.TChain('tree')
+    t = rt.TChain('tree')
 #    t.Add(DYBB_dir + suffix)
 #    t.Add(DY10_dir + suffix)
 #    t.Add(DY50_dir + suffix)
-#    t.Add(DY50_ext_dir + suffix)
+    t.Add(DY50_ext_dir + suffix)
 #    t.Add(TT_dir + suffix)
 #    t.Add(W_dir + suffix)
 #    t.Add(W_ext_dir + suffix)
-    fin = rt.TFile(skim_mem); t = fin.Get('tree')
+    #fin = rt.TFile(skim_mem); t = fin.Get('tree')
     df = rdf(t)
     print'\n\tchain made.'
     N_ENTRIES = df.Count()
@@ -788,7 +780,7 @@ def checkTTLratio(ch='mmm',eta_split=True,mode='sfr',dbg=False):
 
 
     if mode012 == True:
-        cuts_l_021 = cuts_FR_021 + ' && l1_jet_flavour_parton != -99'
+        cuts_l_012 = cuts_FR_012 + ' && l2_jet_flavour_parton != -99'
         f0_012 = df.Filter(cuts_l_012)
         print '\n\tloose 012 defined.'
 
@@ -798,8 +790,8 @@ def checkTTLratio(ch='mmm',eta_split=True,mode='sfr',dbg=False):
 
         dfL_012_flvr = OrderedDict()
         for flvr in ['light', 'heavy']:
-            dfL_012_flvr['light'] = dfL_012.Filter('abs(l1_jet_flavour_parton) != 4 && abs(l1_jet_flavour_parton) != 5')
-            dfL_012_flvr['heavy'] = dfL_012.Filter('abs(l1_jet_flavour_parton) == 4 || abs(l1_jet_flavour_parton) == 5')
+            dfL_012_flvr['light'] = dfL_012.Filter('abs(l2_jet_flavour_parton) != 4 && abs(l2_jet_flavour_parton) != 5')
+            dfL_012_flvr['heavy'] = dfL_012.Filter('abs(l2_jet_flavour_parton) == 4 || abs(l2_jet_flavour_parton) == 5')
         print '\tflavours 012 defined.'
 
         dfL_012_flvr_ita = OrderedDict()
@@ -808,7 +800,7 @@ def checkTTLratio(ch='mmm',eta_split=True,mode='sfr',dbg=False):
             dfL_012_flvr_ita[flvr] = OrderedDict()
             dfT_012_flvr_ita[flvr] = OrderedDict()
             for ita in l_eta.keys():
-                dfL_012_flvr_ita[flvr][ita] = dfL_012_flvr[flvr].Filter(l_eta[ita])
+                dfL_012_flvr_ita[flvr][ita] = dfL_012_flvr[flvr].Filter(re.sub('l1_eta', 'l2_eta', l_eta[ita]))
                 dfT_012_flvr_ita[flvr][ita] = dfL_012_flvr_ita[flvr][ita].Filter(tight_012)
         print '\tloose 012 eta defined.'
         print '\ttight 012 defined.'
@@ -1032,18 +1024,21 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
 #    t.Add(DYBB_dir + suffix)
 #    t.Add(DY10_dir + suffix)
 #    t.Add(DY50_dir + suffix)
-    #t.Add(DY50_ext_dir + suffix)
-    t.Add(TT_dir + suffix)
+    t.Add(DY50_ext_dir + suffix)
+    #t.Add(TT_dir + suffix)
 ##    t.Add(W_dir + suffix)
 #    t.Add(W_ext_dir + suffix)
 #    fin = rt.TFile(skim_mem); t = fin.Get('tree')
 #    fin = rt.TFile(data_B_mmm); t = fin.Get('tree')
     #fin = rt.TFile(data_B_mem + suffix); tr = fin.Get('tree'); tr.AddFriend('ft = tree', plotDir+'label.root')
 #    t.Add(skim_mem); 
-    t.Add(data_B_mem + suffix)
-    t.AddFriend('ftdata = tree', oldPlotDir + 'data_B_mem_friend_tree_label_0.root')
-    #t.AddFriend('ftdy = tree',   oldPlotDir + 'DY50_ext_mem_friend_tree_label_1.root')
-    t.AddFriend('fttt = tree',   oldPlotDir + 'TT_mem_friend_tree_label_2.root')
+    #t.Add(data_B_mem + suffix)
+    try: t.AddFriend('ftdata = tree', oldPlotDir + 'friend_tree_label_%s_0.root'%ch)
+    except: 
+        makeLabel(data_B_mmm, ch, '0')
+        t.AddFriend('ftdata = tree', oldPlotDir + 'friend_tree_label_%s_0.root'%ch)
+    t.AddFriend('ftdy = tree',   oldPlotDir + 'friend_tree_label_%s_1.root'%ch)
+    #t.AddFriend('fttt = tree',   oldPlotDir + 'friend_tree_label_%s_2.root'%ch)
 #    t.AddFriend('ft = tree', plotDir+'label.root')
     df0 = rdf(t)
     df  = df0.Define('_norm_', '1')
@@ -1511,7 +1506,7 @@ class FakeRate(object):
 ######################################################################################
 
 ######################################################################################
-def checkIsoPDF(ch='mmm',ID='No',eta_split=True,mode='sfr',dR='04',fullSplit=False):
+def checkIsoPDF(ch='mmm',ID='No',eta_split=True,mode='sfr',dR='03',fullSplit=False):
 
     sfr = False; dfr = False; print '\n\tmode: %s, \tch: %s' %(mode, ch)
     if mode == 'sfr': sfr = True
@@ -1555,15 +1550,15 @@ def checkIsoPDF(ch='mmm',ID='No',eta_split=True,mode='sfr',dR='04',fullSplit=Fal
 
     ### PREPARE TREES
     t = None
-#    t = rt.TChain('tree')
+    t = rt.TChain('tree')
 #    t.Add(DYBB_dir + suffix)
 #    t.Add(DY10_dir + suffix)
-#    t.Add(DY50_dir + suffix)
-#    t.Add(DY50_ext_dir + suffix)
+    t.Add(DY50_dir + suffix)
+    t.Add(DY50_ext_dir + suffix)
 #    t.Add(TT_dir + suffix)
 ##    t.Add(W_dir + suffix)
 #    t.Add(W_ext_dir + suffix)
-    fin = rt.TFile('/afs/cern.ch/work/m/manzoni/public/forVinzenzDavid/mme_tree.root'); t = fin.Get('tree')
+#    fin = rt.TFile('/afs/cern.ch/work/m/manzoni/public/forVinzenzDavid/mme_tree.root'); t = fin.Get('tree')
     df = rdf(t)
     print'\n\tchain made.'
     N_ENTRIES = df.Count()
@@ -2051,7 +2046,7 @@ def makeFolder(name):
     return plotDir
 
 
-def makeLabel(sample_dir, lbl='1'):
+def makeLabel(sample_dir, ch='mmm', lbl='1'):
     '''create a label (friend) tree for a respective sample
        use the following: data: 0, DY: 1, TT: 2, WJ: 3''' 
     fin = rt.TFile(sample_dir+suffix)
@@ -2061,5 +2056,5 @@ def makeLabel(sample_dir, lbl='1'):
     bL = rt.vector('string')()
     for br in ['event', 'lumi', 'label']:
         bL.push_back(br)
-    df.Snapshot('tree', plotDir + 'friend_tree_label_%s.root'%lbl, bL)
+    df.Snapshot('tree', plotDir + 'friend_tree_label_%s_%s.root'%(ch,lbl), bL)
 
