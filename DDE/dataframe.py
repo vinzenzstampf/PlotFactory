@@ -368,7 +368,7 @@ def map_FR(ch='mem',mode='sfr',isData=True, subtract=False):
     
     mshReg  = 'hnl_w_vis_m > 80'
     mshReg  = '1 == 1'
-    #mshReg  = 'abs(hnl_m_02 - 91.19) < 10'
+    mshReg  = 'abs(hnl_m_01 - 91.19) < 10'
 
     # SCALE MC #TODO PUT THIS IN A FUNCTION
     lumi = 4792.0 #/pb data B
@@ -408,7 +408,7 @@ def map_FR(ch='mem',mode='sfr',isData=True, subtract=False):
                 cuts_FR_021  += ' && l1_gen_match_pdgid != 22 && label == 1'  # DY50 only
 
         if ch == 'mmm':
-            mode021 = True
+#            mode021 = True
             mode012 = True
             b_eta = b_eta_mu
 
@@ -488,11 +488,11 @@ def map_FR(ch='mem',mode='sfr',isData=True, subtract=False):
  
         print '\n\tloose df 021 events:', dfL_021.Count().GetValue()
  
-        dfT_021     = dfL_021.Filter(tight_021)
+        dfT_021 = dfL_021.Filter(tight_021)
         if subtract == True:
-            dfTdata_021      = dfT_021.Filter('run > 1')
+            dfTdata_021 = dfT_021.Filter('run > 1')
             print '\n\tdata 021 defined.'
-            dfTConv_021   = dfT_021.Filter('abs(l1_gen_match_pdgid) == 22 || (abs(l1_gen_match_pdgid) != 22 && l1_gen_match_isPrompt == 1)') 
+            dfTConv_021 = dfT_021.Filter('abs(l1_gen_match_pdgid) == 22 || (abs(l1_gen_match_pdgid) != 22 && l1_gen_match_isPrompt == 1)') 
         print '\n\ttight df 021 defined.'
 
         if subtract == False: T_021 = dfT_021; L_021 = dfL_021
@@ -521,16 +521,16 @@ def map_FR(ch='mem',mode='sfr',isData=True, subtract=False):
         dfL_012 = df0_012.Define('abs_l2_eta', 'abs(l2_eta)')
         print '\n\tabs_l1_eta defined.'
         if subtract == True:
-            dfLdata_012      = dfL_012.Filter('run > 1')
-            dfLConv_012      = dfL_012.Filter('abs(l2_gen_match_pdgid) == 22 || (abs(l2_gen_match_pdgid) != 22 && l2_gen_match_isPrompt == 1)') 
+            dfLdata_012 = dfL_012.Filter('run > 1')
+            dfLConv_012 = dfL_012.Filter('abs(l2_gen_match_pdgid) == 22 || (abs(l2_gen_match_pdgid) != 22 && l2_gen_match_isPrompt == 1)') 
  
         print '\n\tloose df 012 events:', dfL_012.Count().GetValue()
  
-        dfT_012     = dfL_012.Filter(tight_012)
+        dfT_012 = dfL_012.Filter(tight_012)
         if subtract == True:
-            dfTdata_012      = dfT_012.Filter('run > 1')
+            dfTdata_012 = dfT_012.Filter('run > 1')
             print '\n\tdata 012 defined.'
-            dfTConv_012   = dfT_012.Filter('abs(l2_gen_match_pdgid) == 22 || (abs(l2_gen_match_pdgid) != 22 && l2_gen_match_isPrompt == 1)') 
+            dfTConv_012 = dfT_012.Filter('abs(l2_gen_match_pdgid) == 22 || (abs(l2_gen_match_pdgid) != 22 && l2_gen_match_isPrompt == 1)') 
         print '\n\ttight df 012 defined.'
 
         if subtract == False: T_012 = dfT_012; L_012 = dfL_012
@@ -965,8 +965,9 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
     appReg = 'hnl_w_vis_m > 95'
     appReg = '1 == 1'
 
-    cuts_FR = appReg + ' && hnl_dr_12 > 0.3' 
     cuts_FR = appReg # 27_3 FOR CLOSURE TEST LEAVE DR_12 < 0.3 TO SEE WHAT HAPPENS
+    cuts_FR = appReg + ' && hnl_dr_12 > 0.3 && abs(hnl_m_01 - 91.19) < 10'
+    cuts_FR = appReg + ' && hnl_dr_12 > 0.3'
 
     cuts_FR_021 = '1 == 1';    cuts_FR_012 = '1 == 1';    tight_021   = '1 == 1';    tight_012   = '1 == 1'
     lnt_021     = '1 == 1';    lnt_012     = '1 == 1';    ptconel1    = PTCONEL1;    ptconel2    = PTCONEL2
@@ -994,12 +995,15 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
             tight_021 = SFR_EEM_021_T
 
         if ch == 'mmm':
+            b_eta = b_eta_mu
             cuts_FR_012 = cuts_FR + ' && ' + SFR_MMM_012_L
             cuts_FR_021 = cuts_FR + ' && ' + SFR_MMM_021_L
+            lnt_021 = SFR_MMM_021_LNT
+            lnt_012 = SFR_MMM_012_LNT
             tight_021 = SFR_MMM_021_T
-            tight_012 = SFR_MMM_021_T
+            tight_012 = SFR_MMM_012_T
             mode012 = True
-            mode021 = True
+            #mode021 = True for debugging #FIXME 
 
     if dfr: ## FOR DFR NO L1 < -- > L2 IS NEEDED => DRAW EVERYTHING WITH MODE021
 
@@ -1082,7 +1086,8 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
     f0_021 = df.Filter(cuts_l_021)
     if mode021 == True: print '\n\tloose df 021 defined.'
 
-    dfL_021   = f0_021.Define('ptcone021', ptconel1)
+    f1_021    = f0_021.Define('ptcone021', ptconel1)
+    dfL_021   = f1_021.Define('abs_l1_eta', 'abs(l1_eta)')
 
     dfLNT0_021 = dfL_021.Filter(lnt_021)
     dfLNT1_021 = dfLNT0_021.Define('fover1minusf021', selectBins(ch=ch,lep=1,isData=isData))
@@ -1092,7 +1097,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
         if mode021 == True: print '\n\tdata 021 defined.'
     if mode021 == True: print '\n\tweight f/(1-f)  021 defined.'
 
-    if subtract == True: dfLNTConv_021 = dfLNT2_021.Filter('ftdy.label == 1 && ( (abs(l1_gen_match_pdgid) != 22 && l1_gen_match_isPromptFinalState == 1) ||  abs(l1_gen_match_pdgid) == 22 )') 
+    if subtract == True: dfLNTConv_021 = dfLNT2_021.Filter('ftdy.label == 1 && ( (abs(l1_gen_match_pdgid) != 22 && l1_gen_match_isPrompt == 1) ||  abs(l1_gen_match_pdgid) == 22 )') 
     if mode021 == True:  print '\n\tlnt df 021 defined.'
 
     if mode021 == True: print '\n\tlnt df 021 events:', dfLNT0_021.Count().GetValue()
@@ -1103,7 +1108,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
     if isData == True: 
         dfTdata_021 = dfT_021.Filter('ftdata.label == 0')
         if mode021 == True: print '\n\tdata 021 defined.'
-    if label == True: dfTConv_021 = dfT_021.Filter('ftdy.label == 1 && ( (abs(l1_gen_match_pdgid) != 22 && l1_gen_match_isPromptFinalState == 1) ||  abs(l1_gen_match_pdgid) == 22 )') 
+    if label == True: dfTConv_021 = dfT_021.Filter('ftdy.label == 1 && ( (abs(l1_gen_match_pdgid) != 22 && l1_gen_match_isPrompt == 1) ||  abs(l1_gen_match_pdgid) == 22 )') 
     if mode021 == True: print '\n\ttight df 021 defined.'
 
     if mode021 == True: print '\n\ttight df 021 events:', dfT_021.Count().GetValue()
@@ -1114,7 +1119,8 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
     f0_012 = df.Filter(cuts_l_012)
     if mode012 == True: print '\n\tloose df 012 defined.'
 
-    dfL_012   = f0_012.Define('ptcone012', ptconel2)
+    f1_012    = f0_012.Define('ptcone012', ptconel2)
+    dfL_012   = f1_012.Define('abs_l2_eta', 'abs(l2_eta)')
 
     dfLNT0_012 = dfL_012.Filter(lnt_012)
     dfLNT1_012 = dfLNT0_012.Define('fover1minusf012', selectBins(ch=ch,lep=2,isData=isData))
@@ -1124,8 +1130,8 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
         if mode012 == True: print '\n\tdata 012 defined.'
     if mode012 == True: print '\n\tlnt df 012 defined.'
 
-    if subtract == True: dfLNTConv_012 = dfLNT2_012.Filter('(abs(l2_gen_match_pdgid) != 22 && l2_gen_match_isPromptFinalState == 1) ||  abs(l2_gen_match_pdgid) == 22') 
-    if mode012 == True: print '\n\tweight f/(1-f)  012 defined. (without lumi/data normalization)'
+    if subtract == True: dfLNTConv_012 = dfLNT2_012.Filter('ftdy.label == 1 && ( (abs(l2_gen_match_pdgid) != 22 && l2_gen_match_isPrompt == 1) ||  abs(l2_gen_match_pdgid) == 22 )') 
+    if mode012 == True:  print '\n\tweight f/(1-f)  012 defined. (without lumi/data normalization)'
 
     if mode012 == True: print '\n\tlnt df 012 events:', dfLNT0_012.Count().GetValue()
 
@@ -1135,7 +1141,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
     if isData == True: 
         dfTdata_012 = dfT_012.Filter('run > 1')
         if mode012 == True: print '\n\tdata 012 defined.'
-    if label == True: dfTConv_012      = dfT_012.Filter('(abs(l2_gen_match_pdgid) != 22 && l2_gen_match_isPromptFinalState == 1) || abs(l2_gen_match_pdgid) == 22') 
+    if label == True: dfTConv_012 = dfT_012.Filter('ftdy.label == 1 && ( (abs(l2_gen_match_pdgid) != 22 && l2_gen_match_isPrompt == 1) || abs(l2_gen_match_pdgid) == 22 )') 
     if mode012 == True: print '\n\ttight df 012 defined.'
 
     if mode012 == True: print '\n\ttight df 012 events:', dfT_012.Count().GetValue()
@@ -1167,19 +1173,20 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
 
 
     VARS = OrderedDict()
-    VARS ['norm']       = [len(b_N)-1,      b_N,      '_norm_'         , ';Normalisation; Counts'] 
-    VARS ['m_dimu']     = [len(b_m)-1,      b_m,      'hnl_m_12'       , ';m(l_{1},  l_{2}) [GeV]; Counts'] 
-    VARS ['pt']         =  None
-    VARS ['dr_12']      = [len(b_dR)-1,     b_dR,     'hnl_dr_12'      , ';#DeltaR(l_{1},  l_{2}); Counts'] 
-    VARS [ 'dr_01']     = [len(b_dR)-1,     b_dR,     'hnl_dr_01'      , ';#DeltaR(l_{0},  l_{1}); Counts'] 
-    VARS ['m_triL']     = [len(b_M)-1,      b_M,      'hnl_w_vis_m'    , ';m(l_{0},  l_{1},  l_{2}) [GeV]; Counts']
-    VARS [ '2disp_sig'] = [len(b_2d_sig)-1, b_2d_sig, 'hnl_2d_disp_sig', ';2d_disp_sig ; Counts'] 
-    VARS ['nbj']        = [len(b_nbj)-1,    b_nbj,    'nbj'            , ';Number of b-jets; Counts'] 
-    VARS ['2disp']      = [len(b_2d)-1,     b_2d,     'hnl_2d_disp'    , ';2d_disp [cm]; Counts'] 
-    VARS ['BGM_dimu']   = [len(b_M)-1,      b_M,      'hnl_m_12'       , ';m(l_{1},  l_{2}) [GeV]; Counts'] 
-    VARS ['BGM_01']     = [len(b_M)-1,      b_M,      'hnl_m_01'       , ';m(l_{0},  l_{1}) [GeV]; Counts'] 
-    VARS ['BGM_02']     = [len(b_M)-1,      b_M,      'hnl_m_02'       , ';m(l_{0},  l_{2}) [GeV]; Counts']
-    VARS ['dphi_01']    = [len(b_dphi)-1,   b_dphi,   'hnl_dphi_hnvis0'    , ';#Delta#Phi(l_{0},  l_{1}); Counts']
+    VARS ['pt']          =  None
+    VARS ['eta']         =  None
+    VARS ['norm']        = [len(b_N)-1,      b_N,      '_norm_'         , ';Normalisation; Counts'] 
+    VARS ['m_triL']      = [len(b_M)-1,      b_M,      'hnl_w_vis_m'    , ';m(l_{0},  l_{1},  l_{2}) [GeV]; Counts']
+    VARS ['BGM_01']      = [len(b_M)-1,      b_M,      'hnl_m_01'       , ';m(l_{0},  l_{1}) [GeV]; Counts'] 
+    VARS ['BGM_02']      = [len(b_M)-1,      b_M,      'hnl_m_02'       , ';m(l_{0},  l_{2}) [GeV]; Counts']
+    VARS ['m_dilep']     = [len(b_m)-1,      b_m,      'hnl_m_12'       , ';m(l_{1},  l_{2}) [GeV]; Counts'] 
+    VARS ['dr_12']       = [len(b_dR)-1,     b_dR,     'hnl_dr_12'      , ';#DeltaR(l_{1},  l_{2}); Counts'] 
+    VARS ['BGM_dimu']    = [len(b_M)-1,      b_M,      'hnl_m_12'       , ';m(l_{1},  l_{2}) [GeV]; Counts'] 
+    VARS ['nbj']         = [len(b_nbj)-1,    b_nbj,    'nbj'            , ';Number of b-jets; Counts'] 
+    VARS ['2disp']       = [len(b_2d)-1,     b_2d,     'hnl_2d_disp'    , ';2d_disp [cm]; Counts'] 
+    VARS [ 'dr_01']      = [len(b_dR)-1,     b_dR,     'hnl_dr_01'      , ';#DeltaR(l_{0},  l_{1}); Counts'] 
+    VARS [ '2disp_sig']  = [len(b_2d_sig)-1, b_2d_sig, 'hnl_2d_disp_sig', ';2d_disp_sig ; Counts'] 
+    VARS ['dphi_0dilep'] = [len(b_dphi)-1,   b_dphi,   'hnl_dphi_hnvis0', ';#Delta#Phi(l_{0},  l_{1}); Counts']
 
     _H_OBS_012 = OrderedDict();   _H_OBS_021 = OrderedDict();   dfT_021_L  = OrderedDict()
     _H_WHD_012 = OrderedDict();   _H_WHD_021 = OrderedDict();   dfT_012_L  = OrderedDict()   
@@ -1193,7 +1200,8 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
         H_WHD_021[v]  = OrderedDict();  H_WHD_012[v]  = OrderedDict()
     
     if mode021 == True:
-        VARS ['pt'] = [len(b_pt)-1,     b_pt,     'ptcone021'      , ';p_{T}^{cone} [GeV]; Counts']
+        VARS ['pt']  = [len(b_pt)-1,     b_pt,     'ptcone021'      , ';p_{T}^{cone} [GeV]; Counts']
+        VARS ['eta'] = [len(b_eta)-1,    b_eta,    'abs_l1_eta'     , ';|#eta(l_{1})|; Counts']
 
         if fr == True: dfLNT_021_L ['FR'] = dfLNT_021
         if subtract == True: dfLNT_021_L ['Conv'] = dfLNTConv_021
@@ -1215,7 +1223,8 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
                     _H_OBS_021[v][DF] = dfT_021_L[DF].Histo1D(('obs_021_%s_%s'%(v,DF),'obs_021_%s_%s'%(v,DF), VARS[v][0], VARS[v][1]), VARS[v][2], 't_021_evt_wht')
 
     if mode012 == True:
-        VARS ['pt'] = [len(b_pt)-1,     b_pt,     'ptcone012'      , ';p_{T}^{cone} [GeV]; Counts']
+        VARS ['pt']  = [len(b_pt)-1,     b_pt,     'ptcone012'      , ';p_{T}^{cone} [GeV]; Counts']
+        VARS ['eta'] = [len(b_eta)-1,    b_eta,    'abs_l2_eta'     , ';|#eta(l_{2})|; Counts']
 
         if fr == True: dfLNT_012_L ['FR'] = dfLNT_012
         if subtract == True: dfLNT_012_L ['Conv'] = dfLNTConv_012
@@ -1229,11 +1238,11 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
         for v in VARS.keys():
             if fr == True: _H_WHD_012[v]['FR'] = dfLNT_012_L['FR'].Histo1D(('whd_012_%s_FR'%v,'whd_012_%s_FR'%v, VARS[v][0], VARS[v][1]), VARS[v][2], 'lnt_012_evt_wht')
 
-            if subtract == True: _H_WHD_021[v]['Conv'] = dfLNTConv_021.Histo1D(('whd_021_%s_Conv'%v,'whd_021_%s_Conv'%v, VARS[v][0], VARS[v][1]), VARS[v][2], 'lnt_021_evt_wht')
+            if subtract == True: _H_WHD_012[v]['Conv'] = dfLNTConv_012.Histo1D(('whd_012_%s_Conv'%v,'whd_012_%s_Conv'%v, VARS[v][0], VARS[v][1]), VARS[v][2], 'lnt_012_evt_wht')
             if len(KEYS) == 1: _H_OBS_012[v] = dfT_012.Histo1D(('obs_012_%s'%v,'obs_012_%s'%v, VARS[v][0], VARS[v][1]), VARS[v][2], 't_012_evt_wht')
 
             if len(KEYS) > 1:
-                for DF in dfT_021_L.keys():
+                for DF in dfT_012_L.keys():
                     _H_OBS_012[v][DF] = dfT_012_L[DF].Histo1D(('obs_012_%s_%s'%(v,DF),'obs_012_%s_%s'%(v,DF), VARS[v][0], VARS[v][1]), VARS[v][2], 't_012_evt_wht')
 
     for v in VARS.keys():
@@ -2047,7 +2056,6 @@ def makeFolder(name):
     plotDir = plotDir + name + '_' + date + '_' + hour + 'h_' + minit + 'm/'
     os.mkdir(plotDir)
     return plotDir
-
 
 def makeLabel(sample_dir, ch='mmm', lbl='1'):
     '''create a label (friend) tree for a respective sample
