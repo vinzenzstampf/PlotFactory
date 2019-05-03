@@ -419,8 +419,8 @@ def map_FR(ch='mem',mode='sfr',isData=True, subtract=False):
             cuts_FR_012 = cuts_FR + ' && ' + SFR_MMM_012_L 
             cuts_FR_021 = cuts_FR + ' && ' + SFR_MMM_021_L 
 
-            cuts_FR_021 += ' && hnl_dr_01 > 0.3'                                                        # no conversions, only use this to measure t2l ratio 
-            cuts_FR_012 += ' && hnl_dr_02 > 0.3'                                                        # no conversions, only use this to measure t2l ratio 
+            #cuts_FR_021 += ' && hnl_dr_01 > 0.3'                                                        # no conversions, only use this to measure t2l ratio 
+            #cuts_FR_012 += ' && hnl_dr_02 > 0.3'                                                        # no conversions, only use this to measure t2l ratio 
 
             tight_012   = SFR_MMM_012_T
             tight_021   = SFR_MMM_021_T
@@ -461,7 +461,7 @@ def map_FR(ch='mem',mode='sfr',isData=True, subtract=False):
 #    t.Add(DYBB_dir + suffix)
 #    t.Add(DY10_dir + suffix)
 #    t.Add(DY50_dir + suffix)
-    t.Add(DY50_ext_dir + suffix)
+    #t.Add(DY50_ext_dir + suffix)
 #    t.Add(TT_dir + suffix)
 #    t.Add(W_dir + suffix)
 #    t.Add(W_ext_dir + suffix)
@@ -494,6 +494,8 @@ def map_FR(ch='mem',mode='sfr',isData=True, subtract=False):
             print '\n\tdata 021 defined.'
             dfTConv_021 = dfT_021.Filter('abs(l1_gen_match_pdgid) == 22 || (abs(l1_gen_match_pdgid) != 22 && l1_gen_match_isPrompt == 1)') 
         print '\n\ttight df 021 defined.'
+
+        print '\n\ttight df 021 events:', dfT_021.Count().GetValue()
 
         if subtract == False: T_021 = dfT_021; L_021 = dfL_021
         if subtract == True:  
@@ -533,6 +535,8 @@ def map_FR(ch='mem',mode='sfr',isData=True, subtract=False):
             dfTConv_012 = dfT_012.Filter('abs(l2_gen_match_pdgid) == 22 || (abs(l2_gen_match_pdgid) != 22 && l2_gen_match_isPrompt == 1)') 
         print '\n\ttight df 012 defined.'
 
+        print '\n\ttight df 012 events:', dfT_012.Count().GetValue()
+
         if subtract == False: T_012 = dfT_012; L_012 = dfL_012
         if subtract == True:  
             T_012 = dfTdata_012; L_012 = dfLdata_012
@@ -561,7 +565,6 @@ def map_FR(ch='mem',mode='sfr',isData=True, subtract=False):
         h_pt_eta_T_012.Add(h_pt_eta_TConv_012, -1.)
         h_pt_eta_L_012.Add(h_pt_eta_LConv_012, -1.)
       
-
     print '\n\t cuts: %s'                    %cuts_FR
     if mode012 ==True:
         print '\n\t loose 012: %s\n'         %(cuts_FR_012)
@@ -934,7 +937,7 @@ def checkTTLratio(ch='mmm',eta_split=True,mode='sfr',dbg=False):
 ###########################################################################################################################################################################################
 
 ###########################################################################################################################################################################################
-def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, verbose=True, output=False, fr=False):
+def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, verbose=True, output=False, fr=False):
     
     input = 'MC' if isData == False else 'DATA'
 
@@ -945,7 +948,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
     print '\n\tplotDir:', plotDir
 
     print '\n\tcopy from: %s' %oldPlotDir
-    sfr = False; dfr = False; print '\n\tmode: %s, \tch: %s, \tisData: %s, \tlabel: %s, \tsubtract: %s' %(mode, ch, isData, label, subtract)
+    sfr = False; dfr = False; print '\n\tmode: %s, \tch: %s, \tisData: %s, \tCONV: %s, \tsubtract: %s' %(mode, ch, isData, CONV, subtract)
     if mode == 'sfr': sfr = True
     if mode == 'dfr': dfr = True
 
@@ -966,8 +969,8 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
     appReg = '1 == 1'
 
     cuts_FR = appReg # 27_3 FOR CLOSURE TEST LEAVE DR_12 < 0.3 TO SEE WHAT HAPPENS
-    cuts_FR = appReg + ' && hnl_dr_12 > 0.3 && abs(hnl_m_01 - 91.19) < 10'
-    cuts_FR = appReg + ' && hnl_dr_12 > 0.3'
+    #cuts_FR = appReg + ' && hnl_dr_12 > 0.3'
+    #cuts_FR = appReg + ' && hnl_dr_12 > 0.3 && abs(hnl_m_01 - 91.19) < 10'
 
     cuts_FR_021 = '1 == 1';    cuts_FR_012 = '1 == 1';    tight_021   = '1 == 1';    tight_012   = '1 == 1'
     lnt_021     = '1 == 1';    lnt_012     = '1 == 1';    ptconel1    = PTCONEL1;    ptconel2    = PTCONEL2
@@ -1002,8 +1005,8 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
             lnt_012 = SFR_MMM_012_LNT
             tight_021 = SFR_MMM_021_T
             tight_012 = SFR_MMM_012_T
-            mode012 = True
-            #mode021 = True for debugging #FIXME 
+            #mode012 = True
+            mode021 = True 
 
     if dfr: ## FOR DFR NO L1 < -- > L2 IS NEEDED => DRAW EVERYTHING WITH MODE021
 
@@ -1028,7 +1031,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
     #t.Add(DYBB_dir + suffix)
 #    t.Add(DY10_dir + suffix)
 #    t.Add(DY50_dir + suffix)
-    t.Add(DY50_ext_dir + suffix)
+    #t.Add(DY50_ext_dir + suffix)
     #t.Add(TT_dir + suffix)
 ##    t.Add(W_dir + suffix)
 #    t.Add(W_ext_dir + suffix)
@@ -1043,7 +1046,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
     #except: 
     #    makeLabel(data_B_mmm, ch, '0')
     #    t.AddFriend('ftdata = tree', oldPlotDir + 'friend_tree_label_%s_0.root'%ch)
-    t.AddFriend('ftdy = tree',   oldPlotDir + 'friend_tree_label_%s_1.root'%ch)
+    #t.AddFriend('ftdy = tree',   oldPlotDir + 'friend_tree_label_%s_1.root'%ch)
     #t.AddFriend('fttt = tree',   oldPlotDir + 'friend_tree_label_%s_2.root'%ch)
 #    t.AddFriend('ft = tree', plotDir+'label.root')
     df0 = rdf(t)
@@ -1086,15 +1089,20 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
     f0_021 = df.Filter(cuts_l_021)
     if mode021 == True: print '\n\tloose df 021 defined.'
 
+    if mode021 == True: print '\n\tloose df 021 events:', f0_021.Count().GetValue()
+
     f1_021    = f0_021.Define('ptcone021', ptconel1)
     dfL_021   = f1_021.Define('abs_l1_eta', 'abs(l1_eta)')
 
     dfLNT0_021 = dfL_021.Filter(lnt_021)
     dfLNT1_021 = dfLNT0_021.Define('fover1minusf021', selectBins(ch=ch,lep=1,isData=isData))
     dfLNT2_021 = dfLNT1_021.Define('lnt_021_evt_wht', 'fover1minusf021 * weight * lhe_weight')
+    if isData == False: 
+        dfLNT_021 = dfLNT2_021 
+        if mode021 == True: print '\n\tfr mc 021 defined.'
     if isData == True: 
         dfLNTdata_021 = dfLNT2_021.Filter('ftdata.label == 0')
-        if mode021 == True: print '\n\tdata 021 defined.'
+        if mode021 == True: print '\n\tfr data 021 defined.'
     if mode021 == True: print '\n\tweight f/(1-f)  021 defined.'
 
     if subtract == True: dfLNTConv_021 = dfLNT2_021.Filter('ftdy.label == 1 && ( (abs(l1_gen_match_pdgid) != 22 && l1_gen_match_isPrompt == 1) ||  abs(l1_gen_match_pdgid) == 22 )') 
@@ -1105,11 +1113,11 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
     dfT0_021  = dfL_021.Filter(tight_021)
     dfT_021   = dfT0_021.Define('t_021_evt_wht', 'weight * lhe_weight')
     #dfTTT_021 = dfT_021.Filter('fttt.label == 2')
+    if isData == False and mode021 == True: print '\n\ttight mc 021 defined.'
     if isData == True: 
         dfTdata_021 = dfT_021.Filter('ftdata.label == 0')
-        if mode021 == True: print '\n\tdata 021 defined.'
-    if label == True: dfTConv_021 = dfT_021.Filter('ftdy.label == 1 && ( (abs(l1_gen_match_pdgid) != 22 && l1_gen_match_isPrompt == 1) ||  abs(l1_gen_match_pdgid) == 22 )') 
-    if mode021 == True: print '\n\ttight df 021 defined.'
+        if mode021 == True: print '\n\ttight data 021 defined.'
+    if CONV == True: dfTConv_021 = dfT_021.Filter('ftdy.label == 1 && ( (abs(l1_gen_match_pdgid) != 22 && l1_gen_match_isPrompt == 1) ||  abs(l1_gen_match_pdgid) == 22 )') 
 
     if mode021 == True: print '\n\ttight df 021 events:', dfT_021.Count().GetValue()
 
@@ -1119,16 +1127,20 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
     f0_012 = df.Filter(cuts_l_012)
     if mode012 == True: print '\n\tloose df 012 defined.'
 
+    if mode012 == True: print '\n\tloose df 012 events:', f0_012.Count().GetValue()
+
     f1_012    = f0_012.Define('ptcone012', ptconel2)
     dfL_012   = f1_012.Define('abs_l2_eta', 'abs(l2_eta)')
 
     dfLNT0_012 = dfL_012.Filter(lnt_012)
     dfLNT1_012 = dfLNT0_012.Define('fover1minusf012', selectBins(ch=ch,lep=2,isData=isData))
     dfLNT2_012 = dfLNT1_012.Define('lnt_012_evt_wht', 'fover1minusf012 * weight * lhe_weight')
+    if isData == False: 
+        dfLNT_012 = dfLNT2_012 
+        if mode012 == True: print '\n\tlnt mc 012 defined.'
     if isData == True:  
-        dfLNTdata_012 = dfLNT2_012.Filter('run > 1')
-        if mode012 == True: print '\n\tdata 012 defined.'
-    if mode012 == True: print '\n\tlnt df 012 defined.'
+        dfLNTdata_012 = dfLNT2_012.Filter('ftdata.label == 0')
+        if mode012 == True: print '\n\tlnt data 012 defined.'
 
     if subtract == True: dfLNTConv_012 = dfLNT2_012.Filter('ftdy.label == 1 && ( (abs(l2_gen_match_pdgid) != 22 && l2_gen_match_isPrompt == 1) ||  abs(l2_gen_match_pdgid) == 22 )') 
     if mode012 == True:  print '\n\tweight f/(1-f)  012 defined. (without lumi/data normalization)'
@@ -1138,11 +1150,11 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
     dfT0_012 = dfL_012.Filter(tight_012)
     dfT_012 = dfT0_012.Define('t_012_evt_wht', 'weight * lhe_weight')
     #dfTTT_012 = dfT_012.Filter('fttt.label == 2')
+    if isData == False and mode012 == True: print '\n\ttight mc 012 defined.'
     if isData == True: 
-        dfTdata_012 = dfT_012.Filter('run > 1')
-        if mode012 == True: print '\n\tdata 012 defined.'
-    if label == True: dfTConv_012 = dfT_012.Filter('ftdy.label == 1 && ( (abs(l2_gen_match_pdgid) != 22 && l2_gen_match_isPrompt == 1) || abs(l2_gen_match_pdgid) == 22 )') 
-    if mode012 == True: print '\n\ttight df 012 defined.'
+        dfTdata_012 = dfT_012.Filter('ftdata.label == 0')
+        if mode012 == True: print '\n\ttight data 012 defined.'
+    if CONV == True: dfTConv_012 = dfT_012.Filter('ftdy.label == 1 && ( (abs(l2_gen_match_pdgid) != 22 && l2_gen_match_isPrompt == 1) || abs(l2_gen_match_pdgid) == 22 )') 
 
     if mode012 == True: print '\n\ttight df 012 events:', dfT_012.Count().GetValue()
 
@@ -1162,7 +1174,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
         for br in ['event', 'lumi']:
             branchList_021.push_back(br)
             branchList_012.push_back(br)
-        if label == True: branchList_021.push_back('label'); branchList_012.push_back('label')
+        if CONV == True: branchList_021.push_back('label'); branchList_012.push_back('label')
         time_string = ch + '_' + mode + '_' + date + '_' + hour + '_' + minit
         if mode021 == True:
             branchList_021.push_back('fover1minusf021')
@@ -1176,17 +1188,17 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
     VARS ['pt']          =  None
     VARS ['eta']         =  None
     VARS ['norm']        = [len(b_N)-1,      b_N,      '_norm_'         , ';Normalisation; Counts'] 
-    VARS ['m_triL']      = [len(b_M)-1,      b_M,      'hnl_w_vis_m'    , ';m(l_{0},  l_{1},  l_{2}) [GeV]; Counts']
-    VARS ['BGM_01']      = [len(b_M)-1,      b_M,      'hnl_m_01'       , ';m(l_{0},  l_{1}) [GeV]; Counts'] 
-    VARS ['BGM_02']      = [len(b_M)-1,      b_M,      'hnl_m_02'       , ';m(l_{0},  l_{2}) [GeV]; Counts']
-    VARS ['m_dilep']     = [len(b_m)-1,      b_m,      'hnl_m_12'       , ';m(l_{1},  l_{2}) [GeV]; Counts'] 
-    VARS ['dr_12']       = [len(b_dR)-1,     b_dR,     'hnl_dr_12'      , ';#DeltaR(l_{1},  l_{2}); Counts'] 
-    VARS ['BGM_dimu']    = [len(b_M)-1,      b_M,      'hnl_m_12'       , ';m(l_{1},  l_{2}) [GeV]; Counts'] 
-    VARS ['nbj']         = [len(b_nbj)-1,    b_nbj,    'nbj'            , ';Number of b-jets; Counts'] 
-    VARS ['2disp']       = [len(b_2d)-1,     b_2d,     'hnl_2d_disp'    , ';2d_disp [cm]; Counts'] 
-    VARS [ 'dr_01']      = [len(b_dR)-1,     b_dR,     'hnl_dr_01'      , ';#DeltaR(l_{0},  l_{1}); Counts'] 
-    VARS [ '2disp_sig']  = [len(b_2d_sig)-1, b_2d_sig, 'hnl_2d_disp_sig', ';2d_disp_sig ; Counts'] 
-    VARS ['dphi_0dilep'] = [len(b_dphi)-1,   b_dphi,   'hnl_dphi_hnvis0', ';#Delta#Phi(l_{0},  l_{1}); Counts']
+    #VARS ['m_triL']      = [len(b_M)-1,      b_M,      'hnl_w_vis_m'    , ';m(l_{0},  l_{1},  l_{2}) [GeV]; Counts']
+    #VARS ['BGM_01']      = [len(b_M)-1,      b_M,      'hnl_m_01'       , ';m(l_{0},  l_{1}) [GeV]; Counts'] 
+    #VARS ['BGM_02']      = [len(b_M)-1,      b_M,      'hnl_m_02'       , ';m(l_{0},  l_{2}) [GeV]; Counts']
+    #VARS ['m_dilep']     = [len(b_m)-1,      b_m,      'hnl_m_12'       , ';m(l_{1},  l_{2}) [GeV]; Counts'] 
+    #VARS ['dr_12']       = [len(b_dR)-1,     b_dR,     'hnl_dr_12'      , ';#DeltaR(l_{1},  l_{2}); Counts'] 
+    #VARS ['BGM_dimu']    = [len(b_M)-1,      b_M,      'hnl_m_12'       , ';m(l_{1},  l_{2}) [GeV]; Counts'] 
+    #VARS ['nbj']         = [len(b_nbj)-1,    b_nbj,    'nbj'            , ';Number of b-jets; Counts'] 
+    #VARS ['2disp']       = [len(b_2d)-1,     b_2d,     'hnl_2d_disp'    , ';2d_disp [cm]; Counts'] 
+    #VARS [ 'dr_01']      = [len(b_dR)-1,     b_dR,     'hnl_dr_01'      , ';#DeltaR(l_{0},  l_{1}); Counts'] 
+    #VARS [ '2disp_sig']  = [len(b_2d_sig)-1, b_2d_sig, 'hnl_2d_disp_sig', ';2d_disp_sig ; Counts'] 
+    #VARS ['dphi_0dilep'] = [len(b_dphi)-1,   b_dphi,   'hnl_dphi_hnvis0', ';#Delta#Phi(l_{0},  l_{1}); Counts']
 
     _H_OBS_012 = OrderedDict();   _H_OBS_021 = OrderedDict();   dfT_021_L  = OrderedDict()
     _H_WHD_012 = OrderedDict();   _H_WHD_021 = OrderedDict();   dfT_012_L  = OrderedDict()   
@@ -1203,20 +1215,21 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
         VARS ['pt']  = [len(b_pt)-1,     b_pt,     'ptcone021'      , ';p_{T}^{cone} [GeV]; Counts']
         VARS ['eta'] = [len(b_eta)-1,    b_eta,    'abs_l1_eta'     , ';|#eta(l_{1})|; Counts']
 
-        if fr == True: dfLNT_021_L ['FR'] = dfLNT_021
+        if fr == True:       dfLNT_021_L ['FR']   = dfLNT_021
         if subtract == True: dfLNT_021_L ['Conv'] = dfLNTConv_021
+        if isData == False:  dfT_021_L['DY50']    = dfT_021  
         if isData == True:  
             dfT_021_L ['data'] = dfTdata_021
             if fr == True: dfLNT_021_L ['FR'] = dfLNTdata_021
-        if label == True:  dfT_021_L['Conv'] = dfTConv_021
+        if CONV == True:  dfT_021_L['Conv'] = dfTConv_021
         #dfT_021_L ['TT'] = dfTTT_021
         KEYS = dfT_021_L.keys(); keys = dfLNT_021_L.keys()
 
         for v in VARS.keys():
-            if fr == True: _H_WHD_021[v]['FR'] = dfLNT_021_L['FR'].Histo1D(('whd_021_%s_FR'%v,'whd_021_%s_FR'%v, VARS[v][0], VARS[v][1]), VARS[v][2], 'lnt_021_evt_wht')
+            if fr == True:       _H_WHD_021[v]['FR']   = dfLNT_021_L['FR'].Histo1D(('whd_021_%s_FR'%v,'whd_021_%s_FR'%v, VARS[v][0], VARS[v][1]), VARS[v][2], 'lnt_021_evt_wht')
 
             if subtract == True: _H_WHD_021[v]['Conv'] = dfLNTConv_021.Histo1D(('whd_021_%s_Conv'%v,'whd_021_%s_Conv'%v, VARS[v][0], VARS[v][1]), VARS[v][2], 'lnt_021_evt_wht')
-            if len(KEYS) == 1:   _H_OBS_021[v]         = dfT_021.Histo1D(('obs_021_%s'%v,'obs_021_%s'%v, VARS[v][0], VARS[v][1]), VARS[v][2], 't_021_evt_wht')
+            if len(KEYS) == 1:   _H_OBS_021[v]['data'] = dfT_021.Histo1D(('obs_021_%s'%v,'obs_021_%s'%v, VARS[v][0], VARS[v][1]), VARS[v][2], 't_021_evt_wht')
 
             if len(KEYS) > 1:
                 for DF in dfT_021_L.keys():
@@ -1226,20 +1239,21 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
         VARS ['pt']  = [len(b_pt)-1,     b_pt,     'ptcone012'      , ';p_{T}^{cone} [GeV]; Counts']
         VARS ['eta'] = [len(b_eta)-1,    b_eta,    'abs_l2_eta'     , ';|#eta(l_{2})|; Counts']
 
-        if fr == True: dfLNT_012_L ['FR'] = dfLNT_012
+        if fr == True:       dfLNT_012_L ['FR']   = dfLNT_012
         if subtract == True: dfLNT_012_L ['Conv'] = dfLNTConv_012
+        if isData == False:  dfT_012_L['DY50']    = dfT_012  
         if isData == True:  
             dfT_012_L ['data'] = dfTdata_012
             if fr == True: dfLNT_012_L ['FR'] = dfLNTdata_012
-        if label == True:  dfT_012_L['Conv'] = dfTConv_012
+        if CONV == True:  dfT_012_L['Conv'] = dfTConv_012
         #dfT_012_L ['TT'] = dfTTT_012
         KEYS = dfT_012_L.keys(); keys = dfLNT_012_L.keys()
 
         for v in VARS.keys():
-            if fr == True: _H_WHD_012[v]['FR'] = dfLNT_012_L['FR'].Histo1D(('whd_012_%s_FR'%v,'whd_012_%s_FR'%v, VARS[v][0], VARS[v][1]), VARS[v][2], 'lnt_012_evt_wht')
+            if fr == True:       _H_WHD_012[v]['FR']   = dfLNT_012_L['FR'].Histo1D(('whd_012_%s_FR'%v,'whd_012_%s_FR'%v, VARS[v][0], VARS[v][1]), VARS[v][2], 'lnt_012_evt_wht')
 
             if subtract == True: _H_WHD_012[v]['Conv'] = dfLNTConv_012.Histo1D(('whd_012_%s_Conv'%v,'whd_012_%s_Conv'%v, VARS[v][0], VARS[v][1]), VARS[v][2], 'lnt_012_evt_wht')
-            if len(KEYS) == 1: _H_OBS_012[v] = dfT_012.Histo1D(('obs_012_%s'%v,'obs_012_%s'%v, VARS[v][0], VARS[v][1]), VARS[v][2], 't_012_evt_wht')
+            if len(KEYS) == 1:   _H_OBS_012[v]['data'] = dfT_012.Histo1D(('obs_012_%s'%v,'obs_012_%s'%v, VARS[v][0], VARS[v][1]), VARS[v][2], 't_012_evt_wht')
 
             if len(KEYS) > 1:
                 for DF in dfT_012_L.keys():
@@ -1251,8 +1265,8 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
             H_WHD_021[v][df] = rt.TH1F('whd_021_%s_%s'%(v,df),'whd_021_%s_%s'%(v,df), VARS[v][0], VARS[v][1])
 
         if len(KEYS) == 1:
-            H_OBS_012[v] = rt.TH1F('obs_012_%s'%(v),'obs_012_%s'%(v), VARS[v][0], VARS[v][1])           
-            H_OBS_021[v] = rt.TH1F('obs_021_%s'%(v),'obs_021_%s'%(v), VARS[v][0], VARS[v][1])           
+            H_OBS_012[v]['data'] = rt.TH1F('obs_012_%s'%(v),'obs_012_%s'%(v), VARS[v][0], VARS[v][1])           
+            H_OBS_021[v]['data'] = rt.TH1F('obs_021_%s'%(v),'obs_021_%s'%(v), VARS[v][0], VARS[v][1])           
 
         if len(KEYS) > 1:
             for DF in KEYS:
@@ -1262,36 +1276,37 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
         if mode021 == True:
             VARS ['pt'] = [len(b_pt)-1,     b_pt,     'ptcone021'      , ';p_{T}^{cone} [GeV]; Counts']
             if fr == True: 
-                print '\n\tDrawing:', v, 'weighed FR'
+                print '\n\tDrawing: 021', v, 'weighted FR'
                 H_WHD_021[v]['FR']   = _H_WHD_021[v]['FR'].GetPtr()
             if len(keys) > 1:
-                print '\n\tDrawing:', v, 'weighed Conv'
+                print '\n\tDrawing: 021', v, 'weighted Conv'
                 H_WHD_021[v]['Conv'] = _H_WHD_021[v]['Conv'].GetPtr()
-            if len(KEYS) == 1:
-                print '\n\tDrawing:', v, 'tight'
-                H_OBS_021[v] = _H_OBS_021[v].GetPtr()
-            if len(KEYS) > 1:
-                for DF in dfT_021_L.keys():
-                    _H_OBS_021[v][DF] = dfT_021_L[DF].Histo1D(('obs_021_%s_%s'%(v,DF),'obs_021_%s_%s'%(v,DF), VARS[v][0], VARS[v][1]), VARS[v][2], 't_021_evt_wht')
-                    print '\n\tDrawing:', v, DF
-                    H_OBS_021[v][DF]  = _H_OBS_021[v][DF].GetPtr()
+            #if len(KEYS) == 1:
+            #    print '\n\tDrawing:', v, 'tight'
+            #    H_OBS_021[v]['data'] = _H_OBS_021[v]['data'].GetPtr()
+            #if len(KEYS) > 0:
+            sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__; set_trace()
+            for DF in dfT_021_L.keys():
+                _H_OBS_021[v][DF] = dfT_021_L[DF].Histo1D(('obs_021_%s_%s'%(v,DF),'obs_021_%s_%s'%(v,DF), VARS[v][0], VARS[v][1]), VARS[v][2], 't_021_evt_wht')
+                print '\n\tDrawing: 021', v, DF
+                H_OBS_021[v][DF]  = _H_OBS_021[v][DF].GetPtr()
         
         if mode012 == True:
             VARS ['pt'] = [len(b_pt)-1,     b_pt,     'ptcone012'      , ';p_{T}^{cone} [GeV]; Counts']
             if fr == True: 
-                print '\n\tDrawing:', v, 'weighed FR'
+                print '\n\tDrawing: 012', v, 'weighted FR'
                 H_WHD_012[v]['FR']   = _H_WHD_012[v]['FR'].GetPtr()
             if len(keys) > 1:
-                print '\n\tDrawing:', v, 'weighed Conv'
+                print '\n\tDrawing: 012', v, 'weighted Conv'
                 H_WHD_012[v]['Conv'] = _H_WHD_012[v]['Conv'].GetPtr()
-            if len(KEYS) == 1:
-                print '\n\tDrawing:', v, 'tight'
-                H_OBS_012[v] = _H_OBS_012[v].GetPtr()
-            if len(KEYS) > 1:
-                for DF in dfT_012_L.keys():
-                    _H_OBS_012[v][DF] = dfT_012_L[DF].Histo1D(('obs_012_%s_%s'%(v,DF),'obs_012_%s_%s'%(v,DF), VARS[v][0], VARS[v][1]), VARS[v][2], 't_012_evt_wht')
-                    print '\n\tDrawing:', v, DF
-                    H_OBS_012[v][DF]  = _H_OBS_012[v][DF].GetPtr()
+            #if len(KEYS) == 1:
+            #    print '\n\tDrawing:', v, 'tight'
+            #    H_OBS_012[v]['data'] = _H_OBS_012[v]['data'].GetPtr()
+            #if len(KEYS) > 0:
+            for DF in dfT_012_L.keys():
+                _H_OBS_012[v][DF] = dfT_012_L[DF].Histo1D(('obs_012_%s_%s'%(v,DF),'obs_012_%s_%s'%(v,DF), VARS[v][0], VARS[v][1]), VARS[v][2], 't_012_evt_wht')
+                print '\n\tDrawing: 012', v, DF
+                H_OBS_012[v][DF]  = _H_OBS_012[v][DF].GetPtr()
 
         # STACK COLORS            
         col = OrderedDict() 
@@ -1319,38 +1334,44 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
             H_WHD_012[v]['FR'].Add(H_WHD_012[v]['Conv'], -1.)
             if verbose: print '\n\tFR whd entries after subtracting:', H_WHD_012[v]['FR'].GetEntries()
 
-        if label == False:
-            H_OBS_012[v].Add(H_OBS_021[v])
-            obs = H_OBS_012[v]
+        #if CONV == False:
+        #    H_OBS_012[v]['data'].Add(H_OBS_021[v]['data'])
+        #    obs = H_OBS_012[v]['data']
 
-        if label == True:
-            whd = rt.THStack('whd_%s'%v,'whd_%s'%v)
-            
-            for DF in KEYS:
-                H_OBS_012[v][DF].Add(H_OBS_021[v][DF])
-                if not DF == 'DY50' and not DF == 'data':
-                    H_OBS_012[v][DF].SetFillColor(col[DF])
-                    H_OBS_012[v][DF].SetLineColor(rt.kBlack)
-                    H_OBS_012[v][DF].SetMarkerSize(0)
-                    H_OBS_012[v][DF].SetMarkerColor(rt.kBlack)
-            #H_OBS_012[v]['TT'].Scale(TT_SCALE)  ## SCALING MC
-            #whd.Add(H_OBS_012[v]['TT'])
-            if fr == True:
-                H_OBS_012[v]['Conv'].Scale(DY_SCALE)  ## SCALING MC
-                whd.Add(H_OBS_012[v]['Conv'])
-                whd.Add(H_WHD_012[v]['FR'])
+#-->#if CONV == True:
+        whd = rt.THStack('whd_%s'%v,'whd_%s'%v)
+        
+        for DF in KEYS:
+            H_OBS_012[v][DF].Add(H_OBS_021[v][DF])
+            if not DF == 'DY50' and not DF == 'data':
+                H_OBS_012[v][DF].SetFillColor(col[DF])
+                H_OBS_012[v][DF].SetLineColor(rt.kBlack)
+                H_OBS_012[v][DF].SetMarkerSize(0)
+                H_OBS_012[v][DF].SetMarkerColor(rt.kBlack)
+        #H_OBS_012[v]['TT'].Scale(TT_SCALE)  ## SCALING MC
+        #whd.Add(H_OBS_012[v]['TT'])
+#-->#if CONV == True:
+
+        #sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__; set_trace()
+
+        if CONV == True: 
+            H_OBS_012[v]['Conv'].Scale(DY_SCALE)  ## SCALING MC
+            whd.Add(H_OBS_012[v]['Conv'])
+
+        if fr == True:
+            whd.Add(H_WHD_012[v]['FR'])
 
         if v == 'pt':
-            if label == False: n_obs = obs.GetEntries(); n_whd = whd.GetEntries()
-            if label == True: 
-                n_obs = 0; n_whd = 0
-                for DF in KEYS: 
-                    print '\n\t', DF, H_OBS_012[v][DF].GetEntries() 
-                    n_obs += H_OBS_012[v][DF].GetEntries()
-                for df in keys: 
-                    print '\n\t', df, H_WHD_012[v][df].GetEntries() 
-                    n_whd += H_WHD_012[v][df].GetEntries()
-            print '\n\tyields. weighed: %0.2f, observed: %0.2f' %(n_whd, n_obs)
+            #if CONV == False: n_obs = obs.GetEntries(); n_whd = whd.GetEntries()
+            #if CONV == True: 
+            n_obs = 0; n_whd = 0
+            for DF in KEYS: 
+                print '\n\t', DF, H_OBS_012[v][DF].GetEntries() 
+                n_obs += H_OBS_012[v][DF].GetEntries()
+            for df in keys: 
+                print '\n\t', df, H_WHD_012[v][df].GetEntries() 
+                n_whd += H_WHD_012[v][df].GetEntries()
+            print '\n\tyields. weighted: %0.2f, not weighted: %0.2f' %(n_whd, n_obs)
 
         ##SCALING CANVAS
         try:
@@ -1367,9 +1388,9 @@ def closureTest(ch='mmm', mode='sfr', isData=True, label=True, subtract=True, ve
         whd.Draw('histEsame')
         obs.Draw('same')
         leg = rt.TLegend(0.57, 0.78, 0.80, 0.9)
-        if label == False: 
+        if CONV == False: 
             leg.AddEntry(obs, 'observed')
-        if label == True: 
+        if CONV == True: 
             for DF in KEYS:
                 if not DF == 'DY50' and not DF == 'data': leg.AddEntry(H_OBS_012[v][DF], DF)
                 if isData == False:
