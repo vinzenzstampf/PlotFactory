@@ -212,8 +212,9 @@ DFR_MEM_T   =  DFR_MEM_L + ' && ' + l1_e_tight + ' && ' + l2_m_tight
 #SFR_MMM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.42 && abs(l1_eta) < 1.2) || (l1_reliso_rho_03 < 0.35 && abs(l1_eta) > 1.2) )'  # dR 03
 SFR_MMM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.6 && abs(l1_eta) < 1.2) || (l1_reliso_rho_03 < 0.95 && abs(l1_eta) > 1.2 && abs(l1_eta) < 2.1) || (l1_reliso_rho_03 < 0.4 && abs(l1_eta) > 2.1) )'  # dR 03 (29.4.19)
 SFR_MMM_L_CUT = '' #try to see what happens...
-SFR_MMM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.38 && abs(l1_eta) < 1.2) || (l1_reliso_rho_03 < 0.29 && abs(l1_eta) > 1.2 && abs(l1_eta) < 2.1) || (l1_reliso_rho_03 < 0.19 && abs(l1_eta) > 2.1) )'  # dR 03 (6.5.19 including cross dR veto)
+SFR_MMM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.38 && abs(l1_eta) < 1.2) || (l1_reliso_rho_03 < 0.29 && abs(l1_eta) > 1.2 && abs(l1_eta) < 2.1) || (l1_reliso_rho_03 < 0.19 && abs(l1_eta) > 2.1) )'  #dR 03 (6.5.19 incl cross dR veto)
 #SFR_MEM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.6  && abs(l1_eta) < 0.8) || (l1_reliso_rho_03 < 0.35 && abs(l1_eta) > 0.8) )'  # dR 03
+SFR_MEM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.93  && abs(l1_eta) < 0.8) || (l1_reliso_rho_03 < 0.63 && abs(l1_eta) > 0.8 && abs(l1_eta) < 1.479) || (l1_reliso_rho_03 < 0.41 && abs(l1_eta) > 1.479) )' #dR 03 (7.5.19 incl cross dR veto)
 #SFR_MEM_L_CUT = ' && ( (l1_reliso_rho_04 < 0.4  && abs(l1_eta) < 0.8) || (l1_reliso_rho_04 < 0.7 && abs(l1_eta) > 0.8 && abs(l1_eta) < 1.479) || (l1_reliso_rho_04 < 0.3 && abs(l1_eta) > 1.479) )'  # dR 04
 
 ### DY - SELECTION
@@ -233,7 +234,7 @@ SFR_MMM_012_T   =  SFR_MMM_012_L + ' && ' + l2_m_tight
 ### SFR::MEM 
 SFR_MEM_021_L   =  l0_m + ' && ' + l2_m + ' && ' + l1_e_loose 
 SFR_MEM_021_L   += charge_02                                        # opposite charge 
-#SFR_MEM_021_L   += SFR_MEM_L_CUT                                    # reliso bound for LOOSE cf. checkIso_mmm_220319 
+SFR_MEM_021_L   += SFR_MEM_L_CUT                                    # reliso bound for LOOSE cf. checkIso_mmm_220319 
 SFR_MEM_021_LNT =  SFR_MEM_021_L + ' && ' + l1_e_lnt
 SFR_MEM_021_T   =  SFR_MEM_021_L + ' && ' + l1_e_tight 
 
@@ -242,11 +243,11 @@ SFR_MEM_021_T   =  SFR_MEM_021_L + ' && ' + l1_e_tight
 ### SFR::MEM 
 SFR_MEM_012_L   =  l0_m + ' && ' + l1_e + ' && ' + l2_m_loose 
 SFR_MEM_012_L   += charge_01                                        # opposite charge 
+SFR_MEM_012_L   += ' && nbj > 0 && abs(hnl_m_02 - 91.19) > 10'
 SFR_MEM_012_LNT =  SFR_MEM_012_L + ' && ' + l2_m_lnt
 SFR_MEM_012_T   =  SFR_MEM_012_L + ' && ' + l2_m_tight 
 
-SFR_MEM_021_L   += ' && nbj > 0 && abs(hnl_m_02 - 91.19) > 10'
-SFR_MEM_012_L   += ' && nbj > 0'#
+#SFR_MEM_012_L   += ' && nbj > 0'#
 ###########################################################################################################################################################################################
 ### ENERGY-IN-CONE CORRECTED PT
 ###########################################################################################################################################################################################
@@ -260,6 +261,7 @@ b_nbj       = np.arange(0., 10, 1)
 b_N         = np.arange(-0.5, 3.5,1)
 b_pt_std    = np.arange(5.,105,5)
 b_pt        = np.array([ 0., 5., 10., 15., 20., 25., 35., 50., 70.])
+b_pt_mu_sfr = np.array([ 0., 5., 10., 20., 70.])
 b_2d        = np.arange(0., 11, 1)
 b_2d_sig    = np.arange(0., 105, 5)
 b_m         = np.arange(0.,11,1)
@@ -289,13 +291,14 @@ framer.GetYaxis().SetRangeUser(0.,0.5)
 ############################################################################################################################################################################
 def selectBins(ch='mem', lep=1, isData=False):
 
-    input = 'MC'
-    if isData == True: input = 'DATA'
+    input = 'MC' if isData == False else 'DATA'
+    mu_sfr = False
 
     f_in = rt.TFile(plotDir+'%s_T2Lratio_%s_ptCone_eta.root' %(input,ch) )
 
     l_pt   = { '_pt0t5'   : 'ptcone < 5',                  '_pt5t10' : 'ptcone > 5 && ptcone < 10',  '_pt10t15' : 'ptcone > 10 && ptcone < 15', '_pt15t20' : 'ptcone > 15 && ptcone < 20',
-               '_pt20t25' : 'ptcone > 20 && ptcone < 25', '_pt25t35' : 'ptcone > 25 && ptcone < 35', '_pt35t50' : 'ptcone > 35 && ptcone < 50', '_pt50t70' : 'ptcone > 50'}# && ptcone < 70'}
+               '_pt20t25' : 'ptcone > 20 && ptcone < 25', '_pt25t35' : 'ptcone > 25 && ptcone < 35', '_pt35t50' : 'ptcone > 35 && ptcone < 50', '_pt50t70' : 'ptcone > 50',# && ptcone < 70'}
+               '_pt10t20' : 'ptcone > 10 && ptcone < 20', '_pt20t70' : 'ptcone > 20'}
     for i in l_pt.keys(): 
         l_pt[i] = re.sub('ptcone','ptcone021',l_pt[i])
 
@@ -304,6 +307,7 @@ def selectBins(ch='mem', lep=1, isData=False):
 
     if ch == 'mmm':
         l_eta = {'eta_bin_0' : 'abs(l1_eta) < 1.2', 'eta_bin_1' : 'abs(l1_eta) > 1.2 && abs(l1_eta) < 2.1', 'eta_bin_2' : 'abs(l1_eta) > 2.1 && abs(l1_eta) < 2.4'}
+        mu_sfr = True
   
     if lep == 2: 
         for i in l_eta.keys(): 
@@ -314,30 +318,45 @@ def selectBins(ch='mem', lep=1, isData=False):
     c = f_in.Get('ptCone_eta')
     h = c.GetPrimitive('pt_eta_T_012')
 
-    sfr =  '   ({eta00t08} && {pt0t5})   * {eta00t08_pt0t5}'  .format(eta00t08 = l_eta['eta_bin_0'], pt0t5   = l_pt['_pt0t5']  , eta00t08_pt0t5   = h.GetBinContent(1,1)/(1-h.GetBinContent(1,1))) 
-    sfr += ' + ({eta00t08} && {pt5t10})  * {eta00t08_pt5t10}' .format(eta00t08 = l_eta['eta_bin_0'], pt5t10  = l_pt['_pt5t10'] , eta00t08_pt5t10  = h.GetBinContent(2,1)/(1-h.GetBinContent(2,1)))
-    sfr += ' + ({eta00t08} && {pt10t15}) * {eta00t08_pt10t15}'.format(eta00t08 = l_eta['eta_bin_0'], pt10t15 = l_pt['_pt10t15'], eta00t08_pt10t15 = h.GetBinContent(3,1)/(1-h.GetBinContent(3,1)))
-    sfr += ' + ({eta00t08} && {pt15t20}) * {eta00t08_pt15t20}'.format(eta00t08 = l_eta['eta_bin_0'], pt15t20 = l_pt['_pt15t20'], eta00t08_pt15t20 = h.GetBinContent(4,1)/(1-h.GetBinContent(4,1)))
-    sfr += ' + ({eta00t08} && {pt20t25}) * {eta00t08_pt20t25}'.format(eta00t08 = l_eta['eta_bin_0'], pt20t25 = l_pt['_pt20t25'], eta00t08_pt20t25 = h.GetBinContent(5,1)/(1-h.GetBinContent(5,1)))
-    sfr += ' + ({eta00t08} && {pt25t35}) * {eta00t08_pt25t35}'.format(eta00t08 = l_eta['eta_bin_0'], pt25t35 = l_pt['_pt25t35'], eta00t08_pt25t35 = h.GetBinContent(6,1)/(1-h.GetBinContent(6,1)))
-    sfr += ' + ({eta00t08} && {pt35t50}) * {eta00t08_pt35t50}'.format(eta00t08 = l_eta['eta_bin_0'], pt35t50 = l_pt['_pt35t50'], eta00t08_pt35t50 = h.GetBinContent(7,1)/(1-h.GetBinContent(7,1)))
-    sfr += ' + ({eta00t08} && {pt50t70}) * {eta00t08_pt50t70}'.format(eta00t08 = l_eta['eta_bin_0'], pt50t70 = l_pt['_pt50t70'], eta00t08_pt50t70 = h.GetBinContent(8,1)/(1-h.GetBinContent(8,1)))
-    sfr += ' + ({eta08t15} && {pt0t5})   * {eta08t15_pt0t5}'  .format(eta08t15 = l_eta['eta_bin_1'], pt0t5   = l_pt['_pt0t5']  , eta08t15_pt0t5   = h.GetBinContent(1,2)/(1-h.GetBinContent(1,2))) 
-    sfr += ' + ({eta08t15} && {pt5t10})  * {eta08t15_pt5t10}' .format(eta08t15 = l_eta['eta_bin_1'], pt5t10  = l_pt['_pt5t10'] , eta08t15_pt5t10  = h.GetBinContent(2,2)/(1-h.GetBinContent(2,2)))
-    sfr += ' + ({eta08t15} && {pt10t15}) * {eta08t15_pt10t15}'.format(eta08t15 = l_eta['eta_bin_1'], pt10t15 = l_pt['_pt10t15'], eta08t15_pt10t15 = h.GetBinContent(3,2)/(1-h.GetBinContent(3,2)))
-    sfr += ' + ({eta08t15} && {pt15t20}) * {eta08t15_pt15t20}'.format(eta08t15 = l_eta['eta_bin_1'], pt15t20 = l_pt['_pt15t20'], eta08t15_pt15t20 = h.GetBinContent(4,2)/(1-h.GetBinContent(4,2)))
-    sfr += ' + ({eta08t15} && {pt20t25}) * {eta08t15_pt20t25}'.format(eta08t15 = l_eta['eta_bin_1'], pt20t25 = l_pt['_pt20t25'], eta08t15_pt20t25 = h.GetBinContent(5,2)/(1-h.GetBinContent(5,2)))
-    sfr += ' + ({eta08t15} && {pt25t35}) * {eta08t15_pt25t35}'.format(eta08t15 = l_eta['eta_bin_1'], pt25t35 = l_pt['_pt25t35'], eta08t15_pt25t35 = h.GetBinContent(6,2)/(1-h.GetBinContent(6,2)))
-    sfr += ' + ({eta08t15} && {pt35t50}) * {eta08t15_pt35t50}'.format(eta08t15 = l_eta['eta_bin_1'], pt35t50 = l_pt['_pt35t50'], eta08t15_pt35t50 = h.GetBinContent(7,2)/(1-h.GetBinContent(7,2)))
-    sfr += ' + ({eta08t15} && {pt50t70}) * {eta08t15_pt50t70}'.format(eta08t15 = l_eta['eta_bin_1'], pt50t70 = l_pt['_pt50t70'], eta08t15_pt50t70 = h.GetBinContent(8,2)/(1-h.GetBinContent(8,2)))
-    sfr += ' + ({eta15t25} && {pt0t5})   * {eta15t25_pt0t5}'  .format(eta15t25 = l_eta['eta_bin_2'], pt0t5   = l_pt['_pt0t5']  , eta15t25_pt0t5   = h.GetBinContent(1,3)/(1-h.GetBinContent(1,3))) 
-    sfr += ' + ({eta15t25} && {pt5t10})  * {eta15t25_pt5t10}' .format(eta15t25 = l_eta['eta_bin_2'], pt5t10  = l_pt['_pt5t10'] , eta15t25_pt5t10  = h.GetBinContent(2,3)/(1-h.GetBinContent(2,3)))
-    sfr += ' + ({eta15t25} && {pt10t15}) * {eta15t25_pt10t15}'.format(eta15t25 = l_eta['eta_bin_2'], pt10t15 = l_pt['_pt10t15'], eta15t25_pt10t15 = h.GetBinContent(3,3)/(1-h.GetBinContent(3,3)))
-    sfr += ' + ({eta15t25} && {pt15t20}) * {eta15t25_pt15t20}'.format(eta15t25 = l_eta['eta_bin_2'], pt15t20 = l_pt['_pt15t20'], eta15t25_pt15t20 = h.GetBinContent(4,3)/(1-h.GetBinContent(4,3)))
-    sfr += ' + ({eta15t25} && {pt20t25}) * {eta15t25_pt20t25}'.format(eta15t25 = l_eta['eta_bin_2'], pt20t25 = l_pt['_pt20t25'], eta15t25_pt20t25 = h.GetBinContent(5,3)/(1-h.GetBinContent(5,3)))
-    sfr += ' + ({eta15t25} && {pt25t35}) * {eta15t25_pt25t35}'.format(eta15t25 = l_eta['eta_bin_2'], pt25t35 = l_pt['_pt25t35'], eta15t25_pt25t35 = h.GetBinContent(6,3)/(1-h.GetBinContent(6,3)))
-    sfr += ' + ({eta15t25} && {pt35t50}) * {eta15t25_pt35t50}'.format(eta15t25 = l_eta['eta_bin_2'], pt35t50 = l_pt['_pt35t50'], eta15t25_pt35t50 = h.GetBinContent(7,3)/(1-h.GetBinContent(7,3)))
-    sfr += ' + ({eta15t25} && {pt50t70}) * {eta15t25_pt50t70}'.format(eta15t25 = l_eta['eta_bin_2'], pt50t70 = l_pt['_pt50t70'], eta15t25_pt50t70 = h.GetBinContent(8,3)/(1-h.GetBinContent(8,3)))
+    if mu_sfr == False:
+        sfr =  '   ({eta00t08} && {pt0t5})   * {eta00t08_pt0t5}'  .format(eta00t08 = l_eta['eta_bin_0'], pt0t5   = l_pt['_pt0t5']  , eta00t08_pt0t5   = h.GetBinContent(1,1)/(1-h.GetBinContent(1,1))) 
+        sfr += ' + ({eta00t08} && {pt5t10})  * {eta00t08_pt5t10}' .format(eta00t08 = l_eta['eta_bin_0'], pt5t10  = l_pt['_pt5t10'] , eta00t08_pt5t10  = h.GetBinContent(2,1)/(1-h.GetBinContent(2,1)))
+        sfr += ' + ({eta00t08} && {pt10t15}) * {eta00t08_pt10t15}'.format(eta00t08 = l_eta['eta_bin_0'], pt10t15 = l_pt['_pt10t15'], eta00t08_pt10t15 = h.GetBinContent(3,1)/(1-h.GetBinContent(3,1)))
+        sfr += ' + ({eta00t08} && {pt15t20}) * {eta00t08_pt15t20}'.format(eta00t08 = l_eta['eta_bin_0'], pt15t20 = l_pt['_pt15t20'], eta00t08_pt15t20 = h.GetBinContent(4,1)/(1-h.GetBinContent(4,1)))
+        sfr += ' + ({eta00t08} && {pt20t25}) * {eta00t08_pt20t25}'.format(eta00t08 = l_eta['eta_bin_0'], pt20t25 = l_pt['_pt20t25'], eta00t08_pt20t25 = h.GetBinContent(5,1)/(1-h.GetBinContent(5,1)))
+        sfr += ' + ({eta00t08} && {pt25t35}) * {eta00t08_pt25t35}'.format(eta00t08 = l_eta['eta_bin_0'], pt25t35 = l_pt['_pt25t35'], eta00t08_pt25t35 = h.GetBinContent(6,1)/(1-h.GetBinContent(6,1)))
+        sfr += ' + ({eta00t08} && {pt35t50}) * {eta00t08_pt35t50}'.format(eta00t08 = l_eta['eta_bin_0'], pt35t50 = l_pt['_pt35t50'], eta00t08_pt35t50 = h.GetBinContent(7,1)/(1-h.GetBinContent(7,1)))
+        sfr += ' + ({eta00t08} && {pt50t70}) * {eta00t08_pt50t70}'.format(eta00t08 = l_eta['eta_bin_0'], pt50t70 = l_pt['_pt50t70'], eta00t08_pt50t70 = h.GetBinContent(8,1)/(1-h.GetBinContent(8,1)))
+        sfr += ' + ({eta08t15} && {pt0t5})   * {eta08t15_pt0t5}'  .format(eta08t15 = l_eta['eta_bin_1'], pt0t5   = l_pt['_pt0t5']  , eta08t15_pt0t5   = h.GetBinContent(1,2)/(1-h.GetBinContent(1,2))) 
+        sfr += ' + ({eta08t15} && {pt5t10})  * {eta08t15_pt5t10}' .format(eta08t15 = l_eta['eta_bin_1'], pt5t10  = l_pt['_pt5t10'] , eta08t15_pt5t10  = h.GetBinContent(2,2)/(1-h.GetBinContent(2,2)))
+        sfr += ' + ({eta08t15} && {pt10t15}) * {eta08t15_pt10t15}'.format(eta08t15 = l_eta['eta_bin_1'], pt10t15 = l_pt['_pt10t15'], eta08t15_pt10t15 = h.GetBinContent(3,2)/(1-h.GetBinContent(3,2)))
+        sfr += ' + ({eta08t15} && {pt15t20}) * {eta08t15_pt15t20}'.format(eta08t15 = l_eta['eta_bin_1'], pt15t20 = l_pt['_pt15t20'], eta08t15_pt15t20 = h.GetBinContent(4,2)/(1-h.GetBinContent(4,2)))
+        sfr += ' + ({eta08t15} && {pt20t25}) * {eta08t15_pt20t25}'.format(eta08t15 = l_eta['eta_bin_1'], pt20t25 = l_pt['_pt20t25'], eta08t15_pt20t25 = h.GetBinContent(5,2)/(1-h.GetBinContent(5,2)))
+        sfr += ' + ({eta08t15} && {pt25t35}) * {eta08t15_pt25t35}'.format(eta08t15 = l_eta['eta_bin_1'], pt25t35 = l_pt['_pt25t35'], eta08t15_pt25t35 = h.GetBinContent(6,2)/(1-h.GetBinContent(6,2)))
+        sfr += ' + ({eta08t15} && {pt35t50}) * {eta08t15_pt35t50}'.format(eta08t15 = l_eta['eta_bin_1'], pt35t50 = l_pt['_pt35t50'], eta08t15_pt35t50 = h.GetBinContent(7,2)/(1-h.GetBinContent(7,2)))
+        sfr += ' + ({eta08t15} && {pt50t70}) * {eta08t15_pt50t70}'.format(eta08t15 = l_eta['eta_bin_1'], pt50t70 = l_pt['_pt50t70'], eta08t15_pt50t70 = h.GetBinContent(8,2)/(1-h.GetBinContent(8,2)))
+        sfr += ' + ({eta15t25} && {pt0t5})   * {eta15t25_pt0t5}'  .format(eta15t25 = l_eta['eta_bin_2'], pt0t5   = l_pt['_pt0t5']  , eta15t25_pt0t5   = h.GetBinContent(1,3)/(1-h.GetBinContent(1,3))) 
+        sfr += ' + ({eta15t25} && {pt5t10})  * {eta15t25_pt5t10}' .format(eta15t25 = l_eta['eta_bin_2'], pt5t10  = l_pt['_pt5t10'] , eta15t25_pt5t10  = h.GetBinContent(2,3)/(1-h.GetBinContent(2,3)))
+        sfr += ' + ({eta15t25} && {pt10t15}) * {eta15t25_pt10t15}'.format(eta15t25 = l_eta['eta_bin_2'], pt10t15 = l_pt['_pt10t15'], eta15t25_pt10t15 = h.GetBinContent(3,3)/(1-h.GetBinContent(3,3)))
+        sfr += ' + ({eta15t25} && {pt15t20}) * {eta15t25_pt15t20}'.format(eta15t25 = l_eta['eta_bin_2'], pt15t20 = l_pt['_pt15t20'], eta15t25_pt15t20 = h.GetBinContent(4,3)/(1-h.GetBinContent(4,3)))
+        sfr += ' + ({eta15t25} && {pt20t25}) * {eta15t25_pt20t25}'.format(eta15t25 = l_eta['eta_bin_2'], pt20t25 = l_pt['_pt20t25'], eta15t25_pt20t25 = h.GetBinContent(5,3)/(1-h.GetBinContent(5,3)))
+        sfr += ' + ({eta15t25} && {pt25t35}) * {eta15t25_pt25t35}'.format(eta15t25 = l_eta['eta_bin_2'], pt25t35 = l_pt['_pt25t35'], eta15t25_pt25t35 = h.GetBinContent(6,3)/(1-h.GetBinContent(6,3)))
+        sfr += ' + ({eta15t25} && {pt35t50}) * {eta15t25_pt35t50}'.format(eta15t25 = l_eta['eta_bin_2'], pt35t50 = l_pt['_pt35t50'], eta15t25_pt35t50 = h.GetBinContent(7,3)/(1-h.GetBinContent(7,3)))
+        sfr += ' + ({eta15t25} && {pt50t70}) * {eta15t25_pt50t70}'.format(eta15t25 = l_eta['eta_bin_2'], pt50t70 = l_pt['_pt50t70'], eta15t25_pt50t70 = h.GetBinContent(8,3)/(1-h.GetBinContent(8,3)))
+
+    if mu_sfr == True:
+        sfr =  '   ({eta00t08} && {pt0t5})   * {eta00t08_pt0t5}'  .format(eta00t08 = l_eta['eta_bin_0'], pt0t5   = l_pt['_pt0t5']  , eta00t08_pt0t5   = h.GetBinContent(1,1)/(1-h.GetBinContent(1,1))) 
+        sfr += ' + ({eta00t08} && {pt5t10})  * {eta00t08_pt5t10}' .format(eta00t08 = l_eta['eta_bin_0'], pt5t10  = l_pt['_pt5t10'] , eta00t08_pt5t10  = h.GetBinContent(2,1)/(1-h.GetBinContent(2,1)))
+        sfr += ' + ({eta00t08} && {pt10t20}) * {eta00t08_pt10t20}'.format(eta00t08 = l_eta['eta_bin_0'], pt10t20 = l_pt['_pt10t20'], eta00t08_pt10t20 = h.GetBinContent(3,1)/(1-h.GetBinContent(3,1)))
+        sfr += ' + ({eta00t08} && {pt20t70}) * {eta00t08_pt20t70}'.format(eta00t08 = l_eta['eta_bin_0'], pt20t70 = l_pt['_pt20t70'], eta00t08_pt20t70 = h.GetBinContent(4,1)/(1-h.GetBinContent(4,1)))
+        sfr += ' + ({eta08t15} && {pt0t5})   * {eta08t15_pt0t5}'  .format(eta08t15 = l_eta['eta_bin_1'], pt0t5   = l_pt['_pt0t5']  , eta08t15_pt0t5   = h.GetBinContent(1,2)/(1-h.GetBinContent(1,2))) 
+        sfr += ' + ({eta08t15} && {pt5t10})  * {eta08t15_pt5t10}' .format(eta08t15 = l_eta['eta_bin_1'], pt5t10  = l_pt['_pt5t10'] , eta08t15_pt5t10  = h.GetBinContent(2,2)/(1-h.GetBinContent(2,2)))
+        sfr += ' + ({eta08t15} && {pt10t20}) * {eta08t15_pt10t20}'.format(eta08t15 = l_eta['eta_bin_1'], pt10t20 = l_pt['_pt10t20'], eta08t15_pt10t20 = h.GetBinContent(3,2)/(1-h.GetBinContent(3,2)))
+        sfr += ' + ({eta08t15} && {pt20t70}) * {eta08t15_pt20t70}'.format(eta08t15 = l_eta['eta_bin_1'], pt20t70 = l_pt['_pt20t70'], eta08t15_pt20t70 = h.GetBinContent(4,2)/(1-h.GetBinContent(4,2)))
+        sfr += ' + ({eta15t25} && {pt0t5})   * {eta15t25_pt0t5}'  .format(eta15t25 = l_eta['eta_bin_2'], pt0t5   = l_pt['_pt0t5']  , eta15t25_pt0t5   = h.GetBinContent(1,3)/(1-h.GetBinContent(1,3))) 
+        sfr += ' + ({eta15t25} && {pt5t10})  * {eta15t25_pt5t10}' .format(eta15t25 = l_eta['eta_bin_2'], pt5t10  = l_pt['_pt5t10'] , eta15t25_pt5t10  = h.GetBinContent(2,3)/(1-h.GetBinContent(2,3)))
+        sfr += ' + ({eta15t25} && {pt10t20}) * {eta15t25_pt10t20}'.format(eta15t25 = l_eta['eta_bin_2'], pt10t20 = l_pt['_pt10t20'], eta15t25_pt10t20 = h.GetBinContent(3,3)/(1-h.GetBinContent(3,3)))
+        sfr += ' + ({eta15t25} && {pt20t70}) * {eta15t25_pt20t70}'.format(eta15t25 = l_eta['eta_bin_2'], pt20t70 = l_pt['_pt20t70'], eta15t25_pt20t70 = h.GetBinContent(4,3)/(1-h.GetBinContent(4,3)))
 
     return sfr
 ############################################################################################################################################################################
@@ -397,7 +416,7 @@ def map_FR(ch='mem',mode='sfr',isData=True, subtract=False):
             tight_021 = SFR_EEM_021_T
 
         if ch == 'mem':
-
+            b_pt        = np.array([ 0., 5., 10., 15., 20., 25., 35., 50., 70.])
             mode021 = True
             b_eta = b_eta_ele
 
@@ -409,6 +428,7 @@ def map_FR(ch='mem',mode='sfr',isData=True, subtract=False):
                 cuts_FR_021  += ' && l1_gen_match_pdgid != 22 && label == 1'  # DY50 only
 
         if ch == 'mmm':
+            b_pt = b_pt_mu_sfr
             mode021 = True
             mode012 = True
             b_eta = b_eta_mu
@@ -444,6 +464,7 @@ def map_FR(ch='mem',mode='sfr',isData=True, subtract=False):
             if isData == False:
                 cuts_FR_021  += ' && l1_gen_match_pdgid != 22 && label == 1'  # DY50 only
 
+    #sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__; set_trace()
     h_pt_eta_T_012  = rt.TH2F('pt_eta_T_012','pt_eta_T_012',len(b_pt)-1,b_pt,len(b_eta)-1,b_eta)
     h_pt_eta_T_021  = rt.TH2F('pt_eta_T_021','pt_eta_T_021',len(b_pt)-1,b_pt,len(b_eta)-1,b_eta)
     h_pt_eta_L_012  = rt.TH2F('pt_eta_L_012','pt_eta_L_012',len(b_pt)-1,b_pt,len(b_eta)-1,b_eta)
@@ -457,8 +478,8 @@ def map_FR(ch='mem',mode='sfr',isData=True, subtract=False):
     ### PREPARE TREES
     t = None
     t = rt.TChain('tree')
-    t.Add(data_B_mmm + suffix)
-#    t.Add(data_B_mem + suffix)
+#    t.Add(data_B_mmm + suffix)
+    t.Add(data_B_mem + suffix)
 #    t.Add(DYBB_dir + suffix)
 #    t.Add(DY10_dir + suffix)
 #    t.Add(DY50_dir + suffix)
@@ -971,6 +992,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
     appReg = 'hnl_w_vis_m > 95'
     appReg = '1 == 1'
 
+
     cuts_FR = appReg # 27_3 FOR CLOSURE TEST LEAVE DR_12 < 0.3 TO SEE WHAT HAPPENS
     #cuts_FR = appReg + ' && hnl_dr_12 > 0.3'
     #cuts_FR = appReg + ' && hnl_dr_12 > 0.3 && abs(hnl_m_01 - 91.19) < 10'
@@ -986,10 +1008,15 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
 
         #### CHANNEL SPECIFIC
         if ch == 'mem':
-            #mode021 = True
-            mode012 = True
-            cuts_FR_021 = cuts_FR + ' && ' + SFR_MEM_021_L
-            cuts_FR_012 = cuts_FR + ' && ' + SFR_MEM_012_L
+
+            mode021 = True  
+            '''TT selection: in order to test the MU-SFR we apply the FR weights 
+               measured in mmm to a ttbar selection in mem, testing the second muon as FO
+               change this configuration under SFR :: MEM'''
+            #b_eta = b_eta_mu
+            #mode012 = True # TEST MUON AS FO <-- for tt test
+            cuts_FR_021 = cuts_FR + ' && hnl_dr_01 > 0.3 && hnl_dr_12 > 0.3 && ' + SFR_MEM_021_L
+            cuts_FR_012 = cuts_FR + ' && hnl_dr_02 > 0.3 && hnl_dr_12 > 0.3 && ' + SFR_MEM_012_L
             lnt_021     = SFR_MEM_021_LNT
             lnt_012     = SFR_MEM_012_LNT
             tight_021   = SFR_MEM_021_T
@@ -1042,16 +1069,30 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
 #    fin = rt.TFile(data_B_mmm); t = fin.Get('tree')
     #fin = rt.TFile(data_B_mem + suffix); tr = fin.Get('tree'); tr.AddFriend('ft = tree', plotDir+'label.root')
 #    t.Add(skim_mem); 
-    #t.Add(data_B_mem + suffix)
     t.Add(data_B_mmm + suffix)
-    t.AddFriend('ftdata = tree', oldPlotDir + 'friend_tree_label_%s_0.root'%ch)
-    #try: t.AddFriend('ftdata = tree', oldPlotDir + 'friend_tree_label_%s_0.root'%ch)
-    #except: 
-    #    makeLabel(data_B_mmm, ch, '0')
-    #    t.AddFriend('ftdata = tree', oldPlotDir + 'friend_tree_label_%s_0.root'%ch)
-    t.AddFriend('ftdy = tree',   oldPlotDir + 'friend_tree_label_%s_1.root'%ch)
+    #t.Add(data_B_mmm + suffix)
+
+    ## FRIEND TREES
+    try: 
+        copyfile(oldPlotDir+'friend_tree_label_%s_0.root'%ch, plotDir+'friend_tree_label_%s_0.root'%ch)
+        t.AddFriend('ftdata = tree', oldPlotDir + 'friend_tree_label_%s_0.root'%ch)
+    except: 
+        print '\n\tmaking label for data...'
+        makeLabel(data_B_mem, ch, '0')
+        t.AddFriend('ftdata = tree',  oldPlotDir + 'friend_tree_label_%s_0.root'%ch)
+        copyfile(oldPlotDir+'friend_tree_label_%s_0.root'%ch, plotDir+'friend_tree_label_%s_0.root'%ch)
+
+    try: 
+        copyfile(oldPlotDir+'friend_tree_label_%s_1.root'%ch, plotDir+'friend_tree_label_%s_1.root'%ch)
+        t.AddFriend('ftdy = tree',   oldPlotDir + 'friend_tree_label_%s_1.root'%ch)
+    except: 
+        print '\n\tmaking label for DY...'
+        makeLabel(DY50_ext_dir, ch, '1')
+        t.AddFriend('ftdy = tree',    oldPlotDir + 'friend_tree_label_%s_1.root'%ch)
+        copyfile(oldPlotDir+'friend_tree_label_%s_1.root'%ch, plotDir+'friend_tree_label_%s_1.root'%ch)
     #t.AddFriend('fttt = tree',   oldPlotDir + 'friend_tree_label_%s_2.root'%ch)
 #    t.AddFriend('ft = tree', plotDir+'label.root')
+
     df0 = rdf(t)
     df  = df0.Define('_norm_', '1')
     df  = df.Define('abs_l1_eta', 'abs(l1_eta)')
@@ -1193,16 +1234,16 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
     VARS ['pt']          =  None
     VARS ['eta']         =  None
     VARS ['norm']        = [len(b_N)-1,      b_N,      '_norm_'         , ';Normalisation; Counts'] 
-    VARS ['m_triL']      = [len(b_M)-1,      b_M,      'hnl_w_vis_m'    , ';m(l_{0},  l_{1},  l_{2}) [GeV]; Counts']
-    VARS ['BGM_01']      = [len(b_M)-1,      b_M,      'hnl_m_01'       , ';m(l_{0},  l_{1}) [GeV]; Counts'] 
-    VARS ['BGM_02']      = [len(b_M)-1,      b_M,      'hnl_m_02'       , ';m(l_{0},  l_{2}) [GeV]; Counts']
-    VARS ['m_dilep']     = [len(b_m)-1,      b_m,      'hnl_m_12'       , ';m(l_{1},  l_{2}) [GeV]; Counts'] 
-    VARS ['dr_12']       = [len(b_dR)-1,     b_dR,     'hnl_dr_12'      , ';#DeltaR(l_{1},  l_{2}); Counts'] 
-    VARS ['BGM_dilep']   = [len(b_M)-1,      b_M,      'hnl_m_12'       , ';m(l_{1},  l_{2}) [GeV]; Counts'] 
+    VARS ['m_triL']      = [len(b_M)-1,      b_M,      'hnl_w_vis_m'    , ';m(prompt_{1},  prompt_{2},  l_{2}) [GeV]; Counts']
+    VARS ['BGM_01']      = [len(b_M)-1,      b_M,      'hnl_m_01'       , ';m(prompt_{1},  prompt_{2}) [GeV]; Counts'] 
+    VARS ['BGM_02']      = [len(b_M)-1,      b_M,      'hnl_m_02'       , ';m(prompt_{1},  FO) [GeV]; Counts']
+    VARS ['m_dilep']     = [len(b_m)-1,      b_m,      'hnl_m_12'       , ';m(prompt_{2},  FO) [GeV]; Counts'] 
+    VARS ['dr_12']       = [len(b_dR)-1,     b_dR,     'hnl_dr_12'      , ';#DeltaR(prompt_{2},  FO); Counts'] 
+    VARS ['BGM_dilep']   = [len(b_M)-1,      b_M,      'hnl_m_12'       , ';m(prompt_{2},  FO) [GeV]; Counts'] 
     VARS ['nbj']         = [len(b_nbj)-1,    b_nbj,    'nbj'            , ';Number of b-jets; Counts'] 
     VARS ['2disp']       = [len(b_2d)-1,     b_2d,     'hnl_2d_disp'    , ';2d_disp [cm]; Counts'] 
-    VARS [ 'dr_01']      = [len(b_dR)-1,     b_dR,     'hnl_dr_01'      , ';#DeltaR(l_{0},  l_{1}); Counts'] 
-    VARS [ 'dr_02']      = [len(b_dR)-1,     b_dR,     'hnl_dr_02'      , ';#DeltaR(l_{0},  l_{2}); Counts'] 
+    VARS [ 'dr_01']      = [len(b_dR)-1,     b_dR,     'hnl_dr_01'      , ';#DeltaR(prompt_{1},  prompt_{2}); Counts'] 
+    VARS [ 'dr_02']      = [len(b_dR)-1,     b_dR,     'hnl_dr_02'      , ';#DeltaR(prompt_{1},  FO); Counts'] 
     VARS [ '2disp_sig']  = [len(b_2d_sig)-1, b_2d_sig, 'hnl_2d_disp_sig', ';2d_disp_sig ; Counts'] 
     VARS ['dphi_0dilep'] = [len(b_dphi)-1,   b_dphi,   'hnl_dphi_hnvis0', ';#Delta#Phi(l_{0}, di-lep); Counts']
 
@@ -1316,6 +1357,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
                 print '\n\tDrawing: 012', v, DF
                 H_OBS_012[v][DF]  = _H_OBS_012[v][DF].GetPtr()
 
+    for v in VARS.keys():
         # STACK COLORS            
         col = OrderedDict() 
         col['data']    = rt.kBlack;        col['IntConv'] = rt.kRed+1
@@ -1326,6 +1368,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
         if fr == True:
             if v not in ['BGM_01', 'BGM_02', 'dr_01', 'dr_02']:
                 H_WHD_012[v]['FR'].Add(H_WHD_021[v]['FR'])
+            #sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__; set_trace()
             if v == 'BGM_01':
                 H_WHD_012['BGM_01']['FR'].Add(H_WHD_021['BGM_02']['FR'])
             if v == 'BGM_02':
@@ -1650,7 +1693,7 @@ def checkIsoPDF(ch='mmm',ID='No',eta_split=True,mode='sfr',dR='03',fullSplit=Fal
         if ch == 'mem':
             mode021 = True
             cuts_FR += ' && abs(l1_gen_match_pdgid) != 22'
-            cuts_FR_021 = cuts_FR + ' && ' + SFR_MEM_021_L
+            cuts_FR_021 = cuts_FR + ' && hnl_dr_01 > 0.3 && ' + SFR_MEM_021_L
             if ID == 'M':
                 L1ID = ' && l1_MediumNoIso == 1'
             if ID == 'L':
