@@ -389,6 +389,7 @@ def map_FR(ch='mem',mode='sfr',isData=True, subtract=False):
     
     mshReg  = 'hnl_w_vis_m > 80'
     mshReg  = '1 == 1'
+    mshReg  = 'abs(hnl_m_02 - 91.19) < 10'
 
     # SCALE MC #TODO PUT THIS IN A FUNCTION
     lumi = 4792.0 #/pb data B
@@ -673,15 +674,15 @@ def happyTreeFriends(ch='mmm', mode='sfr', isData=True, label=True):
 ###########################################################################################################################################################################################
 
 ###########################################################################################################################################################################################
-def checkT2Lratio(ch='mmm',eta_split=True,mode='sfr',dbg=False):
+def checkT2Lratio(ch='mmm',eta_split=True,mode='sfr',dbg=False,plotDir=plotDir):
 
-    sys.stdout = Logger(plotDir + 'checkTTLratio_%s' %ch)
+    sys.stdout = Logger(plotDir + 'checkT2Lratio_%s' %ch)
 
     sfr = False; dfr = False; print '\n\tmode: %s, \tch: %s' %(mode, ch)
     if mode == 'sfr': sfr = True
     if mode == 'dfr': dfr = True
 
-    plotDir = makeFolder('checkTTLratio_%s'%ch)
+    plotDir = makeFolder('checkT2Lratio_%s'%ch)
     print '\n\tplotDir:', plotDir
 
     l_eta = None; l_eta  = OrderedDict()
@@ -728,7 +729,7 @@ def checkT2Lratio(ch='mmm',eta_split=True,mode='sfr',dbg=False):
         if ch == 'mem':
             mode021 = True
             cuts_FR += ' && abs(l1_gen_match_pdgid) != 22'
-            cuts_FR_021 = cuts_FR + ' && ' + SFR_MEM_021_L
+            cuts_FR_021 = cuts_FR + ' && hnl_dr_01 > 0.3 && hnl_dr_12 > 0.3 && ' + SFR_MEM_021_L
             tight_021 = SFR_MEM_021_T
 
         if ch == 'eem':
@@ -1008,6 +1009,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
 
         #### CHANNEL SPECIFIC
         if ch == 'mem':
+            b_eta = b_eta_ele
 
             mode021 = True  
             '''TT selection: in order to test the MU-SFR we apply the FR weights 
@@ -1069,7 +1071,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
 #    fin = rt.TFile(data_B_mmm); t = fin.Get('tree')
     #fin = rt.TFile(data_B_mem + suffix); tr = fin.Get('tree'); tr.AddFriend('ft = tree', plotDir+'label.root')
 #    t.Add(skim_mem); 
-    t.Add(data_B_mmm + suffix)
+    t.Add(data_B_mem + suffix)
     #t.Add(data_B_mmm + suffix)
 
     ## FRIEND TREES
@@ -1234,7 +1236,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
     VARS ['pt']          =  None
     VARS ['eta']         =  None
     VARS ['norm']        = [len(b_N)-1,      b_N,      '_norm_'         , ';Normalisation; Counts'] 
-    VARS ['m_triL']      = [len(b_M)-1,      b_M,      'hnl_w_vis_m'    , ';m(prompt_{1},  prompt_{2},  l_{2}) [GeV]; Counts']
+    VARS ['m_triL']      = [len(b_M)-1,      b_M,      'hnl_w_vis_m'    , ';m(prompt_{1},  prompt_{2},  FO) [GeV]; Counts']
     VARS ['BGM_01']      = [len(b_M)-1,      b_M,      'hnl_m_01'       , ';m(prompt_{1},  prompt_{2}) [GeV]; Counts'] 
     VARS ['BGM_02']      = [len(b_M)-1,      b_M,      'hnl_m_02'       , ';m(prompt_{1},  FO) [GeV]; Counts']
     VARS ['m_dilep']     = [len(b_m)-1,      b_m,      'hnl_m_12'       , ';m(prompt_{2},  FO) [GeV]; Counts'] 
