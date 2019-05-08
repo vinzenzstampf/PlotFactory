@@ -41,6 +41,8 @@ if platform.platform() == 'Linux-2.6.32-754.3.5.el6.x86_64-x86_64-with-redhat-6.
 
 pf.setpfstyle()
 #rt.TStyle.SetOptStat(0)
+#BATCH MODE
+gr.SetBatch(True)
 
 pi = rt.TMath.Pi()
 ###########################################################################################################################################################################################
@@ -48,24 +50,6 @@ skimDir = eos+'ntuples/skimmed_trees/'
 plotDir = eos+'plots/DDE/'
 suffix  = 'HNLTreeProducer/tree.root'
 ###########################################################################################################################################################################################
-DYBBDir_mee     = eos_david+'ntuples/HN3Lv2.0/background/montecarlo/mee/partial/DYBB/'
-DY50Dir_mee     = eos_david+'ntuples/HN3Lv2.0/background/montecarlo/mee/partial/DYJetsToLL_M50/'
-DY50_extDir_mee = eos_david+'ntuples/HN3Lv2.0/background/montecarlo/mee/partial/DYJetsToLL_M50_ext/'
-DY10Dir_mee     = eos_david+'ntuples/HN3Lv2.0/background/montecarlo/mee/partial/DYJetsToLL_M10to50/'
-TT_dir_mee      = eos_david+'ntuples/HN3Lv2.0/background/montecarlo/mee/partial/TTJets_amcat_20190130/'  
-W_dir_mee       = eos_david+'ntuples/HN3Lv2.0/background/montecarlo/mee/20190129/ntuples/WJetsToLNu/'
-W_ext_dir_mee   = eos_david+'ntuples/HN3Lv2.0/background/montecarlo/mee/20190129/ntuples/WJetsToLNu_ext/'
-###########################################################################################################################################################################################
-# version with last plots 3_15_19
-DYBBDir_mem     = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_mem/DYBB/'
-DY50Dir_mem     = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_mem/DYJetsToLL_M50/'
-DY50_extDir_mem = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_mem/DYJetsToLL_M50_ext/'
-DY10Dir_mem     = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_mem/DYJetsToLL_M10to50/'
-TT_dir_mem      = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_mem/TTJets_amcat/'  
-W_dir_mem       = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_mem/WJetsToLNu/'
-W_ext_dir_mem   = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_mem/WJetsToLNu_ext/'
-###########################################################################################################################################################################################
-# latest version apr_2_19
 DYBBDir_mem     = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_mem/DYBB/'
 DY50Dir_mem     = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_mem/DYJetsToLL_M50/'
 DY50_extDir_mem = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_mem/DYJetsToLL_M50_ext/'
@@ -73,7 +57,12 @@ DY10Dir_mem     = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_mem/DYJetsToLL_
 TT_dir_mem      = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_mem/TTJets/'  
 W_dir_mem       = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_mem/WJetsToLNu/'
 W_ext_dir_mem   = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_mem/WJetsToLNu_ext/'
-data_B_mem      = eos+'ntuples/HN3Lv2.0/data/mem/2017B/Single_mu_2017B/'
+#data_B_mem      = eos+'ntuples/HN3Lv2.0/data/mem/2017B/Single_mu_2017B/'
+data_B_mem      = '/work/dezhu/4_production/production_20190429_Data_mem/ntuples/Single_mu_2017B/'
+data_C_mem      = '/work/dezhu/4_production/production_20190429_Data_mem/ntuples/Single_mu_2017C/'
+data_D_mem      = '/work/dezhu/4_production/production_20190429_Data_mem/ntuples/Single_mu_2017D/'
+data_E_mem      = '/work/dezhu/4_production/production_20190429_Data_mem/ntuples/Single_mu_2017E/'
+data_F_mem      = '/work/dezhu/4_production/production_20190429_Data_mem/ntuples/Single_mu_2017F/'
 ###########################################################################################################################################################################################
 DYBBDir_mmm     = '/work/dezhu/4_production/production_20190411_Bkg_mmm/ntuples/DYBB/'
 DY50Dir_mmm     = '/work/dezhu/4_production/production_20190411_Bkg_mmm/ntuples/DYJetsToLL_M50/'
@@ -83,7 +72,11 @@ TT_dir_mmm      = '/work/dezhu/4_production/production_20190411_Bkg_mmm/ntuples/
 W_dir_mmm       = '/work/dezhu/4_production/production_20190411_Bkg_mmm/ntuples/WJetsToLNu/'
 W_ext_dir_mmm   = '/work/dezhu/4_production/production_20190411_Bkg_mmm/ntuples/WJetsToLNu_ext/'
 data_B_mmm      = '/work/dezhu/4_production/production_20190411_Data_mmm/ntuples/Single_mu_2017B/'
-#######################################################################################################################################################################################################
+data_C_mmm      = '/work/dezhu/4_production/production_20190411_Data_mmm/ntuples/Single_mu_2017C/'
+data_D_mmm      = '/work/dezhu/4_production/production_20190411_Data_mmm/ntuples/Single_mu_2017D/'
+data_E_mmm      = '/work/dezhu/4_production/production_20190411_Data_mmm/ntuples/Single_mu_2017E/'
+data_F_mmm      = '/work/dezhu/4_production/production_20190411_Data_mmm/ntuples/Single_mu_2017F/'
+###########################################################################################################################################################################################
 DYBBDir_eee     = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_eee/partial/DYBB/'
 DY50Dir_eee     = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_eee/partial/DYJetsToLL_M50/'
 DY50_extDir_eee = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_eee/partial/DYJetsToLL_M50_ext/'
@@ -91,6 +84,11 @@ DY10Dir_eee     = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_eee/partial/DYJ
 TT_dir_eee      = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_eee/partial/TTJets_amcat/'  
 W_dir_eee       = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_eee/partial/WJetsToLNu/'
 W_ext_dir_eee   = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_eee/partial/WJetsToLNu_ext/'
+data_B_eee      = '/work/dezhu/4_production/production_20190502_Data_eee/ntuples/Single_ele_2017B/'
+data_C_eee      = '/work/dezhu/4_production/production_20190502_Data_eee/ntuples/Single_ele_2017C/'
+data_D_eee      = '/work/dezhu/4_production/production_20190502_Data_eee/ntuples/Single_ele_2017D/'
+data_E_eee      = '/work/dezhu/4_production/production_20190502_Data_eee/ntuples/Single_ele_2017E/'
+data_F_eee      = '/work/dezhu/4_production/production_20190502_Data_eee/ntuples/Single_ele_2017F/'
 ###########################################################################################################################################################################################
 DYBBDir_eem     = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_eem/DYBB/'
 DY50Dir_eem     = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_eem/DYJetsToLL_M50/'
@@ -99,68 +97,16 @@ DY10Dir_eem     = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_eem/DYJetsToLL_
 TT_dir_eem      = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_eem/TTJets_amcat/'  
 W_dir_eem       = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_eem/WJetsToLNu/'
 W_ext_dir_eem   = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_eem/WJetsToLNu_ext/'
-#######
-## SKIMMED TREES
-####
-skim_mem = eos+'ntuples/mme_tree.root'
-skim_mmm = eos+'ntuples/mmm_merged.root'
 ###########################################################################################################################################################################################
-##### GEN MATCHING: DELTA PHI PERIODICITY
-###########################################################################################################################################################################################
-dPhi00  =  '( (l0_phi-l0_gen_match_phi + 2*TMath::Pi()) * (l0_phi-l0_gen_match_phi < -TMath::Pi()) + (l0_phi-l0_gen_match_phi - 2*TMath::Pi()) * (l0_phi-l0_gen_match_phi > TMath::Pi())'\
-           ' + (l0_phi-l0_gen_match_phi) * ( (l0_phi-l0_gen_match_phi > -TMath::Pi()) && (l0_phi-l0_gen_match_phi < TMath::Pi()) ) )' 
 
-dPhi11  =  '( (l1_phi-l1_gen_match_phi + 2*TMath::Pi()) * (l1_phi-l1_gen_match_phi < -TMath::Pi()) + (l1_phi-l1_gen_match_phi - 2*TMath::Pi()) * (l1_phi-l1_gen_match_phi > TMath::Pi())'\
-           ' + (l1_phi-l1_gen_match_phi) * ( (l1_phi-l1_gen_match_phi > -TMath::Pi()) && (l1_phi-l1_gen_match_phi < TMath::Pi()) ) )' 
-
-dPhi22  =  '( (l2_phi-l2_gen_match_phi + 2*TMath::Pi()) * (l2_phi-l2_gen_match_phi < -TMath::Pi()) + (l2_phi-l2_gen_match_phi - 2*TMath::Pi()) * (l2_phi-l2_gen_match_phi > TMath::Pi())'\
-           ' + (l2_phi-l2_gen_match_phi) * ( (l2_phi-l2_gen_match_phi > -TMath::Pi()) && (l2_phi-l2_gen_match_phi < TMath::Pi()) ) )' 
-###########################################################################################################################################################################################
-##### GEN MATCHING: DEFINE PROMPT AND FAKE LEPTONS
-###########################################################################################################################################################################################
-l0_prompt_m_dr =  '( (l0_gen_match_isDirectPromptTauDecayProductFinalState == 1 || l0_gen_match_isDirectHardProcessTauDecayProductFinalState == 1'
-l0_prompt_m_dr += ' || l0_gen_match_fromHardProcessFinalState == 1 || l0_gen_match_isPromptFinalState == 1) && abs(l0_gen_match_pdgid) == 13'#&& l0_is_real == 1'
-l0_prompt_m_dr += ' && sqrt( pow((l0_eta-l0_gen_match_eta),2) + pow((' + dPhi00 + '),2) ) < 0.04 )' 
-
-l1_prompt_m_dr =  '( (l1_gen_match_isDirectPromptTauDecayProductFinalState == 1 || l1_gen_match_isDirectHardProcessTauDecayProductFinalState == 1'
-l1_prompt_m_dr += ' || l1_gen_match_fromHardProcessFinalState == 1 || l1_gen_match_isPromptFinalState == 1) && abs(l1_gen_match_pdgid) == 13'#&& l1_is_real == 1'
-l1_prompt_m_dr += ' && sqrt( pow((l1_eta-l1_gen_match_eta),2) + pow((' + dPhi11 + '),2) ) < 0.04 )'
-
-l2_prompt_m_dr =  '( (l2_gen_match_isDirectPromptTauDecayProductFinalState == 1 || l2_gen_match_isDirectHardProcessTauDecayProductFinalState == 1'
-l2_prompt_m_dr += ' || l2_gen_match_fromHardProcessFinalState == 1 || l2_gen_match_isPromptFinalState == 1) && abs(l2_gen_match_pdgid) == 13'#&& l2_is_real == 1'
-l2_prompt_m_dr += ' && sqrt( pow((l2_eta-l2_gen_match_eta),2) + pow((' + dPhi22 + '),2) ) < 0.04 )' 
-
-l0_prompt_e_dr =  '( (l0_gen_match_isDirectPromptTauDecayProductFinalState == 1 || l0_gen_match_isDirectHardProcessTauDecayProductFinalState == 1'
-l0_prompt_e_dr += ' || l0_gen_match_fromHardProcessFinalState == 1 || l0_gen_match_isPromptFinalState == 1) && ( abs(l0_gen_match_pdgid) == 11 || abs(l0_gen_match_pdgid) == 22 )'
-l0_prompt_e_dr += ' && sqrt( pow((l0_eta-l0_gen_match_eta),2) + pow((' + dPhi00 + '),2) ) < 0.04 )'
-
-l1_prompt_e_dr =  '( (l1_gen_match_isDirectPromptTauDecayProductFinalState == 1 || l1_gen_match_isDirectHardProcessTauDecayProductFinalState == 1'
-l1_prompt_e_dr += ' || l1_gen_match_fromHardProcessFinalState == 1 || l1_gen_match_isPromptFinalState == 1) && ( abs(l1_gen_match_pdgid) == 11 || abs(l1_gen_match_pdgid) == 22 )'
-l1_prompt_e_dr += ' && sqrt( pow((l1_eta-l1_gen_match_eta),2) + pow((' + dPhi11 + '),2) ) < 0.04 )'
-
-l1_prompt_e_dr_noConv  = '( (l1_gen_match_isDirectPromptTauDecayProductFinalState == 1 || l1_gen_match_isDirectHardProcessTauDecayProductFinalState == 1'
-l1_prompt_e_dr_noConv += ' || l1_gen_match_fromHardProcessFinalState == 1 || l1_gen_match_isPromptFinalState == 1) && abs(l1_gen_match_pdgid) == 11'
-l1_prompt_e_dr_noConv += ' && sqrt( pow((l1_eta-l1_gen_match_eta),2) + pow((' + dPhi11 + '),2) ) < 0.04 )'
-
-l2_prompt_e_dr =  '( (l2_gen_match_isDirectPromptTauDecayProductFinalState == 1 || l2_gen_match_isDirectHardProcessTauDecayProductFinalState == 1'
-l2_prompt_e_dr += ' || l2_gen_match_fromHardProcessFinalState == 1 || l2_gen_match_isPromptFinalState == 1) && ( abs(l2_gen_match_pdgid) == 11 || abs(l2_gen_match_pdgid) == 22 )'
-l2_prompt_e_dr += ' && sqrt( pow((l2_eta-l2_gen_match_eta),2) + pow((' + dPhi22 + '),2) ) < 0.04 )'
-
-l0_fake_m_dr = '( !' + l0_prompt_m_dr + ' )' 
-l1_fake_m_dr = '( !' + l1_prompt_m_dr + ' )' 
-l2_fake_m_dr = '( !' + l2_prompt_m_dr + ' )' 
-
-l0_fake_e_dr = '( !' + l0_prompt_e_dr + ' )' 
-l1_fake_e_dr = '( !' + l1_prompt_e_dr + ' )' 
-l2_fake_e_dr = '( !' + l2_prompt_e_dr + ' )' 
-
-l1_fake_e_dr_noConv = '( !' + l1_prompt_e_dr_noConv + ' )' 
-charge_01 = ' && hnl_q_01 == 0'
-charge_02 = ' && hnl_q_02 == 0'
 ###########################################################################################################################################################################################
 ### FAKEABLE OBJECTS AND PROMPT LEPTON DEFINITIONS
 ###########################################################################################################################################################################################
+charge_01 = ' && hnl_q_01 == 0'
+charge_02 = ' && hnl_q_02 == 0'
+###########################################################################################################################################################################################
 ### PROMPT LEPTONS
+###########################################################################################################################################################################################
 l0_m = 'l0_pt > 25 && abs(l0_eta) < 2.4 && abs(l0_dz) < 0.2 && abs(l0_dxy) < 0.05 && l0_reliso_rho_03 < 0.2 && l0_id_m == 1'                  # l0 genuine muon
 l1_m = 'l1_pt > 10 && abs(l1_eta) < 2.4 && abs(l1_dz) < 0.2 && abs(l1_dxy) < 0.05 && l1_reliso_rho_03 < 0.2 && l1_id_m == 1'                  # l1 genuine muon 
 l2_m = 'l2_pt > 10 && abs(l2_eta) < 2.4 && abs(l2_dz) < 0.2 && abs(l2_dxy) < 0.05 && l2_reliso_rho_03 < 0.2 && l2_id_m == 1'                  # l2 genuine muon 
@@ -169,7 +115,9 @@ l0_e = 'l0_pt > 25 && abs(l0_eta) < 2.5 && abs(l0_dz) < 0.2 && abs(l0_dxy) < 0.0
 l1_e = 'l1_pt > 10 && abs(l1_eta) < 2.5 && abs(l1_dz) < 0.2 && abs(l1_dxy) < 0.05 && l1_reliso_rho_03 < 0.2 && l1_eid_mva_iso_wp90 == 1'      # l1 genuine electron 
 l2_e = 'l2_pt > 10 && abs(l2_eta) < 2.5 && abs(l2_dz) < 0.2 && abs(l2_dxy) < 0.05 && l2_reliso_rho_03 < 0.2 && l2_eid_mva_iso_wp90 == 1'      # l2 genuine electron 
 
+###########################################################################################################################################################################################
 ### FAKEABLE OBJECTS
+###########################################################################################################################################################################################
 l1_m_loose  = 'l1_pt > 5 && abs(l1_eta) < 2.4 && abs(l1_dz) < 2 && abs(l1_dxy) > 0.05'                                              # l1 kinematics and impact parameter
 l1_m_tight  = l1_m_loose + ' &&  l1_Medium == 1 && l1_reliso_rho_03 < 0.2'
 l1_m_lnt    = l1_m_loose + ' && (l1_Medium == 0 || l1_reliso_rho_03 > 0.2)'
@@ -209,6 +157,7 @@ DFR_MEM_T   =  DFR_MEM_L + ' && ' + l1_e_tight + ' && ' + l2_m_tight
               ##                 SINGLE FAKE RATE                   ##  
 ###########################################################################################################################################################################################
 ### SFR:: LOOSE CUTS OBTAINED THROUGH CDF HEAVY/LIGHT COMPARISON 
+SFR_EEE_L_CUT = ''
 #SFR_MMM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.42 && abs(l1_eta) < 1.2) || (l1_reliso_rho_03 < 0.35 && abs(l1_eta) > 1.2) )'  # dR 03
 SFR_MMM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.6 && abs(l1_eta) < 1.2) || (l1_reliso_rho_03 < 0.95 && abs(l1_eta) > 1.2 && abs(l1_eta) < 2.1) || (l1_reliso_rho_03 < 0.4 && abs(l1_eta) > 2.1) )'  # dR 03 (29.4.19)
 SFR_MMM_L_CUT = '' #try to see what happens...
@@ -218,6 +167,19 @@ SFR_MEM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.93  && abs(l1_eta) < 0.8) || (l1_re
 #SFR_MEM_L_CUT = ' && ( (l1_reliso_rho_04 < 0.4  && abs(l1_eta) < 0.8) || (l1_reliso_rho_04 < 0.7 && abs(l1_eta) > 0.8 && abs(l1_eta) < 1.479) || (l1_reliso_rho_04 < 0.3 && abs(l1_eta) > 1.479) )'  # dR 04
 
 ### DY - SELECTION
+### SFR::MMM 
+SFR_EEE_021_L   =  l0_e + ' && ' + l2_e + ' && ' + l1_e_loose 
+SFR_EEE_021_L   += charge_02                                        # opposite charge 
+SFR_EEE_021_L   += SFR_EEE_L_CUT                                    # reliso bound for LOOSE cf. checkIso_mmm_220319 
+SFR_EEE_021_LNT =  SFR_EEE_021_L + ' && ' + l1_e_lnt
+SFR_EEE_021_T   =  SFR_EEE_021_L + ' && ' + l1_e_tight 
+
+SFR_EEE_012_L   =  l0_e + ' && ' + l1_e + ' && ' + l2_e_loose 
+SFR_EEE_012_L   += re.sub('02', '01', charge_02)                    # opposite charge 
+SFR_EEE_012_L   += re.sub('l1', 'l2', SFR_EEE_L_CUT)                # reliso bound for LOOSE cf. checkIso_mmm_220319 
+SFR_EEE_012_LNT =  SFR_EEE_012_L + ' && ' + l2_e_lnt
+SFR_EEE_012_T   =  SFR_EEE_012_L + ' && ' + l2_e_tight 
+
 ### SFR::MMM 
 SFR_MMM_021_L   =  l0_m + ' && ' + l2_m + ' && ' + l1_m_loose 
 SFR_MMM_021_L   += charge_02                                        # opposite charge 
@@ -302,10 +264,10 @@ def selectBins(ch='mem', lep=1, isData=False):
     for i in l_pt.keys(): 
         l_pt[i] = re.sub('ptcone','ptcone021',l_pt[i])
 
-    if ch == 'mem':
+    if ch == 'eee' or ch == 'mem':
         l_eta = {'eta_bin_0' : 'abs(l1_eta) < 0.8', 'eta_bin_1' : 'abs(l1_eta) > 0.8 && abs(l1_eta) < 1.479', 'eta_bin_2' : 'abs(l1_eta) > 1.479 && abs(l1_eta) < 2.5'}
 
-    if ch == 'mmm':
+    if ch == 'mmm' or ch == 'eem':
         l_eta = {'eta_bin_0' : 'abs(l1_eta) < 1.2', 'eta_bin_1' : 'abs(l1_eta) > 1.2 && abs(l1_eta) < 2.1', 'eta_bin_2' : 'abs(l1_eta) > 2.1 && abs(l1_eta) < 2.4'}
         mu_sfr = True
   
@@ -381,7 +343,7 @@ def map_FR(ch='mem',mode='sfr',isData=True, subtract=False):
 
     SFR_021_L, SFR_012_L, SFR_021_LNT, SFR_012_LNT, SFR_021_T, SFR_012_T = SFR 
     DFR_L, DFR_T, DFR_LNT = DFR
-    DYBB_dir, DY10_dir, DY50_dir, DY50_ext_dir, TT_dir, W_dir, W_ext_dir = dirs   
+    DYBB_dir, DY10_dir, DY50_dir, DY50_ext_dir, TT_dir, W_dir, W_ext_dir, DATA = dirs   
 
     dRdefList, sHdefList = selectDefs(ch)
 
@@ -393,6 +355,7 @@ def map_FR(ch='mem',mode='sfr',isData=True, subtract=False):
 
     # SCALE MC #TODO PUT THIS IN A FUNCTION
     lumi = 4792.0 #/pb data B
+    lumi = 41530.0 #/pb data 2017 full golden JSON actually has a lumi of 41.53/fb -->  https://twiki.cern.ch/twiki/bin/viewauth/CMS/PdmV2017Analysis
     pckfile = DY50_ext_dir+'SkimAnalyzerCount/SkimReport.pck'
     pckobj = pickle.load(open(pckfile, 'r'))
     counters = dict(pckobj)
@@ -480,18 +443,18 @@ def map_FR(ch='mem',mode='sfr',isData=True, subtract=False):
     t = None
     t = rt.TChain('tree')
 #    t.Add(data_B_mmm + suffix)
-    t.Add(data_B_mem + suffix)
+    for d in DATA: t.Add(d + suffix)
 #    t.Add(DYBB_dir + suffix)
 #    t.Add(DY10_dir + suffix)
 #    t.Add(DY50_dir + suffix)
-    #t.Add(DY50_ext_dir + suffix)
+    t.Add(DY50_ext_dir + suffix)
 #    t.Add(TT_dir + suffix)
 #    t.Add(W_dir + suffix)
 #    t.Add(W_ext_dir + suffix)
 #    fin = rt.TFile(skim_mem); t = fin.Get('tree')
     df = rdf(t)
     print'\n\tchain made.'
-    N_ENTRIES = df.Count()
+    print '\n\tentries:', df.Count().GetValue()
 
     df = df.Define('evt_wht', 'weight * lhe_weight')
 
@@ -709,7 +672,7 @@ def checkT2Lratio(ch='mmm',eta_split=True,mode='sfr',dbg=False,plotDir=plotDir):
 
     SFR_021_L, SFR_012_L, SFR_021_LNT, SFR_012_LNT, SFR_021_T, SFR_012_T = SFR 
     DFR_L, DFR_T, DFR_LNT = DFR
-    DYBB_dir, DY10_dir, DY50_dir, DY50_ext_dir, TT_dir, W_dir, W_ext_dir = dirs   
+    DYBB_dir, DY10_dir, DY50_dir, DY50_ext_dir, TT_dir, W_dir, W_ext_dir, DATA = dirs   
 
     dRdefList, sHdefList = selectDefs(ch)
 
@@ -982,11 +945,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
 
     SFR_021_L, SFR_012_L, SFR_021_LNT, SFR_012_LNT, SFR_021_T, SFR_012_T = SFR 
     DFR_L, DFR_T, DFR_LNT = DFR
-    DYBB_dir, DY10_dir, DY50_dir, DY50_ext_dir, TT_dir, W_dir, W_ext_dir = dirs   
-
-    dRdefList, sHdefList = selectDefs(ch)
-
-    l0_is_fake, no_fakes, one_fake_xor, two_fakes, twoFakes_sameJet = dRdefList
+    DYBB_dir, DY10_dir, DY50_dir, DY50_ext_dir, TT_dir, W_dir, W_ext_dir, DATA = dirs   
 
     ### APPLICATION REGION
     appReg = 'hnl_w_vis_m < 80'
@@ -1040,6 +999,17 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
             mode012 = True
             mode021 = True 
 
+        if ch == 'eee':
+            b_eta = b_eta_ele
+            cuts_FR_012 = cuts_FR + ' && hnl_dr_02 > 0.3 && hnl_dr_12 > 0.3 && ' + SFR_EEE_012_L
+            cuts_FR_021 = cuts_FR + ' && hnl_dr_01 > 0.3 && hnl_dr_12 > 0.3 && ' + SFR_EEE_021_L
+            lnt_021 = SFR_EEE_021_LNT
+            lnt_012 = SFR_EEE_012_LNT
+            tight_021 = SFR_EEE_021_T
+            tight_012 = SFR_EEE_012_T
+            mode012 = True
+            mode021 = True 
+
     if dfr: ## FOR DFR NO L1 < -- > L2 IS NEEDED => DRAW EVERYTHING WITH MODE021
 
         #### GENERAL 
@@ -1071,18 +1041,24 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
 #    fin = rt.TFile(data_B_mmm); t = fin.Get('tree')
     #fin = rt.TFile(data_B_mem + suffix); tr = fin.Get('tree'); tr.AddFriend('ft = tree', plotDir+'label.root')
 #    t.Add(skim_mem); 
-    t.Add(data_B_mem + suffix)
+    #for d in DATA: t.Add(d + suffix)
+    t.Add(data_B_eee + suffix)
+    #t.Add(data_B_mem + suffix)
     #t.Add(data_B_mmm + suffix)
 
     ## FRIEND TREES
     try: 
-        copyfile(oldPlotDir+'friend_tree_label_%s_0.root'%ch, plotDir+'friend_tree_label_%s_0.root'%ch)
-        t.AddFriend('ftdata = tree', oldPlotDir + 'friend_tree_label_%s_0.root'%ch)
+        for d in DATA: 
+            era = d[-2:-1]
+            t.AddFriend('ftdata = tree',  oldPlotDir + 'friend_tree_label_%s_0%s.root'%(ch,era))
+            copyfile(oldPlotDir+'friend_tree_label_%s_0%s.root'%(ch,era), plotDir+'friend_tree_label_%s_0%s.root'%(ch,era))
     except: 
-        print '\n\tmaking label for data...'
-        makeLabel(data_B_mem, ch, '0')
-        t.AddFriend('ftdata = tree',  oldPlotDir + 'friend_tree_label_%s_0.root'%ch)
-        copyfile(oldPlotDir+'friend_tree_label_%s_0.root'%ch, plotDir+'friend_tree_label_%s_0.root'%ch)
+        for d in DATA: 
+            era = d[-2:-1]
+            makeLabel(d, ch, '0', era=era)
+            print '\n\tmaking label for data era %s...' %era
+            t.AddFriend('ftdata = tree',  oldPlotDir + 'friend_tree_label_%s_0%s.root'%(ch,era))
+            copyfile(oldPlotDir+'friend_tree_label_%s_0%s.root'%(ch,era), plotDir+'friend_tree_label_%s_0%s.root'%(ch,era))
 
     try: 
         copyfile(oldPlotDir+'friend_tree_label_%s_1.root'%ch, plotDir+'friend_tree_label_%s_1.root'%ch)
@@ -1096,13 +1072,22 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
 #    t.AddFriend('ft = tree', plotDir+'label.root')
 
     df0 = rdf(t)
+    print '\n\tentries:', df0.Count().GetValue()
     df  = df0.Define('_norm_', '1')
     df  = df.Define('abs_l1_eta', 'abs(l1_eta)')
     df  = df.Define('abs_l2_eta', 'abs(l2_eta)')
+    ## DIRRRTY TRICK, USING REALLY OLD NTUPLES
+    if ch == 'eee':
+        df.Define('l0_reliso_rho_03', 'l0_reliso05')
+        df.Define('l1_reliso_rho_03', 'l1_reliso05')
+        df.Define('l2_reliso_rho_03', 'l2_reliso05')
+        df.Define('l1_gen_match_isPrompt', 'l1_gen_match_isPromptFinalState') 
+        df.Define('l2_gen_match_isPrompt', 'l2_gen_match_isPromptFinalState') 
     print'\n\tchain made.'
 
     # SCALE MC #TODO PUT THIS IN A FUNCTION
     lumi = 4792.0 #/pb data B
+    #lumi = 41530.0 #/pb data 2017 full golden JSON actually has a lumi of 41.53/fb -->  https://twiki.cern.ch/twiki/bin/viewauth/CMS/PdmV2017Analysis
 
     ## DY
     pckfile_dy = DY50_ext_dir+'SkimAnalyzerCount/SkimReport.pck'
@@ -1235,19 +1220,19 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
     VARS = OrderedDict()
     VARS ['pt']          =  None
     VARS ['eta']         =  None
-    VARS ['norm']        = [len(b_N)-1,      b_N,      '_norm_'         , ';Normalisation; Counts'] 
-    VARS ['m_triL']      = [len(b_M)-1,      b_M,      'hnl_w_vis_m'    , ';m(prompt_{1},  prompt_{2},  FO) [GeV]; Counts']
-    VARS ['BGM_01']      = [len(b_M)-1,      b_M,      'hnl_m_01'       , ';m(prompt_{1},  prompt_{2}) [GeV]; Counts'] 
-    VARS ['BGM_02']      = [len(b_M)-1,      b_M,      'hnl_m_02'       , ';m(prompt_{1},  FO) [GeV]; Counts']
-    VARS ['m_dilep']     = [len(b_m)-1,      b_m,      'hnl_m_12'       , ';m(prompt_{2},  FO) [GeV]; Counts'] 
-    VARS ['dr_12']       = [len(b_dR)-1,     b_dR,     'hnl_dr_12'      , ';#DeltaR(prompt_{2},  FO); Counts'] 
-    VARS ['BGM_dilep']   = [len(b_M)-1,      b_M,      'hnl_m_12'       , ';m(prompt_{2},  FO) [GeV]; Counts'] 
-    VARS ['nbj']         = [len(b_nbj)-1,    b_nbj,    'nbj'            , ';Number of b-jets; Counts'] 
-    VARS ['2disp']       = [len(b_2d)-1,     b_2d,     'hnl_2d_disp'    , ';2d_disp [cm]; Counts'] 
-    VARS [ 'dr_01']      = [len(b_dR)-1,     b_dR,     'hnl_dr_01'      , ';#DeltaR(prompt_{1},  prompt_{2}); Counts'] 
-    VARS [ 'dr_02']      = [len(b_dR)-1,     b_dR,     'hnl_dr_02'      , ';#DeltaR(prompt_{1},  FO); Counts'] 
-    VARS [ '2disp_sig']  = [len(b_2d_sig)-1, b_2d_sig, 'hnl_2d_disp_sig', ';2d_disp_sig ; Counts'] 
-    VARS ['dphi_0dilep'] = [len(b_dphi)-1,   b_dphi,   'hnl_dphi_hnvis0', ';#Delta#Phi(l_{0}, di-lep); Counts']
+    VARS ['norm']        = [len(b_N)-1,        b_N,            '_norm_'         ,   ';Normalisation; Counts'] 
+    VARS ['m_triL']      = [len(b_M)-1,        b_M,            'hnl_w_vis_m'    ,   ';m(prompt_{1},  prompt_{2},  FO) [GeV]; Counts']
+    VARS ['BGM_01']      = [len(b_M)-1,        b_M,            'hnl_m_01'       ,   ';m(prompt_{1},  prompt_{2}) [GeV]; Counts'] 
+    VARS ['BGM_02']      = [len(b_M)-1,        b_M,            'hnl_m_02'       ,   ';m(prompt_{1},  FO) [GeV]; Counts']
+    VARS ['m_dilep']     = [len(b_m)-1,        b_m,            'hnl_m_12'       ,   ';m(prompt_{2},  FO) [GeV]; Counts'] 
+    VARS ['dr_12']       = [len(b_dR)-1,       b_dR,           'hnl_dr_12'      ,   ';#DeltaR(prompt_{2},  FO); Counts'] 
+    VARS ['BGM_dilep']   = [len(b_M)-1,        b_M,            'hnl_m_12'       ,   ';m(prompt_{2},  FO) [GeV]; Counts'] 
+    VARS ['nbj']         = [len(b_nbj)-1,      b_nbj,          'nbj'            ,   ';Number of b-jets; Counts'] 
+    VARS ['2disp']       = [len(b_2d)-1,       b_2d,           'hnl_2d_disp'    ,   ';2d_disp [cm]; Counts'] 
+    VARS [ 'dr_01']      = [len(b_dR)-1,       b_dR_coarse,    'hnl_dr_01'      ,   ';#DeltaR(prompt_{1},  prompt_{2}); Counts'] 
+    VARS [ 'dr_02']      = [len(b_dR)-1,       b_dR_coarse,    'hnl_dr_02'      ,   ';#DeltaR(prompt_{1},  FO); Counts'] 
+    VARS [ '2disp_sig']  = [len(b_2d_sig)-1,   b_2d_sig,       'hnl_2d_disp_sig',   ';2d_disp_sig ; Counts'] 
+    VARS ['dphi_0dilep'] = [len(b_dphi)-1,     b_dphi,         'hnl_dphi_hnvis0',   ';#Delta#Phi(l_{0}, di-lep); Counts']
 
     _H_OBS_012 = OrderedDict();   _H_OBS_021 = OrderedDict();   dfT_021_L  = OrderedDict()
     _H_WHD_012 = OrderedDict();   _H_WHD_021 = OrderedDict();   dfT_012_L  = OrderedDict()   
@@ -1311,36 +1296,14 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
                     _H_OBS_012[v][DF] = dfT_012_L[DF].Histo1D(('obs_012_%s_%s'%(v,DF),'obs_012_%s_%s'%(v,DF), VARS[v][0], VARS[v][1]), VARS[v][2], 't_012_evt_wht')
 
     for v in VARS.keys():
+#        if v not in ['BGM_01', 'BGM_02', 'dr_01', 'dr_02']: continue
         for df in keys:
             H_WHD_012[v][df] = rt.TH1F('whd_012_%s_%s'%(v,df),'whd_012_%s_%s'%(v,df), VARS[v][0], VARS[v][1])
             H_WHD_021[v][df] = rt.TH1F('whd_021_%s_%s'%(v,df),'whd_021_%s_%s'%(v,df), VARS[v][0], VARS[v][1])
 
-        #if len(KEYS) == 1:
-        #    H_OBS_012[v]['data'] = rt.TH1F('obs_012_%s'%(v),'obs_012_%s'%(v), VARS[v][0], VARS[v][1])           
-        #    H_OBS_021[v]['data'] = rt.TH1F('obs_021_%s'%(v),'obs_021_%s'%(v), VARS[v][0], VARS[v][1])           
-
-        #if len(KEYS) > 1:
         for DF in KEYS:
             H_OBS_012[v][DF] = rt.TH1F('obs_012_%s_%s'%(v,DF),'obs_012_%s_%s'%(v,DF), VARS[v][0], VARS[v][1])           
             H_OBS_021[v][DF] = rt.TH1F('obs_021_%s_%s'%(v,DF),'obs_021_%s_%s'%(v,DF), VARS[v][0], VARS[v][1])           
-
-        if mode021 == True:
-            VARS ['pt'] = [len(b_pt)-1,     b_pt,     'ptcone021'      , ';p_{T}^{cone} [GeV]; Counts']
-            if fr == True: 
-                print '\n\tDrawing: 021', v, 'weighted FR'
-                H_WHD_021[v]['FR']   = _H_WHD_021[v]['FR'].GetPtr()
-            if len(keys) > 1:
-                print '\n\tDrawing: 021', v, 'weighted Conv'
-                H_WHD_021[v]['Conv'] = _H_WHD_021[v]['Conv'].GetPtr()
-            #if len(KEYS) == 1:
-            #    print '\n\tDrawing:', v, 'tight'
-            #    H_OBS_021[v]['data'] = _H_OBS_021[v]['data'].GetPtr()
-            #if len(KEYS) > 0:
-            for DF in dfT_021_L.keys():
-                try: _H_OBS_021[v][DF] = dfT_021_L[DF].Histo1D(('obs_021_%s_%s'%(v,DF),'obs_021_%s_%s'%(v,DF), VARS[v][0], VARS[v][1]), VARS[v][2], 't_021_evt_wht')
-                except: sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__; set_trace()
-                print '\n\tDrawing: 021', v, DF
-                H_OBS_021[v][DF]  = _H_OBS_021[v][DF].GetPtr()
         
         if mode012 == True:
             VARS ['pt'] = [len(b_pt)-1,     b_pt,     'ptcone012'      , ';p_{T}^{cone} [GeV]; Counts']
@@ -1350,16 +1313,31 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
             if len(keys) > 1:
                 print '\n\tDrawing: 012', v, 'weighted Conv'
                 H_WHD_012[v]['Conv'] = _H_WHD_012[v]['Conv'].GetPtr()
-            #if len(KEYS) == 1:
-            #    print '\n\tDrawing:', v, 'tight'
-            #    H_OBS_012[v]['data'] = _H_OBS_012[v]['data'].GetPtr()
-            #if len(KEYS) > 0:
             for DF in dfT_012_L.keys():
                 _H_OBS_012[v][DF] = dfT_012_L[DF].Histo1D(('obs_012_%s_%s'%(v,DF),'obs_012_%s_%s'%(v,DF), VARS[v][0], VARS[v][1]), VARS[v][2], 't_012_evt_wht')
                 print '\n\tDrawing: 012', v, DF
                 H_OBS_012[v][DF]  = _H_OBS_012[v][DF].GetPtr()
 
-    for v in VARS.keys():
+        if mode021 == True:
+            VARS ['pt'] = [len(b_pt)-1,     b_pt,     'ptcone021'      , ';p_{T}^{cone} [GeV]; Counts']
+            if v not in ['BGM_01', 'BGM_02', 'dr_01', 'dr_02']: V = v
+            if v == 'BGM_01': V = 'BGM_02'
+            if v == 'BGM_02': V = 'BGM_01'
+            if v == 'dr_01':  V = 'dr_02'
+            if v == 'dr_02':  V = 'dr_01'
+            if fr == True: 
+                print '\n\tDrawing: 021', V, 'weighted FR'
+                H_WHD_021[V]['FR']   = _H_WHD_021[V]['FR'].GetPtr()
+            if len(keys) > 1:
+                print '\n\tDrawing: 021', V, 'weighted Conv'
+                H_WHD_021[V]['Conv'] = _H_WHD_021[V]['Conv'].GetPtr()
+            for DF in dfT_021_L.keys():
+                try: _H_OBS_021[v][DF] = dfT_021_L[DF].Histo1D(('obs_021_%s_%s'%(V,DF),'obs_021_%s_%s'%(V,DF), VARS[V][0], VARS[V][1]), VARS[V][2], 't_021_evt_wht')
+                except: sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__; set_trace()
+                print '\n\tDrawing: 021', V, DF
+                H_OBS_021[V][DF]  = _H_OBS_021[V][DF].GetPtr()
+
+    #for v in VARS.keys():
         # STACK COLORS            
         col = OrderedDict() 
         col['data']    = rt.kBlack;        col['IntConv'] = rt.kRed+1
@@ -1368,17 +1346,11 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
         col['DY50']    = rt.kYellow+1;     col['whd']     = rt.kGreen+1 
         
         if fr == True:
-            if v not in ['BGM_01', 'BGM_02', 'dr_01', 'dr_02']:
-                H_WHD_012[v]['FR'].Add(H_WHD_021[v]['FR'])
-            #sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__; set_trace()
-            if v == 'BGM_01':
-                H_WHD_012['BGM_01']['FR'].Add(H_WHD_021['BGM_02']['FR'])
-            if v == 'BGM_02':
-                H_WHD_012['BGM_02']['FR'].Add(H_WHD_021['BGM_01']['FR'])
-            if v == 'dr_01':
-                H_WHD_012['dr_01']['FR'].Add(H_WHD_021['dr_02']['FR'])
-            if v == 'dr_02':
-                H_WHD_012['dr_02']['FR'].Add(H_WHD_021['dr_01']['FR'])
+            if v not in ['BGM_01', 'BGM_02', 'dr_01', 'dr_02']: H_WHD_012[v]['FR'].Add(H_WHD_021[v]['FR'])
+            if v == 'BGM_01':                                   H_WHD_012['BGM_01']['FR'].Add(H_WHD_021['BGM_02']['FR'])
+            if v == 'BGM_02':                                   H_WHD_012['BGM_02']['FR'].Add(H_WHD_021['BGM_01']['FR'])
+            if v == 'dr_01':                                    H_WHD_012['dr_01']['FR'].Add(H_WHD_021['dr_02']['FR'])
+            if v == 'dr_02':                                    H_WHD_012['dr_02']['FR'].Add(H_WHD_021['dr_01']['FR'])
             H_WHD_012[v]['FR'].SetFillColor(col['whd'])
             H_WHD_012[v]['FR'].SetLineColor(rt.kBlack)
             H_WHD_012[v]['FR'].SetMarkerSize(0)
@@ -1388,16 +1360,11 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
         if isData == True:  obs = H_OBS_012[v]['data'] 
 
         if subtract == True:
-            if v not in ['BGM_01', 'BGM_02', 'dr_01', 'dr_02']:
-                H_WHD_012[v]['Conv'].Add(H_WHD_021[v]['Conv'])
-            if v == 'BGM_01':
-                H_WHD_012['BGM_01']['Conv'].Add(H_WHD_021['BGM_02']['Conv'])
-            if v == 'BGM_02':
-                H_WHD_012['BGM_02']['Conv'].Add(H_WHD_021['BGM_01']['Conv'])
-            if v == 'dr_01':
-                H_WHD_012['dr_01']['Conv'].Add(H_WHD_021['dr_02']['Conv'])
-            if v == 'dr_02':
-                H_WHD_012['dr_02']['Conv'].Add(H_WHD_021['dr_01']['Conv'])
+            if v not in ['BGM_01', 'BGM_02', 'dr_01', 'dr_02']: H_WHD_012[v]['Conv'].Add(H_WHD_021[v]['Conv'])
+            if v == 'BGM_01':                                   H_WHD_012['BGM_01']['Conv'].Add(H_WHD_021['BGM_02']['Conv'])
+            if v == 'BGM_02':                                   H_WHD_012['BGM_02']['Conv'].Add(H_WHD_021['BGM_01']['Conv'])
+            if v == 'dr_01':                                    H_WHD_012['dr_01']['Conv'].Add(H_WHD_021['dr_02']['Conv'])
+            if v == 'dr_02':                                    H_WHD_012['dr_02']['Conv'].Add(H_WHD_021['dr_01']['Conv'])
             if verbose: print '\n\tConv whd entries b4 weighting:', H_WHD_012[v]['Conv'].GetEntries()
             H_WHD_012[v]['Conv'].Scale(DY_SCALE)      ## SCALING MC
             if verbose: print '\n\tConv whd entries after weighting:', H_WHD_012[v]['Conv'].GetEntries()
@@ -1405,27 +1372,17 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
             H_WHD_012[v]['FR'].Add(H_WHD_012[v]['Conv'], -1.)
             if verbose: print '\n\tFR whd entries after subtracting:', H_WHD_012[v]['FR'].GetEntries()
 
-        #if CONV == False:
-        #    H_OBS_012[v]['data'].Add(H_OBS_021[v]['data'])
-        #    obs = H_OBS_012[v]['data']
-
-#-->#if CONV == True:
         whd = rt.THStack('whd_%s'%v,'whd_%s'%v)
         
         for DF in KEYS:
             if dfr:
                 H_OBS_012[v][DF].Add(H_OBS_021[v][DF])
             if sfr:
-                if v not in ['BGM_01', 'BGM_02', 'dr_01', 'dr_02']:
-                    H_OBS_012[v][DF].Add(H_OBS_021[v][DF])
-                if v == 'BGM_01':
-                    H_OBS_012['BGM_01'][DF].Add(H_OBS_021['BGM_02'][DF])
-                if v == 'BGM_02':
-                    H_OBS_012['BGM_02'][DF].Add(H_OBS_021['BGM_01'][DF])
-                if v == 'dr_01':
-                    H_OBS_012['dr_01'][DF].Add(H_OBS_021['dr_02'][DF])
-                if v == 'dr_02':
-                    H_OBS_012['dr_02'][DF].Add(H_OBS_021['dr_01'][DF])
+                if v not in ['BGM_01', 'BGM_02', 'dr_01', 'dr_02']: H_OBS_012[v][DF].Add(H_OBS_021[v][DF])
+                if v == 'BGM_01':                                   H_OBS_012['BGM_01'][DF].Add(H_OBS_021['BGM_02'][DF])
+                if v == 'BGM_02':                                   H_OBS_012['BGM_02'][DF].Add(H_OBS_021['BGM_01'][DF])
+                if v == 'dr_01':                                    H_OBS_012['dr_01'][DF].Add(H_OBS_021['dr_02'][DF])
+                if v == 'dr_02':                                    H_OBS_012['dr_02'][DF].Add(H_OBS_021['dr_01'][DF])
             if not DF == 'DY50' and not DF == 'data':
                 H_OBS_012[v][DF].SetFillColor(col[DF])
                 H_OBS_012[v][DF].SetLineColor(rt.kBlack)
@@ -1433,9 +1390,6 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
                 H_OBS_012[v][DF].SetMarkerColor(rt.kBlack)
         #H_OBS_012[v]['TT'].Scale(TT_SCALE)  ## SCALING MC
         #whd.Add(H_OBS_012[v]['TT'])
-#-->#if CONV == True:
-
-        #sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__; set_trace()
 
         if CONV == True: 
             H_OBS_012[v]['Conv'].Scale(DY_SCALE)  ## SCALING MC
@@ -1445,8 +1399,6 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
             whd.Add(H_WHD_012[v]['FR'])
 
         if v == 'pt':
-            #if CONV == False: n_obs = obs.GetEntries(); n_whd = whd.GetEntries()
-            #if CONV == True: 
             n_obs = 0; n_whd = 0
             for DF in KEYS: 
                 print '\n\t', DF, H_OBS_012[v][DF].GetEntries() 
@@ -1457,11 +1409,9 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
             print '\n\tyields. weighted: %0.2f, not weighted: %0.2f' %(n_whd, n_obs)
 
         ##SCALING CANVAS
-        try:
-            ymax = whd.GetMaximum()
-            if obs.GetMaximum() > ymax: ymax = obs.GetMaximum()
-            ymax *= 1.4; obs.GetYaxis().SetRangeUser(0.01, ymax)
-        except: set_trace()
+        ymax = whd.GetMaximum()
+        if obs.GetMaximum() > ymax: ymax = obs.GetMaximum()
+        ymax *= 1.4; obs.GetYaxis().SetRangeUser(0.01, ymax)
  
         c = rt.TCanvas(v, v); c.cd()
         whd.SetTitle(VARS[v][3])
@@ -1503,7 +1453,7 @@ class FakeRate(object):
 
         SFR_021_L, SFR_012_L, SFR_021_LNT, SFR_012_LNT, SFR_021_T, SFR_012_T = SFR 
         DFR_L, DFR_T, DFR_LNT = DFR
-        DYBB_dir, DY10_dir, DY50_dir, DY50_ext_dir, TT_dir, W_dir, W_ext_dir = dirs   
+        DYBB_dir, DY10_dir, DY50_dir, DY50_ext_dir, TT_dir, W_dir, W_ext_dir, DATA = dirs   
 
         dRdefList, sHdefList = selectDefs(ch)
 
@@ -1658,7 +1608,7 @@ def checkIsoPDF(ch='mmm',ID='No',eta_split=True,mode='sfr',dR='03',fullSplit=Fal
 
     SFR_021_L, SFR_012_L, SFR_021_LNT, SFR_012_LNT, SFR_021_T, SFR_012_T = SFR 
     DFR_L, DFR_T, DFR_LNT = DFR
-    DYBB_dir, DY10_dir, DY50_dir, DY50_ext_dir, TT_dir, W_dir, W_ext_dir = dirs   
+    DYBB_dir, DY10_dir, DY50_dir, DY50_ext_dir, TT_dir, W_dir, W_ext_dir, DATA = dirs   
 
     dRdefList, sHdefList = selectDefs(ch)
 
@@ -1955,10 +1905,11 @@ def selectCuts(channel):
         W_dir          =   W_dir_eee
         W_ext_dir      =   W_ext_dir_eee
         TT_dir         =   TT_dir_eee
+        data           =   [data_B_eee, data_C_eee, data_D_eee, data_E_eee, data_F_eee]
 
-        DFR_T          =   DFR_EEE_T
-        DFR_L          =   DFR_EEE_L
-        DFR_LNT        =   DFR_EEE_LNT
+        DFR_T          =   ''
+        DFR_L          =   ''
+        DFR_LNT        =   ''
 
         SFR_012_L       =  SFR_EEE_012_L  
         SFR_012_LNT     =  SFR_EEE_012_LNT
@@ -1976,6 +1927,7 @@ def selectCuts(channel):
         W_dir          =   W_dir_eem
         W_ext_dir      =   W_ext_dir_eem
         TT_dir         =   TT_dir_eem
+        data           =   [data_B_eem, data_C_eem, data_D_eem, data_E_eem, data_F_eem]
 
         DFR_T          =   DFR_EMM_T
         DFR_L          =   DFR_EMM_L
@@ -1989,48 +1941,6 @@ def selectCuts(channel):
         SFR_021_T       =  ''
 
 
-    if channel == 'emm':
-        DYBB_dir       =   DYBBDir_emm     
-        DY10_dir       =   DY10Dir_emm      
-        DY50_dir       =   DY50Dir_emm      
-        DY50_ext_dir   =   DY50_extDir_emm 
-        W_dir          =   W_dir_emm
-        W_ext_dir      =   W_ext_dir_emm
-        TT_dir         =   TT_dir_emm
-
-        DFR_T          =   DFR_EMM_T
-        DFR_L          =   DFR_EMM_L
-        DFR_LNT        =   DFR_EMM_LNT
-
-        SFR_012_L       =  SFR_EMM_012_L  
-        SFR_012_LNT     =  SFR_EMM_012_LNT
-        SFR_012_T       =  SFR_EMM_012_T  
-        SFR_021_L       =  SFR_EMM_021_L  
-        SFR_021_LNT     =  SFR_EMM_021_LNT
-        SFR_021_T       =  SFR_EMM_021_T  
-
-
-    if channel == 'mee':
-        DYBB_dir       =   DYBBDir_mee     
-        DY10_dir       =   DY10Dir_mee      
-        DY50_dir       =   DY50Dir_mee      
-        DY50_ext_dir   =   DY50_extDir_mee 
-        W_dir          =   W_dir_mee
-        W_ext_dir      =   W_ext_dir_mee
-        TT_dir         =   TT_dir_mee
-
-        DFR_T          =   DFR_MEE_T
-        DFR_L          =   DFR_MEE_L
-        DFR_LNT        =   DFR_MEE_LNT
-
-        SFR_012_L       =  SFR_MEE_012_L  
-        SFR_012_LNT     =  SFR_MEE_012_LNT
-        SFR_012_T       =  SFR_MEE_012_T  
-        SFR_021_L       =  SFR_MEE_021_L  
-        SFR_021_LNT     =  SFR_MEE_021_LNT
-        SFR_021_T       =  SFR_MEE_021_T  
-
-
     if channel == 'mem':
         DYBB_dir       =   DYBBDir_mem     
         DY10_dir       =   DY10Dir_mem      
@@ -2039,6 +1949,7 @@ def selectCuts(channel):
         W_dir          =   W_dir_mem
         W_ext_dir      =   W_ext_dir_mem
         TT_dir         =   TT_dir_mem
+        data           =   [data_B_mem, data_C_mem, data_D_mem, data_E_mem, data_F_mem]
 
         DFR_T          =   DFR_MEM_T
         DFR_L          =   DFR_MEM_L
@@ -2051,6 +1962,7 @@ def selectCuts(channel):
         SFR_021_LNT     =  SFR_MEM_021_LNT
         SFR_021_T       =  SFR_MEM_021_T  
 
+
     if channel == 'mmm':
         DYBB_dir       =   DYBBDir_mmm     
         DY10_dir       =   DY10Dir_mmm      
@@ -2059,6 +1971,7 @@ def selectCuts(channel):
         W_dir          =   W_dir_mmm
         W_ext_dir      =   W_ext_dir_mmm
         TT_dir         =   TT_dir_mmm
+        data           =   [data_B_mmm, data_C_mmm, data_D_mmm, data_E_mmm, data_F_mmm]
 
         DFR_T          =   DFR_MMM_T
         DFR_L          =   DFR_MMM_L
@@ -2073,7 +1986,7 @@ def selectCuts(channel):
 
     SFR  = [SFR_021_L, SFR_012_L, SFR_021_LNT, SFR_012_LNT, SFR_021_T, SFR_012_T] 
     DFR  = [DFR_L, DFR_T, DFR_LNT] 
-    dirs = [DYBB_dir, DY10_dir, DY50_dir, DY50_ext_dir, TT_dir, W_dir, W_ext_dir] 
+    dirs = [DYBB_dir, DY10_dir, DY50_dir, DY50_ext_dir, TT_dir, W_dir, W_ext_dir, data] 
 
     return SFR, DFR, dirs 
 ######################################################################################
@@ -2161,9 +2074,10 @@ def makeFolder(name):
     os.mkdir(plotDir)
     return plotDir
 
-def makeLabel(sample_dir, ch='mmm', lbl='1'):
+def makeLabel(sample_dir, ch='mmm', lbl='1',era='B'):
     '''create a label (friend) tree for a respective sample
        use the following: data: 0, DY: 1, TT: 2, WJ: 3''' 
+    if lbl != '0': era = ''
     fin = rt.TFile(sample_dir+suffix)
     tr = fin.Get('tree')
     ldf = rdf(tr)
@@ -2171,7 +2085,7 @@ def makeLabel(sample_dir, ch='mmm', lbl='1'):
     bL = rt.vector('string')()
     for br in ['event', 'lumi', 'label']:
         bL.push_back(br)
-    df.Snapshot('tree', plotDir + 'friend_tree_label_%s_%s.root'%(ch,lbl), bL)
+    df.Snapshot('tree', plotDir + 'friend_tree_label_%s_%s%s.root'%(ch,lbl,era), bL)
 
 def multiDraw(dataFrameHisto):
     h = dataFrameHisto.GetPtr()
