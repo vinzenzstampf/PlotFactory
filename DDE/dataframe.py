@@ -924,7 +924,7 @@ def checkT2Lratio(ch='mmm',eta_split=True,mode='sfr',dbg=False,plotDir=plotDir):
 ###########################################################################################################################################################################################
 
 ###########################################################################################################################################################################################
-def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, verbose=True, output=False, fr=False):
+def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, verbose=True, output=False, fr=False, full=False):
     
     input = 'MC' if isData == False else 'DATA'
 
@@ -946,6 +946,8 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
     SFR_021_L, SFR_012_L, SFR_021_LNT, SFR_012_LNT, SFR_021_T, SFR_012_T = SFR 
     DFR_L, DFR_T, DFR_LNT = DFR
     DYBB_dir, DY10_dir, DY50_dir, DY50_ext_dir, TT_dir, W_dir, W_ext_dir, DATA = dirs   
+
+    if full == False: DATA = DATA[:1]
 
     ### APPLICATION REGION
     appReg = 'hnl_w_vis_m < 80'
@@ -1007,6 +1009,10 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
             lnt_012 = SFR_EEE_012_LNT
             tight_021 = SFR_EEE_021_T
             tight_012 = SFR_EEE_012_T
+            '''## TEST IF THERE IS A Z PEAK IN LNT!'''
+            print '\n\tATTENTION: THIS IS ONLY TO TEST IF THERE IS A Z PEAK IN LNT\n\tFOR FURTHER USAGE RESTORE TIGHT->TIGHT'
+            tight_021 = SFR_EEE_021_LNT
+            tight_012 = SFR_EEE_012_LNT
             mode012 = True
             mode021 = True 
 
@@ -1041,8 +1047,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
 #    fin = rt.TFile(data_B_mmm); t = fin.Get('tree')
     #fin = rt.TFile(data_B_mem + suffix); tr = fin.Get('tree'); tr.AddFriend('ft = tree', plotDir+'label.root')
 #    t.Add(skim_mem); 
-    #for d in DATA: t.Add(d + suffix)
-    t.Add(data_B_eee + suffix)
+    for d in DATA: t.Add(d + suffix)
     #t.Add(data_B_mem + suffix)
     #t.Add(data_B_mmm + suffix)
 
@@ -1085,9 +1090,10 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
         df.Define('l2_gen_match_isPrompt', 'l2_gen_match_isPromptFinalState') 
     print'\n\tchain made.'
 
-    # SCALE MC #TODO PUT THIS IN A FUNCTION
-    lumi = 4792.0 #/pb data B
-    #lumi = 41530.0 #/pb data 2017 full golden JSON actually has a lumi of 41.53/fb -->  https://twiki.cern.ch/twiki/bin/viewauth/CMS/PdmV2017Analysis
+    ''' SCALE MC #TODO PUT THIS IN A FUNCTION
+    ### lumi = 4792.0 /pb data B
+    ### lumi = 41530.0 /pb data 2017 full golden JSON -->  https://twiki.cern.ch/twiki/bin/viewauth/CMS/PdmV2017Analysis'''
+    lumi = 4792.0 if full == False else 41530.0 
 
     ## DY
     pckfile_dy = DY50_ext_dir+'SkimAnalyzerCount/SkimReport.pck'
