@@ -113,7 +113,7 @@ def makePlots(plotDir,channel_name,variables, regions, total_weight, sample_dict
 
         print('\n###########################################################')
         print('# creating plots for %i sample(s) and %i variable(s)...'%(len(sample_dict['working_samples']),len(variables),))
-        print('# using %d CPUs'%(cpu_count()))
+        print('# using all %d CPUs (or set to a different value manually)'%(cpu_count()))
         print('###########################################################')
 
         i_var = 0
@@ -186,6 +186,9 @@ def producePlots(promptLeptonType, L1L2LeptonType, multiprocess = False, datafra
             plotDir = plotDirBase + 'mmm/'
             channel_name += '#mu#mu'
             channel = 'mmm'
+
+    os.environ['PLOTDIR'] = plotDir
+    print os.environ['PLOTDIR']
     
     if "lxplus" in hostname:
         analysis_dir = '/eos/user/v/vstampf/ntuples/'

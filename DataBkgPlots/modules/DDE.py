@@ -1,4 +1,5 @@
 from modules.officialStyle import officialStyle
+from os import environ
 import plotfactory as pf
 from modules.Samples import createSampleLists, setSumWeights
 from modules.Selections import getSelection
@@ -13,7 +14,7 @@ from pdb import set_trace
 pf.setpfstyle()
 
 # Enable ROOT's implicit multi-threading for all objects that provide an internal parallelisation mechanism
-ROOT.EnableImplicitMT()
+ROOT.EnableImplicitMT(10)
 
 class DDE(object):
 
@@ -22,14 +23,13 @@ class DDE(object):
         self.server         = server
         self.channel        = channel
 
-
     def ptCone(self):
         # PTCONE = '((l%s_pt*(l%s_reliso_rho_03<0.2))+((l%s_reliso_rho_03>=0.2)*(l%s_pt*(1. + l%s_reliso_rho_03 - 0.2))))'%(lepton,lepton,lepton,lepton,lepton)
         PTCONE   = '(  ( hnl_hn_vis_pt * (hnl_iso03_rel_rhoArea<0.2) ) + ( (hnl_iso03_rel_rhoArea>=0.2) * ( hnl_hn_vis_pt * (1. + hnl_iso03_rel_rhoArea - 0.2) ) )  )'
         return PTCONE
 
     # def measureFR(self, analysis_dir,server, channel):
-    def measureFR(self, drawPlot = False):
+    def measureFR(self, drawPlot = False,plotDir=''):
         sample_dict = {}
         samples_all, samples_singlefake, samples_doublefake = createSampleLists(analysis_dir=self.analysis_dir, server = self.server, channel=self.channel)
         working_samples = samples_doublefake
@@ -158,7 +158,7 @@ class DDE(object):
         ########################################
 
         # preparing the histo and save it into a .root file
-        dfr_TH2_dir = '/home/dehuazhu/HNL/CMSSW_9_4_6_patch1/src/PlotFactory/DataBkgPlots/modules/DDE_doublefake.root' 
+        dfr_TH2_dir = plotDir+'DDE_doublefake.root' 
         dfr_hist = h_TT_correlated.Clone()
         # hist = h_LL_correlated.Clone()
         # hist = h_baseline.Clone()
@@ -166,7 +166,7 @@ class DDE(object):
         dfr_hist.SaveAs(dfr_TH2_dir)
 
         #prepare a .h file to implement the fakerates into the ROOT namespace
-        dfr_namespace_dir = "/home/dehuazhu/HNL/CMSSW_9_4_6_patch1/src/PlotFactory/DataBkgPlots/modules/DDE_doublefake.h"
+        dfr_namespace_dir = plotDir+"DDE_doublefake.h"
         with open(dfr_namespace_dir, "w") as dfr_namespace:
                 dfr_namespace.write("// This namespace prepares the doublefakerate measured via DDE.py to be implementable in dataframe for the main plotting tool.\n")
                 dfr_namespace.write("namespace dfr_namespace {\n")
@@ -184,7 +184,7 @@ class DDE(object):
                 dfr_namespace.write("}\n")
         print 'FakeRateMap saved in "%s"'%(dfr_TH2_dir)
         print 'FakeRateNamespace saved in "%s"'%(dfr_namespace_dir)
-        gROOT.ProcessLine(".L modules/DDE_doublefake.h+")
+        gROOT.ProcessLine(".L " +  plotDir +"DDE_doublefake.h+")
 
         # draw the histo if required 
         if drawPlot == True:
@@ -216,7 +216,7 @@ def main():
 
     # import ntuples and measure Fakerate, the output is a 2D histogram fakerate map
     doublefake = DDE(analysis_dir,hostname,channel) 
-    dfr_hist = doublefake.measureFR(drawPlot = False)
+    dfr_hist = doublefake.measureFR(drawPlot = False,plotDir=environ['PLOTDIR'])
     
 
 if __name__ == '__main__':

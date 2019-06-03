@@ -5,6 +5,7 @@ from multiprocessing import Pool, Process, cpu_count
 from array import array
 import numpy as np
 import time
+from os import environ
 from modules.PlotConfigs import HistogramCfg
 from modules.DataMCPlot import DataMCPlot
 from modules.DDE import DDE
@@ -216,7 +217,7 @@ class CreateHists(object):
         if (not cfg.is_data) and (not cfg.is_doublefake) and (not cfg.is_singlefake):
             weight = weight + ' * ' + str(self.hist_cfg.lumi*cfg.xsec/cfg.sumweights)
 
-        gSystem.Load("modules/DDE_doublefake_h.so")
+        gSystem.Load(environ['PLOTDIR']+"DDE_doublefake_h.so")
         if cfg.is_doublefake:
             weight = 'doubleFakeWeight'
 
