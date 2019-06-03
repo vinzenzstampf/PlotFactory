@@ -63,6 +63,17 @@ def DY():
                 )
     return selection
 
+def DY_SFR_MEM():
+    selection = ('abs(hnl_m_01 - 91.18) < 15'
+                '& abs(hnl_w_vis_m - 91.18) > 15 '
+                '& hnl_dr_02 > 0.3 '
+                '& hnl_dr_12 > 0.3 '
+                '& hnl_q_01 == 0 '
+#                '& nbj == 0 ' 
+#                '& pfmet_pt < 30 '
+#                '& hnl_mt_0 < 30 '
+                )
+    return selection
 
 def baseline(channel): 
     if channel == 'mmm':
