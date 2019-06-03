@@ -954,6 +954,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
     appReg = 'hnl_w_vis_m > 95'
     appReg = '1 == 1'
 
+    mReg   = '1 == 1'
 
     cuts_FR = appReg # 27_3 FOR CLOSURE TEST LEAVE DR_12 < 0.3 TO SEE WHAT HAPPENS
     #cuts_FR = appReg + ' && hnl_dr_12 > 0.3'
@@ -980,6 +981,8 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
             #mode012 = True # TEST MUON AS FO <-- for tt test
             cuts_FR_021 = cuts_FR + ' && hnl_dr_01 > 0.3 && hnl_dr_12 > 0.3 && ' + SFR_MEM_021_L
             cuts_FR_012 = cuts_FR + ' && hnl_dr_02 > 0.3 && hnl_dr_12 > 0.3 && ' + SFR_MEM_012_L
+            cuts_FR_MR_012 = mReg + ' && hnl_dr_02 > 0.3 && hnl_dr_12 > 0.3 && ' + SFR_MEM_012_L
+            cuts_FR_MR_021 = mReg + ' && hnl_dr_01 > 0.3 && hnl_dr_12 > 0.3 && ' + SFR_MEM_021_L
             lnt_021     = SFR_MEM_021_LNT
             lnt_012     = SFR_MEM_012_LNT
             tight_021   = SFR_MEM_021_T
@@ -1300,6 +1303,71 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
             if len(KEYS) > 1:
                 for DF in dfT_012_L.keys():
                     _H_OBS_012[v][DF] = dfT_012_L[DF].Histo1D(('obs_012_%s_%s'%(v,DF),'obs_012_%s_%s'%(v,DF), VARS[v][0], VARS[v][1]), VARS[v][2], 't_012_evt_wht')
+
+    '''VALIDATION
+       make weighed plots
+       with AR = MR'''
+    print '\n\tentering validation ...'
+    VLD_MR_012_T_pt     = rt.TH1F('VLD_012_T_pt',    'VLD_012_T_pt',    VARS['pt'][0],  VARS['pt'][1],  VARS['pt'][2])
+    VLD_MR_012_T_eta    = rt.TH1F('VLD_012_T_eta',   'VLD_012_T_eta',   VARS['eta'][0], VARS['eta'][1], VARS['eta'][2])
+    VLD_MR_012_LNT_pt   = rt.TH1F('VLD_012_LNT_pt',  'VLD_012_LNT_pt',  VARS['pt'][0],  VARS['pt'][1],  VARS['pt'][2])
+    VLD_MR_012_LNT_eta  = rt.TH1F('VLD_012_LNT_eta', 'VLD_012_LNT_eta', VARS['eta'][0], VARS['eta'][1], VARS['eta'][2])
+    VLD_MR_021_T_pt     = rt.TH1F('VLD_021_T_pt',    'VLD_021_T_pt',    VARS['pt'][0],  VARS['pt'][1],  VARS['pt'][2])
+    VLD_MR_021_T_eta    = rt.TH1F('VLD_021_T_eta',   'VLD_021_T_eta',   VARS['eta'][0], VARS['eta'][1], VARS['eta'][2])
+    VLD_MR_021_LNT_pt   = rt.TH1F('VLD_021_LNT_pt',  'VLD_021_LNT_pt',  VARS['pt'][0],  VARS['pt'][1],  VARS['pt'][2])
+    VLD_MR_021_LNT_eta  = rt.TH1F('VLD_021_LNT_eta', 'VLD_021_LNT_eta', VARS['eta'][0], VARS['eta'][1], VARS['eta'][2])
+    if mode012 == True:
+        df_MR_012     = df.Filter(cuts_FR_MR_012)
+        if isData == True: df_MR_012 = df_MR_012.Filter('ftdata.label == 0')
+        df_MR_012     = f0_021.Define('ptcone012', ptconel2)
+        df_MR_012     = df_MR_012.Define('012_evt_wht', 'weight * lhe_weight')
+        df_MR_012_T   = df_MR_012.Filter(tight_012)
+        df_MR_012_LNT = df_MR_012.Filter(lnt_012)
+        _VLD_MR_012_LNT_pt  = df_MR_012_LNT.Histo1D(('VLD_012_LNT_pt',  'VLD_012_LNT_pt',  VARS['pt'][0],  VARS['pt'][1]),  VARS['pt'][2],  '012_evt_wht')
+        _VLD_MR_012_LNT_eta = df_MR_012_LNT.Histo1D(('VLD_012_LNT_eta', 'VLD_012_LNT_eta', VARS['eta'][0], VARS['eta'][1]), VARS['eta'][2], '012_evt_wht')
+        _VLD_MR_012_T_pt    = df_MR_012_T  .Histo1D(('VLD_012_T_pt',    'VLD_012_T_pt',    VARS['pt'][0],  VARS['pt'][1]),  VARS['pt'][2],  '012_evt_wht')
+        _VLD_MR_012_T_eta   = df_MR_012_T  .Histo1D(('VLD_012_T_eta',   'VLD_012_T_eta',   VARS['eta'][0], VARS['eta'][1]), VARS['eta'][2], '012_evt_wht')
+        VLD_MR_012_T_pt     = _VLD_MR_012_T_pt   .GetPtr()
+        VLD_MR_012_T_eta    = _VLD_MR_012_T_eta  .GetPtr()
+        VLD_MR_012_LNT_pt   = _VLD_MR_012_LNT_pt .GetPtr()
+        VLD_MR_012_LNT_eta  = _VLD_MR_012_LNT_eta.GetPtr()
+    if mode021 == True:
+        df_MR_021     = df.Filter(cuts_FR_MR_021)
+        if isData == True: df_MR_021 = df_MR_021.Filter('ftdata.label == 0')
+        df_MR_021     = f0_021.Define('ptcone021', ptconel1)
+        df_MR_021     = df_MR_012.Define('021_evt_wht', 'weight * lhe_weight')
+        df_MR_021_T   = df_MR_021.Filter(tight_021)
+        df_MR_021_LNT = df_MR_021.Filter(lnt_021)
+        _VLD_MR_021_LNT_pt  = df_MR_021_LNT.Histo1D(('VLD_021_LNT_pt',  'VLD_021_LNT_pt',  VARS['pt'][0],  VARS['pt'][1]),  VARS['pt'][2],  '021_evt_wht')
+        _VLD_MR_021_LNT_eta = df_MR_021_LNT.Histo1D(('VLD_021_LNT_eta', 'VLD_021_LNT_eta', VARS['eta'][0], VARS['eta'][1]), VARS['eta'][2], '021_evt_wht')
+        _VLD_MR_021_T_pt    = df_MR_021_T  .Histo1D(('VLD_021_T_pt',    'VLD_021_T_pt',    VARS['pt'][0],  VARS['pt'][1]),  VARS['pt'][2],  '021_evt_wht')
+        _VLD_MR_021_T_eta   = df_MR_021_T  .Histo1D(('VLD_021_T_eta',   'VLD_021_T_eta',   VARS['eta'][0], VARS['eta'][1]), VARS['eta'][2], '021_evt_wht')
+        VLD_MR_021_T_pt     = _VLD_MR_021_T_pt   .GetPtr()
+        VLD_MR_021_T_eta    = _VLD_MR_021_T_eta  .GetPtr()
+        VLD_MR_021_LNT_pt   = _VLD_MR_021_LNT_pt .GetPtr()
+        VLD_MR_021_LNT_eta  = _VLD_MR_021_LNT_eta.GetPtr()
+
+    VLD_MR_012_T_pt   .Add(VLD_MR_021_T_pt)
+    VLD_MR_012_T_eta  .Add(VLD_MR_021_T_eta)
+    VLD_MR_012_LNT_pt .Add(VLD_MR_021_LNT_pt)
+    VLD_MR_012_LNT_eta.Add(VLD_MR_021_LNT_eta)
+    
+    for j, vld in enumerate([ [VLD_MR_012_T_pt, VLD_MR_012_LNT_pt], [VLD_MR_012_T_eta, VLD_MR_012_LNT_eta] ]):
+        oBs = vld[0]; wHd = vld[1]
+
+        c = rt.TCanvas(j, j); c.cd()
+        wHd.SetTitle('VLD_%d' %j)
+        oBs.SetTitle('VLD_%d' %j)
+        wHd.Draw('histE')
+        oBs.Draw('histEsame')
+        leg = rt.TLegend(0.57, 0.78, 0.80, 0.9)
+        leg.AddEntry(oBs, 'tight')
+        leg.AddEntry(wHd, 'loose_not_tight')
+        leg.Draw()
+        pf.showlogoprelimsim('CMS')
+        pf.showlumi('SFR_'+ch)
+        save(knvs=c, sample='DDE', ch=ch, DIR=plotDir)
+
 
     for v in VARS.keys():
 #        if v not in ['BGM_01', 'BGM_02', 'dr_01', 'dr_02']: continue
