@@ -13,6 +13,7 @@ import time
 
 from copy_reg import pickle       # to pickle methods for multiprocessing
 from types    import MethodType   # to pickle methods for multiprocessing
+from datetime import datetime
 
 from modules.PlotConfigs import HistogramCfg, VariableCfg
 # from modules.HistCreator import CreateHists
@@ -23,8 +24,6 @@ from modules.Selections import getSelection, Region
 from modules.Samples import createSampleLists, setSumWeights
 from pdb import set_trace
 # from CMGTools.HNL.plotter.qcdEstimationMSSMltau import estimateQCDWMSSM, createQCDWHistograms
-
-
 
 def _pickle_method(method): 
     func_name = method.im_func.__name__
@@ -163,7 +162,8 @@ def producePlots(promptLeptonType, L1L2LeptonType, multiprocess = False, datafra
         if usr == 'vstampf': plotDirBase = '/eos/user/v/vstampf/plots/'
 
     if 'starseeker' in hostname:
-        if usr == 'dehuazhu': plotDirBase = '/mnt/StorageElement1/3_figures/1_DataMC/FinalStates/'
+        if usr == 'dehuazhu':      plotDirBase = '/mnt/StorageElement1/3_figures/1_DataMC/FinalStates/'
+        if usr == 'vinzenzstampf': plotDirBase = '/mnt/StorageElement1/7_vinz/plots/'
 
     if promptLeptonType == "ele":
         channel_name = 'e'
@@ -219,8 +219,10 @@ def producePlots(promptLeptonType, L1L2LeptonType, multiprocess = False, datafra
     handle.close()
     cmsBaseDir = line.strip('\n')
 
+    today = datetime.now(); date = today.strftime('%y%m%d'); hour = str(today.hour); minit = str(today.minute)
+
     for region in regions:
-        regionDir = plotDir+region.name
+        regionDir = plotDir + region.name + '_' + date + '_' + hour + 'h_' + minit + 'm/'
         if not os.path.exists(regionDir):
             os.mkdir(regionDir)
             print "Output directory created. "
