@@ -374,12 +374,12 @@ test_vars = [
 
 essential_vars = [
             VCfg(name='_norm_'     , drawname='norm_count', binning={'nbinsx':5, 'xmin':-1.5, 'xmax':3.5}, unit='', xtitle='Normalisation'),
-            VCfg(name='hnl_m_12_low' , drawname='hnl_m_12', binning={'nbinsx':10, 'xmin':0   , 'xmax':10  }, unit='GeV', xtitle='dimuon mass'),
-            VCfg(name='hnl_2d_disp', binning={'nbinsx':5, 'xmin':0   , 'xmax':2. }, unit='cm' , xtitle='2D displacement'),
-            VCfg(name='m_triL_wide', drawname='hnl_w_vis_m',       binning={'nbinsx':40, 'xmin':0., 'xmax':250}, unit='GeV', xtitle='Tri-Lepton Mass'),
-            VCfg(name='ptCone', drawname='pt_cone',      binning={'nbinsx':14, 'xmin':0, 'xmax':70},    unit='GeV', xtitle='p^{Cone}_{T}'),
-            VCfg(name='hnl_dr_12'        , binning={'nbinsx':5, 'xmin':0   , 'xmax':0.5 }, unit=None, xtitle='#DeltaR (#mu_{1}, #mu_{2})'),
-            VCfg(name='l2_pt'      , binning={'nbinsx':6, 'xmin':0.  , 'xmax':60.}, unit='GeV', xtitle='2nd muon p_{T}'),
+#            VCfg(name='hnl_m_12_low' , drawname='hnl_m_12', binning={'nbinsx':10, 'xmin':0   , 'xmax':10  }, unit='GeV', xtitle='dimuon mass'),
+#            VCfg(name='hnl_2d_disp', binning={'nbinsx':5, 'xmin':0   , 'xmax':2. }, unit='cm' , xtitle='2D displacement'),
+#            VCfg(name='m_triL_wide', drawname='hnl_w_vis_m',       binning={'nbinsx':40, 'xmin':0., 'xmax':250}, unit='GeV', xtitle='Tri-Lepton Mass'),
+#            VCfg(name='ptCone', drawname='pt_cone',      binning={'nbinsx':14, 'xmin':0, 'xmax':70},    unit='GeV', xtitle='p^{Cone}_{T}'),
+#            VCfg(name='hnl_dr_12'        , binning={'nbinsx':5, 'xmin':0   , 'xmax':0.5 }, unit=None, xtitle='#DeltaR (#mu_{1}, #mu_{2})'),
+#            VCfg(name='l2_pt'      , binning={'nbinsx':6, 'xmin':0.  , 'xmax':60.}, unit='GeV', xtitle='2nd muon p_{T}'),
 
             # VCfg(name='l0_pt'      , binning={'nbinsx':10, 'xmin':0.  , 'xmax':100.}, unit='GeV', xtitle='prompt lepton p_{T}'),
             # VCfg(name='l1_pt'      , binning={'nbinsx':6, 'xmin':0.  , 'xmax':60.}, unit='GeV', xtitle='1st muon p_{T}'),

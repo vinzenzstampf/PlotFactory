@@ -15,7 +15,7 @@ from pdb import set_trace
 from ROOT import ROOT, RDataFrame, TH1F, TFile, TTree, TTreeFormula, gInterpreter, gROOT, gSystem
 
 # Enable ROOT's implicit multi-threading for all objects that provide an internal parallelisation mechanism
-ROOT.EnableImplicitMT(17)
+ROOT.EnableImplicitMT(10)
 
 def initHist(hist, vcfg):
     hist.Sumw2()
@@ -217,9 +217,10 @@ class CreateHists(object):
         if (not cfg.is_data) and (not cfg.is_doublefake) and (not cfg.is_singlefake):
             weight = weight + ' * ' + str(self.hist_cfg.lumi*cfg.xsec/cfg.sumweights)
 
-        gSystem.Load(environ['PLOTDIR']+"DDE_doublefake_h.so")
-        if cfg.is_doublefake:
-            weight = 'doubleFakeWeight'
+        #print 'entering HistCreator'
+        #gSystem.Load(environ['PLOTDIR']+"DDE_doublefake_h.so")
+#        if cfg.is_doublefake:
+#            weight = 'doubleFakeWeight'
 
         hists[vcfg.name] =   dataframe\
                                 .Define('norm_count','1.')\
@@ -231,10 +232,18 @@ class CreateHists(object):
                                 .Define('eta_hnl_l0','hnl_hn_eta - l0_eta')\
                                 .Define('abs_hnl_hn_eta','abs(hnl_hn_eta)')\
                                 .Define('abs_hnl_hn_vis_eta','abs(hnl_hn_vis_eta)')\
-                                .Define('doubleFakeRate','dfr_namespace::getFakeRate(pt_cone, abs_hnl_hn_eta)')\
-                                .Define('doubleFakeWeight','doubleFakeRate/(1.0-doubleFakeRate)')\
                                 .Define('w',weight)\
                                 .Filter(norm_cut)\
                                 .Histo1D((hists[vcfg.name].GetName(),'',vcfg.binning['nbinsx'],vcfg.binning['xmin'], vcfg.binning['xmax']),vcfg.drawname,'w')
+                                #.Define('doubleFakeRate','dfr_namespace::getFakeRate(pt_cone, abs_hnl_hn_eta)')\
+                                #.Define('doubleFakeWeight','doubleFakeRate/(1.0-doubleFakeRate)')\
+        shape = False
+        if shape: 
+            # TODO define Tight and LNT dataframes (for data) 
+            dataframe_T  .Histo1D((hists[vcfg.name].GetName(),'',vcfg.binning['nbinsx'],vcfg.binning['xmin'], vcfg.binning['xmax']),vcfg.drawname,'w')
+            dataframe_LNT.Histo1D((hists[vcfg.name].GetName(),'',vcfg.binning['nbinsx'],vcfg.binning['xmin'], vcfg.binning['xmax']),vcfg.drawname,'w')
+             
         return hists[vcfg.name]
 
+    def makeShapeHisto():
+        return 0

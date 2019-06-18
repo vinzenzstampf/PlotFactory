@@ -54,11 +54,11 @@ int_lumi = 41530.0 # pb ### (all eras), Golden JSON Int.Lumi: from https://twiki
 
 def prepareRegions(channel):
     regions = []
-    regions.append(Region('SR',channel,'SR'))
+    # regions.append(Region('SR',channel,'SR'))
     # regions.append(Region('MR',channel,'MR'))
     # regions.append(Region('Conversion',channel,'Conversion'))
     # regions.append(Region('TTbar',channel,'ttbar'))
-    # regions.append(Region('DY',channel,'DY'))
+    regions.append(Region('DY',channel,'DY'))
 
     print('###########################################################')
     print('# setting analysis regions')
@@ -94,7 +94,7 @@ def createVariables(rebin=None):
     # Taken from Variables.py; can get subset with e.g. getVars(['mt', 'mvis'])
 #    variables = CR_vars
     DoNotRebin = ['_norm_', 'n_vtx', 'nj', 'nbj',] 
-    variables = full_vars
+    #variables = full_vars
     variables = essential_vars
     # variables = test_vars
     if rebin>0:

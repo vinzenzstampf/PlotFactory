@@ -166,6 +166,7 @@ class DDE(object):
         dfr_hist.SaveAs(dfr_TH2_dir)
 
         #prepare a .h file to implement the fakerates into the ROOT namespace
+        print 'entering DDE'
         dfr_namespace_dir = plotDir+"DDE_doublefake.h"
         with open(dfr_namespace_dir, "w") as dfr_namespace:
                 dfr_namespace.write("// This namespace prepares the doublefakerate measured via DDE.py to be implementable in dataframe for the main plotting tool.\n")
@@ -184,7 +185,7 @@ class DDE(object):
                 dfr_namespace.write("}\n")
         print 'FakeRateMap saved in "%s"'%(dfr_TH2_dir)
         print 'FakeRateNamespace saved in "%s"'%(dfr_namespace_dir)
-        gROOT.ProcessLine(".L " +  plotDir +"DDE_doublefake.h+")
+        gROOT.ProcessLine(".L " + plotDir + "DDE_doublefake.h+")
 
         # draw the histo if required 
         if drawPlot == True:

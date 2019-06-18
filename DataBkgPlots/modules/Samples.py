@@ -13,8 +13,6 @@ from modules.PlotConfigs import SampleCfg, HistogramCfg
 
 # from modules.samples_data_2017_noskim import Single_ele_2017B, Single_ele_2017C, Single_ele_2017D, Single_ele_2017E, Single_ele_2017F, Single_mu_2017B,  Single_mu_2017C,  Single_mu_2017D,  Single_mu_2017E,  Single_mu_2017F
 
-
-
 def createSampleLists(analysis_dir='', 
                       server='t3',
                       channel='mmm',
@@ -330,14 +328,14 @@ def createSampleLists(analysis_dir='',
 
 
 
-    # samples_mc =  samples_DY + samples_WJets + samples_TTJets + samples_Diboson + samples_SingleTop
+    samples_mc =  samples_DY + samples_WJets + samples_TTJets + samples_Diboson + samples_SingleTop
     # samples_mc =  samples_DY + samples_WJets + samples_TTJets + samples_Diboson + samples_SingleConversions + samples_SingleTop 
     # samples_mc =  samples_DY + samples_TTJets + samples_Diboson + samples_SingleConversions + samples_SingleTop 
     # samples_mc =  samples_DY + samples_WJets + samples_TTJets + samples_Diboson 
-    samples_mc =  samples_Diboson + samples_SingleConversions
+    # samples_mc =  samples_Diboson + samples_SingleConversions
     # samples_bkg = samples_mc + samples_singlefake + samples_doublefake 
-    samples_bkg = samples_doublefake + samples_mc
-    # samples_bkg = samples_mc 
+    # samples_bkg = samples_doublefake + samples_mc
+    samples_bkg = samples_mc 
     samples_all = samples_bkg + samples_data
     # samples_all = samples_signal
 
