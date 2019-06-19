@@ -93,6 +93,11 @@ DY10Dir_eem     = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_eem/DYJetsToLL_
 TT_dir_eem      = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_eem/TTJets_amcat/'  
 W_dir_eem       = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_eem/WJetsToLNu/'
 W_ext_dir_eem   = eos+'ntuples/HN3Lv2.0/background/montecarlo/mc_eem/WJetsToLNu_ext/'
+data_B_eem      = '/work/dezhu/4_production/production_20190511_Data_eem/ntuples/Single_ele_2017B/'
+data_C_eem      = '/work/dezhu/4_production/production_20190511_Data_eem/ntuples/Single_ele_2017C/'
+data_D_eem      = '/work/dezhu/4_production/production_20190511_Data_eem/ntuples/Single_ele_2017D/'
+data_E_eem      = '/work/dezhu/4_production/production_20190511_Data_eem/ntuples/Single_ele_2017E/'
+data_F_eem      = '/work/dezhu/4_production/production_20190511_Data_eem/ntuples/Single_ele_2017F/'
 ###########################################################################################################################################################################################
 
 ###########################################################################################################################################################################################
@@ -114,11 +119,11 @@ l2_e = 'l2_pt > 10 && abs(l2_eta) < 2.5 && abs(l2_dz) < 0.2 && abs(l2_dxy) < 0.0
 ###########################################################################################################################################################################################
 ### FAKEABLE OBJECTS
 ###########################################################################################################################################################################################
-l1_m_loose  = 'l1_pt > 5 && abs(l1_eta) < 2.4 && abs(l1_dz) < 2 && abs(l1_dxy) > 0.05'                                              # l1 kinematics and impact parameter
+l1_m_loose  = 'l1_pt > 5 && abs(l1_eta) < 2.4 && abs(l1_dz) < 2 && abs(l1_dxy) > 0.01'                                              # l1 kinematics and impact parameter
 l1_m_tight  = l1_m_loose + ' &&  l1_Medium == 1 && l1_reliso_rho_03 < 0.2'
 l1_m_lnt    = l1_m_loose + ' && (l1_Medium == 0 || l1_reliso_rho_03 > 0.2)'
 
-l2_m_loose  = 'l2_pt > 5 && abs(l2_eta) < 2.4 && abs(l2_dz) < 2 && abs(l2_dxy) > 0.05'                                              # l2 kinematics and impact parameter
+l2_m_loose  = 'l2_pt > 5 && abs(l2_eta) < 2.4 && abs(l2_dz) < 2 && abs(l2_dxy) > 0.01'                                              # l2 kinematics and impact parameter
 l2_m_tight  = l2_m_loose + ' &&  l2_Medium == 1 && l2_reliso_rho_03 < 0.2'
 l2_m_lnt    = l2_m_loose + ' && (l2_Medium == 0 || l2_reliso_rho_03 > 0.2)'
 
@@ -206,6 +211,11 @@ SFR_MEM_012_LNT =  SFR_MEM_012_L + ' && ' + l2_m_lnt
 SFR_MEM_012_T   =  SFR_MEM_012_L + ' && ' + l2_m_tight 
 
 #SFR_MEM_012_L   += ' && nbj > 0'#
+SFR_EEM_012_L   =  l0_e + ' && ' + l1_e + ' && ' + l2_m_loose 
+SFR_EEM_012_L   += ' && hnl_q_01 == 0'                                  # opposite charge 
+#SFR_EEM_012_L   += re.sub('l1', 'l2', SFR_MMM_L_CUT)                # reliso bound for LOOSE cf. checkIso_mmm_220319 
+SFR_EEM_012_LNT =  SFR_EEM_012_L + ' && ' + l2_m_lnt
+SFR_EEM_012_T   =  SFR_EEM_012_L + ' && ' + l2_m_tight 
 ###########################################################################################################################################################################################
 ### ENERGY-IN-CONE CORRECTED PT
 ###########################################################################################################################################################################################
@@ -237,6 +247,7 @@ b_z_fine    = np.arange(-0.02,0.02,0.0001)
 b_st        = np.arange(-20,20,1)
 b_sf        = np.arange(-20,20,1)
 b_y         = np.arange(0.,1.,0.1)
+b_dxy       = np.arange(0.,0.51,0.01)
 b_chi2      = np.arange(0.,1.05,0.05)
 
 '''framer for TEfficiency plots'''
@@ -320,606 +331,6 @@ def selectBins(ch='mem', lep=1, isData=False):
 ############################################################################################################################################################################
 
 ######################################################################################
-def map_FR(ch='mem',mode='sfr',isData=True, subtract=False):
-
-    plotDir = makeFolder('map_FR_%s'%ch)
-    sys.stdout = Logger(plotDir + 'map_FR_%s' %ch)
-    print '\n\tplotDir:', plotDir
-
-    sfr = False; dfr = False; print '\n\tmode: %s, \tch: %s, \tisData: %s, \tsubtract: %s' %(mode, ch, isData, subtract)
-    if mode == 'sfr': sfr = True
-    if mode == 'dfr': dfr = True
-
-    mode021 = False; mode012 = False; mshReg = ''
-    cuts_FR_021 = ''; cuts_FR_012 = ''
-    input = 'MC' if isData == False else 'DATA'
-
-    ### PREPARE CUTS AND FILES
-    SFR, DFR, dirs = selectCuts(ch)
-
-    SFR_021_L, SFR_012_L, SFR_021_LNT, SFR_012_LNT, SFR_021_T, SFR_012_T = SFR 
-    DFR_L, DFR_T, DFR_LNT = DFR
-    DYBB_dir, DY10_dir, DY50_dir, DY50_ext_dir, TT_dir, W_dir, W_ext_dir, DATA = dirs   
-
-    dRdefList, sHdefList = selectDefs(ch)
-
-    l0_is_fake, no_fakes, one_fake_xor, two_fakes, twoFakes_sameJet = dRdefList
-    
-    mshReg  = 'hnl_w_vis_m > 80'
-    mshReg  = '1 == 1'
-    mshReg  = 'abs(hnl_m_02 - 91.19) < 10'
-
-    # SCALE MC #TODO PUT THIS IN A FUNCTION
-    lumi = 4792.0 #/pb data B
-    lumi = 41530.0 #/pb data 2017 full golden JSON actually has a lumi of 41.53/fb -->  https://twiki.cern.ch/twiki/bin/viewauth/CMS/PdmV2017Analysis
-    pckfile = DY50_ext_dir+'SkimAnalyzerCount/SkimReport.pck'
-    pckobj = pickle.load(open(pckfile, 'r'))
-    counters = dict(pckobj)
-    sumweights = counters['Sum Norm Weights']
-    xsec = DYJetsToLL_M50_ext.xSection
-    SCALE = lumi * xsec / sumweights
-    print '\n\tlumi: %0.2f, xsec: %0.2f, sumweights: %0.2f, SCALE: %0.2f' %(lumi, xsec, sumweights, SCALE)
-
-    if sfr:
-
-        #### GENERAL 
-        ptconel1 = PTCONEL1
-        ptconel2 = PTCONEL2
-        print '\n\tdrawing single fakes ...'
-
-        cuts_FR = mshReg + ' && hnl_dr_12 > 0.3'
-
-        #### CHANNEL SPECIFIC
-        if ch == 'eem':
-            mode012 = True
-            cuts_FR_012 = cuts_FR + ' && ' + SFR_EEM_012_L
-            tight_021 = SFR_EEM_021_T
-
-        if ch == 'mem':
-            b_pt        = np.array([ 0., 5., 10., 15., 20., 25., 35., 50., 70.])
-            mode021 = True
-            b_eta = b_eta_ele
-
-            cuts_FR_021 =  cuts_FR + ' && ' + SFR_MEM_021_L 
-            cuts_FR_021 += ' && hnl_dr_01 > 0.3'                                                        # no conversions, only use this to measure t2l ratio 
-            tight_021   = SFR_MEM_021_T
-
-            if isData == False:
-                cuts_FR_021  += ' && l1_gen_match_pdgid != 22 && label == 1'  # DY50 only
-
-        if ch == 'mmm':
-            b_pt = b_pt_mu_sfr
-            mode021 = True
-            mode012 = True
-            b_eta = b_eta_mu
-
-            if isData == False:
-                cuts_FR_021  += ' && l1_gen_match_pdgid != 22'# && label == 1' # DY50 only
-                cuts_FR_012  += ' && l2_gen_match_pdgid != 22'# && label == 1' # DY50 only
-
-            cuts_FR_012 = cuts_FR + ' && abs(hnl_m_01 - 91.19) < 10 && hnl_dr_02 > 0.3 && hnl_dr_12 > 0.3 && ' + SFR_MMM_012_L 
-            cuts_FR_021 = cuts_FR + ' && abs(hnl_m_02 - 91.19) < 10 && hnl_dr_01 > 0.3 && hnl_dr_12 > 0.3 && ' + SFR_MMM_021_L 
-
-            #cuts_FR_021 += ' && hnl_dr_01 > 0.3'                                                        # no conversions, only use this to measure t2l ratio 
-            #cuts_FR_012 += ' && hnl_dr_02 > 0.3'                                                        # no conversions, only use this to measure t2l ratio 
-
-            tight_012   = SFR_MMM_012_T
-            tight_021   = SFR_MMM_021_T
-
-    if dfr:
-
-        #### GENERAL 
-        ptconel1 = PTCONE
-        print '\n\tdrawing double fakes ...'
-        cuts_FR = 'hnl_dr_12 < 0.3'
-
-        #### CHANNEL SPECIFIC
-        if ch == 'mem':
-            mode021 = True
-
-            cuts_FR_021 = cuts_FR + ' && ' + DFR_MEM_L
-            tight_021 = DFR_MEM_T
-            b_eta = b_eta_mu
-
-            if isData == False:
-                cuts_FR_021  += ' && l1_gen_match_pdgid != 22 && label == 1'  # DY50 only
-
-    #sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__; set_trace()
-    h_pt_eta_T_012  = rt.TH2F('pt_eta_T_012','pt_eta_T_012',len(b_pt)-1,b_pt,len(b_eta)-1,b_eta)
-    h_pt_eta_T_021  = rt.TH2F('pt_eta_T_021','pt_eta_T_021',len(b_pt)-1,b_pt,len(b_eta)-1,b_eta)
-    h_pt_eta_L_012  = rt.TH2F('pt_eta_L_012','pt_eta_L_012',len(b_pt)-1,b_pt,len(b_eta)-1,b_eta)
-    h_pt_eta_L_021  = rt.TH2F('pt_eta_L_021','pt_eta_L_021',len(b_pt)-1,b_pt,len(b_eta)-1,b_eta)
-
-    h_pt_eta_TConv_012  = rt.TH2F('pt_eta_TConv_012','pt_eta_TConv_012',len(b_pt)-1,b_pt,len(b_eta)-1,b_eta)
-    h_pt_eta_TConv_021  = rt.TH2F('pt_eta_TConv_021','pt_eta_TConv_021',len(b_pt)-1,b_pt,len(b_eta)-1,b_eta)
-    h_pt_eta_LConv_012  = rt.TH2F('pt_eta_LConv_012','pt_eta_LConv_012',len(b_pt)-1,b_pt,len(b_eta)-1,b_eta)
-    h_pt_eta_LConv_021  = rt.TH2F('pt_eta_LConv_021','pt_eta_LConv_021',len(b_pt)-1,b_pt,len(b_eta)-1,b_eta)
-
-    ### PREPARE TREES
-    t = None
-    t = rt.TChain('tree')
-#    t.Add(data_B_mmm + suffix)
-    for d in DATA: t.Add(d + suffix)
-#    t.Add(DYBB_dir + suffix)
-#    t.Add(DY10_dir + suffix)
-#    t.Add(DY50_dir + suffix)
-    t.Add(DY50_ext_dir + suffix)
-#    t.Add(TT_dir + suffix)
-#    t.Add(W_dir + suffix)
-#    t.Add(W_ext_dir + suffix)
-#    fin = rt.TFile(skim_mem); t = fin.Get('tree')
-    df = rdf(t)
-    print'\n\tchain made.'
-    print '\n\tentries:', df.Count().GetValue()
-
-    df = df.Define('evt_wht', 'weight * lhe_weight')
-
-    if mode021 == True:
-
-        f0_021 = df.Filter(cuts_FR_021)
-
-        print '\n\tf0_021 entries:', f0_021.Count().GetValue()
-
-        df0_021 = f0_021.Define('ptcone021', ptconel1)
-        print '\n\tptcone021 defined.'
-        dfL_021 = df0_021.Define('abs_l1_eta', 'abs(l1_eta)')
-        print '\n\tabs_l1_eta defined.'
-        if subtract == True:
-            dfLdata_021      = dfL_021.Filter('run > 1')
-            dfLConv_021      = dfL_021.Filter('abs(l1_gen_match_pdgid) == 22 || (abs(l1_gen_match_pdgid) != 22 && l1_gen_match_isPrompt == 1)') 
- 
-        print '\n\tloose df 021 events:', dfL_021.Count().GetValue()
- 
-        dfT_021 = dfL_021.Filter(tight_021)
-        if subtract == True:
-            dfTdata_021 = dfT_021.Filter('run > 1')
-            print '\n\tdata 021 defined.'
-            dfTConv_021 = dfT_021.Filter('abs(l1_gen_match_pdgid) == 22 || (abs(l1_gen_match_pdgid) != 22 && l1_gen_match_isPrompt == 1)') 
-        print '\n\ttight df 021 defined.'
-
-        print '\n\ttight df 021 events:', dfT_021.Count().GetValue()
-
-        if subtract == False: T_021 = dfT_021; L_021 = dfL_021
-        if subtract == True:  
-            T_021 = dfTdata_021; L_021 = dfLdata_021
-            _pt_eta_TConv_021 = dfTConv_021.Histo2D(('pt_eta_TConv_021','pt_eta_TConv_021',len(b_pt)-1,b_pt,len(b_eta)-1,b_eta),'ptcone021','abs_l1_eta', 'evt_wht')
-            _pt_eta_LConv_021 = dfLConv_021.Histo2D(('pt_eta_LConv_021','pt_eta_LConv_021',len(b_pt)-1,b_pt,len(b_eta)-1,b_eta),'ptcone021','abs_l1_eta', 'evt_wht')
-
-            h_pt_eta_TConv_021 = _pt_eta_TConv_021.GetPtr()
-            h_pt_eta_LConv_021 = _pt_eta_LConv_021.GetPtr()
-
-        _pt_eta_T_021 = T_021.Histo2D(('pt_eta_T_021','pt_eta_T_021',len(b_pt)-1,b_pt,len(b_eta)-1,b_eta),'ptcone021','abs_l1_eta', 'evt_wht')
-        _pt_eta_L_021 = L_021.Histo2D(('pt_eta_L_021','pt_eta_L_021',len(b_pt)-1,b_pt,len(b_eta)-1,b_eta),'ptcone021','abs_l1_eta', 'evt_wht')
-
-        h_pt_eta_T_021 = _pt_eta_T_021.GetPtr()
-        h_pt_eta_L_021 = _pt_eta_L_021.GetPtr()
-
-    if mode012 == True:
-
-        f0_012 = df.Filter(cuts_FR_012)
-
-        print '\n\tf0_012 entries:', f0_012.Count().GetValue()
-
-        df0_012 = f0_012.Define('ptcone012', ptconel2)
-        print '\n\tptcone012 defined.'
-        dfL_012 = df0_012.Define('abs_l2_eta', 'abs(l2_eta)')
-        print '\n\tabs_l1_eta defined.'
-        if subtract == True:
-            dfLdata_012 = dfL_012.Filter('run > 1')
-            dfLConv_012 = dfL_012.Filter('abs(l2_gen_match_pdgid) == 22 || (abs(l2_gen_match_pdgid) != 22 && l2_gen_match_isPrompt == 1)') 
- 
-        print '\n\tloose df 012 events:', dfL_012.Count().GetValue()
- 
-        dfT_012 = dfL_012.Filter(tight_012)
-        if subtract == True:
-            dfTdata_012 = dfT_012.Filter('run > 1')
-            print '\n\tdata 012 defined.'
-            dfTConv_012 = dfT_012.Filter('abs(l2_gen_match_pdgid) == 22 || (abs(l2_gen_match_pdgid) != 22 && l2_gen_match_isPrompt == 1)') 
-        print '\n\ttight df 012 defined.'
-
-        print '\n\ttight df 012 events:', dfT_012.Count().GetValue()
-
-        if subtract == False: T_012 = dfT_012; L_012 = dfL_012
-        if subtract == True:  
-            T_012 = dfTdata_012; L_012 = dfLdata_012
-            _pt_eta_TConv_012 = dfTConv_012.Histo2D(('pt_eta_TConv_012','pt_eta_TConv_012',len(b_pt)-1,b_pt,len(b_eta)-1,b_eta),'ptcone012','abs_l2_eta', 'evt_wht')
-            _pt_eta_LConv_012 = dfLConv_012.Histo2D(('pt_eta_LConv_012','pt_eta_LConv_012',len(b_pt)-1,b_pt,len(b_eta)-1,b_eta),'ptcone012','abs_l2_eta', 'evt_wht')
-
-            h_pt_eta_TConv_012 = _pt_eta_TConv_012.GetPtr()
-            h_pt_eta_LConv_012 = _pt_eta_LConv_012.GetPtr()
-
-        _pt_eta_T_012 = dfT_012.Histo2D(('pt_eta_T_012','pt_eta_T_012',len(b_pt)-1,b_pt,len(b_eta)-1,b_eta),'ptcone012','abs_l2_eta', 'evt_wht')
-        _pt_eta_L_012 = dfL_012.Histo2D(('pt_eta_L_012','pt_eta_L_012',len(b_pt)-1,b_pt,len(b_eta)-1,b_eta),'ptcone012','abs_l2_eta', 'evt_wht')
-
-        h_pt_eta_T_012 = _pt_eta_T_012.GetPtr()
-        h_pt_eta_L_012 = _pt_eta_L_012.GetPtr()
-
-    h_pt_eta_T_012.Add(h_pt_eta_T_021)
-    h_pt_eta_L_012.Add(h_pt_eta_L_021)
-
-    if subtract == True:
-        h_pt_eta_TConv_012.Add(h_pt_eta_TConv_021)
-        h_pt_eta_LConv_012.Add(h_pt_eta_LConv_021)
-      
-        h_pt_eta_TConv_012.Scale(SCALE)
-        h_pt_eta_LConv_012.Scale(SCALE)
-
-        h_pt_eta_T_012.Add(h_pt_eta_TConv_012, -1.)
-        h_pt_eta_L_012.Add(h_pt_eta_LConv_012, -1.)
-      
-    print '\n\t cuts: %s'                    %cuts_FR
-    if mode012 ==True:
-        print '\n\t loose 012: %s\n'         %(cuts_FR_012)
-        print '\n\t tight 012: %s\n'         %(tight_012)
-        print '\ttotal loose 012: %s\n'      %f0_012.Count().GetValue()
-    if mode021 ==True:
-        print '\n\t loose 021: %s\n'         %(cuts_FR_021)
-        print '\n\t tight 021: %s\n'         %(tight_021)
-        print '\ttotal loose 021: %s\n'      %f0_021.Count().GetValue()
-
-    print '\n\tentries T && L: ', h_pt_eta_T_012.GetEntries(), h_pt_eta_L_012.GetEntries()
-
-    c_pt_eta = rt.TCanvas('ptCone_eta', 'ptCone_eta')
-    h_pt_eta_T_012.Divide(h_pt_eta_L_012)
-    h_pt_eta_T_012.Draw('colztextE')
-    h_pt_eta_T_012.SetTitle('; p_{T}^{cone} [GeV]; DiLepton |#eta|; tight-to-loose ratio')
-    pf.showlogoprelimsim('CMS')
-    pf.showlumi('SFR_'+ch)
-    save(knvs=c_pt_eta, sample='%s_T2Lratio'%input, ch=ch, DIR=plotDir)
-
-    sys.stderr = sys.__stderr__
-    sys.stdout = sys.__stdout__
-    # DO AGAIN WITH THREE DIFFERENT TEFFS TO GET ERROR
-###########################################################################################################################################################################################
-
-###########################################################################################################################################################################################
-def happyTreeFriends(ch='mmm', mode='sfr', isData=True, label=True):
-    
-    sfr = False; dfr = False
-    if mode == 'sfr': sfr = True
-    if mode == 'dfr': dfr = True
-
-    plotDir = makeFolder('friendTree_%s'%ch)
-    print '\n\tplotDir:', plotDir
-    sys.stdout = Logger(plotDir + 'friendTree_%s' %ch)
-
-    print '\n\tmode: %s\n'%ch
-
-    ### PREPARE DATAFRAMES
-    t = None
-    t = rt.TChain('tree')
-    t.Add('root://cms-xrd-transit.cern.ch//store/user/dezhu/2_ntuples/HN3Lv2.0/mmm/data/Single_mu_2017B/HNLTreeProducer/tree.root')
-    df = rdf(t)
-    print'\n\tchain made.'
-
-    if sfr: 
-
-        ptconel1 = PTCONEL1; ptconel2 = PTCONEL2
-        if ch == 'mem': mode021 = True
-        if ch == 'mmm': 
-            mode021 = True; mode012 = True
-
-    if dfr: ptconel1 = PTCONE
-
-    if mode021 == True:
-        df_021   = df.Define('ptcone021', ptconel1)
-
-        print '\n\tlnt df 021 events:', df_021.Count().GetValue()
-
-        df_021 = df_021.Define('fover1minusf021', selectBins(ch=ch,lep=1,isData=isData))
-        print '\n\tweight f/(1-f)  021 defined.'
-
-    if mode012 == True:
-        df_012   = df.Define('ptcone012', ptconel2)
-
-        print '\n\tlnt df 012 events:', df_012.Count().GetValue()
-
-        df_012 = df_012.Define('fover1minusf012', selectBins(ch=ch,lep=2,isData=isData))
-        print '\n\tweight f/(1-f)  012 defined.'
-
-    ## SAVE FR OUTPUT BRANCH IN TREE
-    branchList_021 = rt.vector('string')(); branchList_012 = rt.vector('string')()
-    for br in ['event', 'lumi']:
-        branchList_021.push_back(br)
-        branchList_012.push_back(br)
-    if label == True: branchList_021.push_back('label'); branchList_012.push_back('label')
-    time_string = ch + '_' + mode + '_' + date + '_' + hour + 'h_' + minit + 'm'
-    if mode021 == True:
-        branchList_021.push_back('fover1minusf021')
-        df_021.Snapshot('tree', plotDir + 'fr_021_%s.root'%time_string, branchList_021)
-    if mode012 == True:
-        branchList_012.push_back('fover1minusf012')
-        df_012.Snapshot('tree', plotDir + 'fr_012_%s.root'%time_string, branchList_012)
-###########################################################################################################################################################################################
-
-###########################################################################################################################################################################################
-def checkT2Lratio(ch='mmm',eta_split=True,mode='sfr',dbg=False,plotDir=plotDir):
-
-    sys.stdout = Logger(plotDir + 'checkT2Lratio_%s' %ch)
-
-    sfr = False; dfr = False; print '\n\tmode: %s, \tch: %s' %(mode, ch)
-    if mode == 'sfr': sfr = True
-    if mode == 'dfr': dfr = True
-
-    plotDir = makeFolder('checkT2Lratio_%s'%ch)
-    print '\n\tplotDir:', plotDir
-
-    l_eta = None; l_eta  = OrderedDict()
-    l_eta['_eta_all'] = '1 == 1'
-
-    if eta_split == True: 
-
-        if ch == 'mem' or ch == 'eee':
-            l_eta = None; l_eta = OrderedDict()
-            l_eta ['_eta_00t08'] = 'abs(l1_eta) < 0.8'; l_eta ['_eta_08t15'] = 'abs(l1_eta) > 0.8 && abs(l1_eta) < 1.479'; l_eta ['_eta_15t25'] = 'abs(l1_eta) > 1.479 && abs(l1_eta) < 2.5'
-
-        if ch == 'mmm' or ch == 'eem':
-            l_eta = None; l_eta = OrderedDict()
-            l_eta ['_eta_00t12'] = 'abs(l1_eta) < 1.2'; l_eta ['_eta_12t21'] = 'abs(l1_eta) > 1.2 && abs(l1_eta) < 2.1'; l_eta ['_eta_21t24'] = 'abs(l1_eta) > 2.1 && abs(l1_eta) < 2.4'
-
-        if dfr: 
-            l_eta = None; l_eta = OrderedDict()
-            l_eta ['_eta_00t12'] = 'abs(l1_eta) < 1.2'; l_eta ['_eta_12t21'] = 'abs(l1_eta) > 1.2 && abs(l1_eta) < 2.1'; l_eta ['_eta_21t24'] = 'abs(l1_eta) > 2.1 && abs(l1_eta) < 2.4'
-            for i in l_eta.keys(): l_eta[i] = re.sub('l1', 'hnl_hn_vis', l_eta[i])
-
-
-    ### PREPARE CUTS AND FILES
-    SFR, DFR, dirs = selectCuts(ch)
-
-    SFR_021_L, SFR_012_L, SFR_021_LNT, SFR_012_LNT, SFR_021_T, SFR_012_T = SFR 
-    DFR_L, DFR_T, DFR_LNT = DFR
-    DYBB_dir, DY10_dir, DY50_dir, DY50_ext_dir, TT_dir, W_dir, W_ext_dir, DATA = dirs   
-
-    dRdefList, sHdefList = selectDefs(ch)
-
-    l0_is_fake, no_fakes, one_fake_xor, two_fakes, twoFakes_sameJet = dRdefList
-    
-    if sfr:
-
-        #### GENERAL 
-        ptconel1 = PTCONEL1
-        ptconel2 = PTCONEL2
-        print '\n\tdrawing single fakes ...'
-        mode021 = False; mode012 = False
-
-        cuts_FR = 'hnl_dr_12 > 0.3'
-
-        #### CHANNEL SPECIFIC
-        if ch == 'mem':
-            mode021 = True
-            cuts_FR += ' && abs(l1_gen_match_pdgid) != 22'
-            cuts_FR_021 = cuts_FR + ' && hnl_dr_01 > 0.3 && hnl_dr_12 > 0.3 && ' + SFR_MEM_021_L
-            tight_021 = SFR_MEM_021_T
-
-        if ch == 'eem':
-            mode012 = True
-            cuts_FR_012 = cuts_FR + ' && ' + SFR_EEM_012_L
-            tight_021 = SFR_EEM_021_T
-
-        if ch == 'mmm':
-            cuts_FR_012 = cuts_FR + ' && hnl_dr_02 > 0.3 && hnl_dr_12 > 0.3 && ' + SFR_MMM_012_L
-            cuts_FR_021 = cuts_FR + ' && hnl_dr_01 > 0.3 && hnl_dr_12 > 0.3 && ' + SFR_MMM_021_L
-            tight_021 = SFR_MMM_021_T
-            tight_012 = SFR_MMM_012_T
-            mode012 = True
-            mode021 = True
-
-    if dfr: ## FOR DFR NO L1 < -- > L2 IS NEEDED => DRAW EVERYTHING WITH MODE021
-
-        #### GENERAL 
-        ptconel1 = PTCONE
-        print '\n\tdrawing double fakes ...'
-        mode021 = False; mode012 = False
-
-        cuts_FR = 'hnl_dr_12 < 0.3'
-        #### CHANNEL SPECIFIC
-        if ch == 'mem':
-            mode021 = True
-            cuts_FR += ' && abs(l1_gen_match_pdgid) != 22'
-            cuts_FR_021 = cuts_FR + ' && ' + DFR_MEM_L
-            tight_021 = DFR_MEM_T
-
-    ### PREPARE TREES
-    t = None
-    t = rt.TChain('tree')
-#    t.Add(DYBB_dir + suffix)
-#    t.Add(DY10_dir + suffix)
-#    t.Add(DY50_dir + suffix)
-    t.Add(DY50_ext_dir + suffix)
-#    t.Add(TT_dir + suffix)
-#    t.Add(W_dir + suffix)
-#    t.Add(W_ext_dir + suffix)
-    #fin = rt.TFile(skim_mem); t = fin.Get('tree')
-    df = rdf(t)
-    print'\n\tchain made.'
-    N_ENTRIES = df.Count()
-
-    flavors = ['all', 'heavy', 'light']
-
-
-    ### PREPARE DATAFRAMES
-    if mode021 == True:
-        cuts_l_021 = cuts_FR_021 + ' && l1_jet_flavour_parton != -99'
-        f0_021 = df.Filter(cuts_l_021)
-        print '\n\tloose 021 defined.'
-
-        dfL_021 = f0_021.Define('ptcone021', ptconel1)
-        print '\n\tptcone 021: %s\n' %ptconel1
-        print '\tptcone 021 defined.'
-
-        dfL_021_flvr = OrderedDict()
-        for flvr in ['light', 'heavy']:
-            dfL_021_flvr['light'] = dfL_021.Filter('abs(l1_jet_flavour_parton) != 4 && abs(l1_jet_flavour_parton) != 5')
-            dfL_021_flvr['heavy'] = dfL_021.Filter('abs(l1_jet_flavour_parton) == 4 || abs(l1_jet_flavour_parton) == 5')
-        print '\tflavours 021 defined.'
-
-        dfL_021_flvr_ita = OrderedDict()
-        dfT_021_flvr_ita = OrderedDict()
-        for flvr in ['light', 'heavy']:
-            dfL_021_flvr_ita[flvr] = OrderedDict()
-            dfT_021_flvr_ita[flvr] = OrderedDict()
-            for ita in l_eta.keys():
-                dfL_021_flvr_ita[flvr][ita] = dfL_021_flvr[flvr].Filter(l_eta[ita])
-                dfT_021_flvr_ita[flvr][ita] = dfL_021_flvr_ita[flvr][ita].Filter(tight_021)
-        print '\tloose 021 eta defined.'
-        print '\ttight 021 eta defined.'
-
-
-    if mode012 == True:
-        cuts_l_012 = cuts_FR_012 + ' && l2_jet_flavour_parton != -99'
-        f0_012 = df.Filter(cuts_l_012)
-        print '\n\tloose 012 defined.'
-
-        dfL_012 = f0_012.Define('ptcone012', ptconel2)
-        print '\n\tptcone 012: %s\n' %ptconel2
-        print '\tptcone 012 defined.'
-
-        dfL_012_flvr = OrderedDict()
-        for flvr in ['light', 'heavy']:
-            dfL_012_flvr['light'] = dfL_012.Filter('abs(l2_jet_flavour_parton) != 4 && abs(l2_jet_flavour_parton) != 5')
-            dfL_012_flvr['heavy'] = dfL_012.Filter('abs(l2_jet_flavour_parton) == 4 || abs(l2_jet_flavour_parton) == 5')
-        print '\tflavours 012 defined.'
-
-        dfL_012_flvr_ita = OrderedDict()
-        dfT_012_flvr_ita = OrderedDict()
-        for flvr in ['light', 'heavy']:
-            dfL_012_flvr_ita[flvr] = OrderedDict()
-            dfT_012_flvr_ita[flvr] = OrderedDict()
-            for ita in l_eta.keys():
-                dfL_012_flvr_ita[flvr][ita] = dfL_012_flvr[flvr].Filter(re.sub('l1_eta', 'l2_eta', l_eta[ita]))
-                dfT_012_flvr_ita[flvr][ita] = dfL_012_flvr_ita[flvr][ita].Filter(tight_012)
-        print '\tloose 012 eta defined.'
-        print '\ttight 012 defined.'
-
-
-    print '\n\t cuts: %s'                    %cuts_FR
-    if mode012 ==True:
-        print '\n\t loose 012: %s\n'         %(cuts_FR_012)
-        print '\n\t tight 012: %s\n'         %(tight_012)
-        print '\ttotal loose 012: %s\n'      %f0_012.Count().GetValue()
-    if mode021 ==True:
-        print '\n\t loose 021: %s\n'         %(cuts_FR_021)
-        print '\n\t tight 021: %s\n'         %(tight_021)
-        print '\ttotal loose 021: %s\n'      %f0_021.Count().GetValue()
-
-    i = 0
-    for ita in l_eta.keys():
-        print '\n\teta:', ita
-        print '\n\teta cut:', l_eta[ita]
-
-
-        if mode012 == True:
-            print'\n\t','df 012 sum loose:',   dfL_012_flvr_ita['heavy'][ita].Count().GetValue() + dfL_012_flvr_ita['light'][ita].Count().GetValue()
-            print'\t','df 012 entries loose:', dfL_012_flvr_ita['heavy'][ita].Count().GetValue(),  dfL_012_flvr_ita['light'][ita].Count().GetValue()
-            print'\t','df 012 sum tight:',     dfT_012_flvr_ita['heavy'][ita].Count().GetValue() + dfT_012_flvr_ita['light'][ita].Count().GetValue()
-            print'\t','df 012 entries tight:', dfT_012_flvr_ita['heavy'][ita].Count().GetValue(),  dfT_012_flvr_ita['light'][ita].Count().GetValue()
-        if mode021 == True:
-            print'\n\t','df 021 sum loose:',   dfL_021_flvr_ita['heavy'][ita].Count().GetValue() + dfL_021_flvr_ita['light'][ita].Count().GetValue()
-            print'\t','df 021 entries loose:', dfL_021_flvr_ita['heavy'][ita].Count().GetValue(),  dfL_021_flvr_ita['light'][ita].Count().GetValue()
-            print'\t','df 021 sum tight:',     dfT_021_flvr_ita['heavy'][ita].Count().GetValue() + dfT_021_flvr_ita['light'][ita].Count().GetValue()
-            print'\t','df 021 entries tight:', dfT_021_flvr_ita['heavy'][ita].Count().GetValue(),  dfT_021_flvr_ita['light'][ita].Count().GetValue()
-
-        h_pt = OrderedDict()
-        for flvr in flavors:
-            h_pt[flvr] = OrderedDict()
-            for lbl in ['T_012','T_021','L_012','L_021']: 
-                h_pt[flvr][lbl]   = rt.TH1F('pt_%s_%s'%(lbl,flvr),    'pt_%s_%s'%(lbl,flvr), len(b_pt)-1,b_pt)
-
-        ### FILLING
-        if mode021 ==True:
-
-            _h_pt_L_021 = OrderedDict(); _h_pt_T_021 = OrderedDict()
-            for flvr in ['heavy','light']:
-                _h_pt_L_021[flvr] = dfL_021_flvr_ita[flvr][ita].Histo1D(('pt_L_021_%s'%flvr, 'pt_L_021_%s'%flvr, len(b_pt)-1, b_pt), 'ptcone021')
-                _h_pt_T_021[flvr] = dfT_021_flvr_ita[flvr][ita].Histo1D(('pt_T_021_%s'%flvr, 'pt_T_021_%s'%flvr, len(b_pt)-1, b_pt), 'ptcone021')
-
-                h_pt[flvr]['L_021']  = _h_pt_L_021[flvr].GetPtr()
-                h_pt[flvr]['T_021']  = _h_pt_T_021[flvr].GetPtr()
-            print '\n\tfilling 021 done.'
-
-        if mode012 ==True:
-
-            _h_pt_L_012 = OrderedDict(); _h_pt_T_012 = OrderedDict()
-            for flvr in ['heavy','light']:
-                _h_pt_L_012[flvr] = dfL_012_flvr_ita[flvr][ita].Histo1D(('pt_L_012_%s'%flvr, 'pt_L_012_%s'%flvr, len(b_pt)-1, b_pt), 'ptcone012')
-                _h_pt_T_012[flvr] = dfT_012_flvr_ita[flvr][ita].Histo1D(('pt_T_012_%s'%flvr, 'pt_T_012_%s'%flvr, len(b_pt)-1, b_pt), 'ptcone012')
-
-                h_pt[flvr]['L_012']  = _h_pt_L_012[flvr].GetPtr()
-                h_pt[flvr]['T_012']  = _h_pt_T_012[flvr].GetPtr()
-            print '\n\tfilling 012 done.'
-
-
-        ### ADDING 012 + 021
-        h_pt['light']['T_012'].Add(h_pt['light']['T_021'])
-        h_pt['heavy']['T_012'].Add(h_pt['heavy']['T_021'])
-        print '\n\th entries tight:', h_pt['heavy']['T_012'].GetEntries(), h_pt['light']['T_012'].GetEntries()
-        print '\th sum tight:', h_pt['heavy']['T_012'].GetEntries() + h_pt['light']['T_012'].GetEntries()
-
-        h_pt['all']['T_012'].Add(h_pt['light']['T_012'])  
-        h_pt['all']['T_012'].Add(h_pt['heavy']['T_012'])  
-        print '\th entries tight:', h_pt['all']['T_012'].GetEntries()
-
-        h_pt['light']['L_012'].Add(h_pt['light']['L_021'])
-        h_pt['heavy']['L_012'].Add(h_pt['heavy']['L_021'])
-        print '\n\th entries  loose:', h_pt['heavy']['L_012'].GetEntries(), h_pt['light']['L_012'].GetEntries()
-        print '\th sum loose:', h_pt['heavy']['L_012'].GetEntries() + h_pt['light']['L_012'].GetEntries()
-
-        h_pt['all']['L_012'].Add(h_pt['light']['L_012'])  
-        h_pt['all']['L_012'].Add(h_pt['heavy']['L_012'])  
-        print '\th entries loose:', h_pt['all']['L_012'].GetEntries()
-
-
-        ### EFFICIENCIES
-        h_fr_pt = OrderedDict()
-        for flvr in flavors:
-            h_fr_pt[flvr] = rt.TEfficiency(h_pt[flvr]['T_012'], h_pt[flvr]['L_012'])
-            h_fr_pt[flvr].SetTitle('%s; p_{T} [GeV]; tight-to-loose ratio'%flvr)
-            h_fr_pt[flvr].SetFillColor(rt.kWhite)
-
-        h_fr_pt['all']  .SetMarkerColor(rt.kBlack)
-        h_fr_pt['light'].SetMarkerColor(rt.kBlue)
-        h_fr_pt['heavy'].SetMarkerColor(rt.kBlack+1)
-
-        ### PLOTTING
-        if sfr:
-
-            c_fr_pt = rt.TCanvas('ptCone_1f', 'ptCone_1f')
-            framer.Draw()
-            framer.GetYaxis().SetTitle('tight-to-loose ratio (SFR)')
-            framer.GetXaxis().SetTitle('p_{T}^{cone} [GeV]')
-            leg = rt.TLegend(0.57, 0.78, 0.80, 0.9)
-            for flvr in flavors:
-                h_fr_pt[flvr].Draw('same')
-                leg.AddEntry(h_fr_pt[flvr], h_fr_pt[flvr].GetTitle())
-            leg.Draw()
-            pf.showlogoprelimsim('CMS')
-            pf.showlumi(ch+ita)
-            save(knvs=c_fr_pt, sample='TT_DY_WJ', ch=ch+ita, DIR=plotDir)
- 
-        if dfr:
-
-            c_pt_2f = rt.TCanvas('ptCone_2f', 'ptCone_2f')
-            framer.Draw()
-            framer.GetYaxis().SetTitle('tight-to-loose ratio (DFR)')
-            framer.GetXaxis().SetTitle('p_{T}^{cone} [GeV]')
-            leg = rt.TLegend(0.57, 0.78, 0.80, 0.9)
-            for flvr in flavors:
-                h_fr_pt[flvr].Draw('same')
-                leg.AddEntry(h_fr_pt[flvr], h_fr_pt[flvr].GetTitle())
-            leg.Draw()
-            pf.showlogoprelimsim('CMS')
-            pf.showlumi(ch+ita)
-            save(knvs=c_pt_2f, sample='TT_DY_WJ', ch=ch+ita, DIR=plotDir)
-
-        i += 1
-        print '\n\t %s done'%ita
-
-    print '\n\t %s %s done'%(mode, ch)
-    sys.stderr = sys.__stderr__
-    sys.stdout = sys.__stdout__
-###########################################################################################################################################################################################
-
-###########################################################################################################################################################################################
 def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, verbose=True, output=False, fr=False, full=False):
     
     input = 'MC' if isData == False else 'DATA'
@@ -974,30 +385,32 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
             mode012 = True
             mode021 = True 
 
+        if ch == 'eem':
+            b_eta = b_eta_mu
+            cuts_FR_012 = cuts_FR + ' && hnl_dr_02 > 0.3 && hnl_dr_12 > 0.3 && ' + SFR_EEM_012_L
+            cuts_FR_021 = cuts_FR + ' && nbj > 50'
+            lnt_012 = SFR_EEM_012_LNT
+            lnt_021 = SFR_EEM_012_LNT
+            tight_012 = SFR_EEM_012_T
+            tight_021 = SFR_EEM_012_T
+            mode012 = True
+            mode021 = True
+
 
     ### PREPARE TREES
     t = None
     t = rt.TChain('tree')
-    #t.Add(DYBB_dir + suffix)
-#    t.Add(DY10_dir + suffix)
-#    t.Add(DY50_dir + suffix)
-    t.Add(eos+'ML_FR/mmm_full17_half1_output.root')
-    t.Add(eos+'ML_FR/mmm_full17_half2_output.root')
-    t.AddFriend('dataB = tree',  data_B_mmm+suffix)
-    t.AddFriend('dataC = tree',  data_C_mmm+suffix)
-    t.AddFriend('dataD = tree',  data_D_mmm+suffix)
-    t.AddFriend('dataE = tree',  data_E_mmm+suffix)
-    t.AddFriend('dataF = tree',  data_F_mmm+suffix) 
-    #t.Add(TT_dir + suffix)
-##    t.Add(W_dir + suffix)
-#    t.Add(W_ext_dir + suffix)
-#    fin = rt.TFile(skim_mem); t = fin.Get('tree')
-#    fin = rt.TFile(data_B_mmm); t = fin.Get('tree')
-    #fin = rt.TFile(data_B_mem + suffix); tr = fin.Get('tree'); tr.AddFriend('ft = tree', plotDir+'label.root')
-#    t.Add(skim_mem); 
-    #for d in DATA: t.Add(d + suffix)
-    #t.Add(data_B_mem + suffix)
-    #t.Add(data_B_mmm + suffix)
+    t.Add(eos+'ML_FR/data_geq0p01dxy/data_eem_6_19_output.root')
+    #t.Add(eos+'ML_FR/data_geq0p01dxy/data_6_18_untouched_half_output.root')
+    #t.Add(eos+'ML_FR/data_geq0p01dxy/data_6_18_training_half_output.root')
+    t.AddFriend('dataB = tree',  data_B_eem+suffix)
+    t.AddFriend('dataC = tree',  data_C_eem+suffix)
+    t.AddFriend('dataD = tree',  data_D_eem+suffix)
+    t.AddFriend('dataE = tree',  data_E_eem+suffix)
+    t.AddFriend('dataF = tree',  data_F_eem+suffix) 
+    #t.Add(eos+'ML_FR/DY/DY_6_18_half1_output.root')
+    #t.AddFriend('DY = tree',      DY50Dir_mmm    +suffix)
+    #t.AddFriend('DY_ext = tree',  DY50_extDir_mmm+suffix)
 
     ## FRIEND TREES
     if 3==4:
@@ -1030,6 +443,8 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
     df  = df0.Define('_norm_', '1')
     df  = df.Define('abs_l1_eta', 'abs(l1_eta)')
     df  = df.Define('abs_l2_eta', 'abs(l2_eta)')
+    df  = df.Define('abs_l1_dxy', 'abs(l1_dxy)')
+    df  = df.Define('abs_l2_dxy', 'abs(l2_dxy)')
     ## DIRRRTY TRICK, USING REALLY OLD NTUPLES
     if ch == 'eee':
         df.Define('l0_reliso_rho_03', 'l0_reliso05')
@@ -1083,7 +498,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
     dfL_021   = f1_021#.Define('abs_l1_eta', 'abs(l1_eta)')
 
     dfLNT0_021 = dfL_021.Filter(lnt_021)
-    dfLNT1_021 = dfLNT0_021.Define('fover1minusf021', 'score/(1-score)')
+    dfLNT1_021 = dfLNT0_021.Define('fover1minusf021', 'score/(1-score) * 1.70')
     dfLNT2_021 = dfLNT1_021.Define('lnt_021_evt_wht', 'fover1minusf021 * weight * lhe_weight')
     if isData == False: 
         dfLNT_021 = dfLNT2_021 
@@ -1121,7 +536,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
     dfL_012   = f1_012#.Define('abs_l2_eta', 'abs(l2_eta)')
 
     dfLNT0_012 = dfL_012.Filter(lnt_012)
-    dfLNT1_012 = dfLNT0_012.Define('fover1minusf012', 'score/(1-score)')
+    dfLNT1_012 = dfLNT0_012.Define('fover1minusf012', 'score/(1-score) * 1.70')
     dfLNT2_012 = dfLNT1_012.Define('lnt_012_evt_wht', 'fover1minusf012 * weight * lhe_weight')
     if isData == False: 
         dfLNT_012 = dfLNT2_012 
@@ -1189,6 +604,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
     VARS [ 'dr_02']      = [len(b_dR)-1,       b_dR_coarse,    'hnl_dr_02'      ,   ';#DeltaR(prompt_{1},  FO); Counts'] 
     VARS [ '2disp_sig']  = [len(b_2d_sig)-1,   b_2d_sig,       'hnl_2d_disp_sig',   ';2d_disp_sig ; Counts'] 
     VARS ['dphi_0dilep'] = [len(b_dphi)-1,     b_dphi,         'hnl_dphi_hnvis0',   ';#Delta#Phi(l_{0}, di-lep); Counts']
+    VARS ['FO_dxy']      = [len(b_dxy)-1,      b_dxy,          'abs_l2_dxy'     ,   ';|d_{xy}|(FO); Counts']
 
     _H_OBS_012 = OrderedDict();   _H_OBS_021 = OrderedDict();   dfT_021_L  = OrderedDict()
     _H_WHD_012 = OrderedDict();   _H_WHD_021 = OrderedDict();   dfT_012_L  = OrderedDict()   
@@ -1395,457 +811,6 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
 
     sys.stderr = sys.__stderr__
     sys.stdout = sys.__stdout__
-######################################################################################
-
-######################################################################################
-## FIXME TODO PLAN IS TO USE THIS INSTEAD OF REPEATING THE SAME IN EVERY FUNCTION --> PREPARE AND RETURN DFs
-## TODO make a class out of this
-class FakeRate(object):
-
-    def prepareDF(self, ch='mem'):
-
-        ### PREPARE CUTS AND FILES
-        SFR, DFR, dirs = selectCuts(ch)
-
-        SFR_021_L, SFR_012_L, SFR_021_LNT, SFR_012_LNT, SFR_021_T, SFR_012_T = SFR 
-        DFR_L, DFR_T, DFR_LNT = DFR
-        DYBB_dir, DY10_dir, DY50_dir, DY50_ext_dir, TT_dir, W_dir, W_ext_dir, DATA = dirs   
-
-        dRdefList, sHdefList = selectDefs(ch)
-
-        l0_is_fake, no_fakes, one_fake_xor, two_fakes, twoFakes_sameJet = dRdefList
-
-        ### PREPARE DF
-        t = None
-        t = rt.TChain('tree')
-        t.Add(DYBB_dir + suffix)
-        t.Add(DY10_dir + suffix)
-        t.Add(DY50_dir + suffix)
-        t.Add(DY50_ext_dir + suffix)
-        t.Add(TT_dir + suffix)
-        t.Add(W_dir + suffix)
-    #    t.Add(W_ext_dir + suffix)
-        df = rdf(t)
-        print'\n\tchain made.'
-        N_ENTRIES = df.Count()
-
-        if sfr:
-
-            #### GENERAL 
-            print '\n\tpreparing single fakes ...'
-            mode021 = False; mode012 = False
-
-            cuts_FR = 'hnl_dr_12 > 0.3'
-
-            #### CHANNEL SPECIFIC
-            if ch == 'mem':
-                mode021 = True
-                cuts_FR += ' && abs(l1_gen_match_pdgid) != 22'
-
-            if ch == 'mmm':
-               mode012 = True
-               mode021 = True
-
-            ### PREPARE DATAFRAMES
-            if mode021 == True:
-                cuts_l_021 = cuts_FR + ' && l1_jet_flavour_parton != -99 && ' + l0l2 + ' && ' + l1_loose
-                f0_021 = df.Filter(cuts_l_021)
-                print '\n\tloose 021 defined.'
-
-                dfL_021 = f0_021.Define('ptcone021', PTCONEL1)
-                print '\n\tptcone 021: %s\n' %PTCONEL1
-                print '\tptcone 021 defined.'
-
-                dfL_021_light = dfL_021.Filter('abs(l1_jet_flavour_parton) != 4 && abs(l1_jet_flavour_parton) != 5')
-                dfL_021_heavy = dfL_021.Filter('abs(l1_jet_flavour_parton) == 4 || abs(l1_jet_flavour_parton) == 5')
-                print '\tflavours 021 defined.'
-
-                dfL_021_light_eta0 = dfL_021_light.Filter(l_eta[l_eta.keys()[0]])
-                dfL_021_heavy_eta0 = dfL_021_heavy.Filter(l_eta[l_eta.keys()[0]])
-
-                dfL_021_light_eta1 = dfL_021_light.Filter(l_eta[l_eta.keys()[1]])
-                dfL_021_heavy_eta1 = dfL_021_heavy.Filter(l_eta[l_eta.keys()[1]])
-
-                dfL_021_light_eta2 = dfL_021_light.Filter(l_eta[l_eta.keys()[2]])
-                dfL_021_heavy_eta2 = dfL_021_heavy.Filter(l_eta[l_eta.keys()[2]])
-                print '\tloose 021 eta defined.'
-
-                dfT_021_light_eta0 = dfL_021_light_eta0.Filter(l1_tight)
-                dfT_021_heavy_eta0 = dfL_021_heavy_eta0.Filter(l1_tight)
-
-                dfT_021_light_eta1 = dfL_021_light_eta1.Filter(l1_tight)
-                dfT_021_heavy_eta1 = dfL_021_heavy_eta1.Filter(l1_tight)
-
-                dfT_021_light_eta2 = dfL_021_light_eta2.Filter(l1_tight)
-                dfT_021_heavy_eta2 = dfL_021_heavy_eta2.Filter(l1_tight)
-                print '\ttight 021 defined.'
-
-                _dfL_021_light = [dfL_021_light_eta0, dfL_021_light_eta1, dfL_021_light_eta2]
-                _dfL_021_heavy = [dfL_021_heavy_eta0, dfL_021_heavy_eta1, dfL_021_heavy_eta2]
-
-                _dfT_021_light = [dfT_021_light_eta0, dfT_021_light_eta1, dfT_021_light_eta2]
-                _dfT_021_heavy = [dfT_021_heavy_eta0, dfT_021_heavy_eta1, dfT_021_heavy_eta2]
-
-            if mode012 == True:
-                cuts_l_012 = cuts_FR + ' && l2_jet_flavour_parton != -99 && ' + l0l1 + ' && ' + l2_loose 
-
-                f0_012 = df.Filter(cuts_l_012)
-                print '\n\tloose 012 defined.'
-
-                dfL_012 = f0_012.Define('ptcone012', PTCONEL2)
-                print '\n\tptcone 012: %s\n' %PTCONEL2
-                print '\tptcone 012 defined.'
-
-                dfL_012_light = dfL_012.Filter('abs(l2_jet_flavour_parton) != 4 && abs(l2_jet_flavour_parton) != 5')
-                dfL_012_heavy = dfL_012.Filter('abs(l2_jet_flavour_parton) == 4 || abs(l2_jet_flavour_parton) == 5')
-                print '\tflavours 012 defined.'
-
-                dfL_012_light_eta0 = dfL_012_light.Filter(re.sub('l1_eta','l2_eta',l_eta[l_eta.keys()[0]]))
-                dfL_012_heavy_eta0 = dfL_012_heavy.Filter(re.sub('l1_eta','l2_eta',l_eta[l_eta.keys()[0]]))
-
-                dfL_012_light_eta1 = dfL_012_light.Filter(re.sub('l1_eta','l2_eta',l_eta[l_eta.keys()[1]]))
-                dfL_012_heavy_eta1 = dfL_012_heavy.Filter(re.sub('l1_eta','l2_eta',l_eta[l_eta.keys()[1]]))
-
-                dfL_012_light_eta2 = dfL_012_light.Filter(re.sub('l1_eta','l2_eta',l_eta[l_eta.keys()[2]]))
-                dfL_012_heavy_eta2 = dfL_012_heavy.Filter(re.sub('l1_eta','l2_eta',l_eta[l_eta.keys()[2]]))
-                print '\tloose 012 eta defined.'
-
-                dfT_012_light_eta0 = dfL_012_light_eta0.Filter(l2_tight)
-                dfT_012_heavy_eta0 = dfL_012_heavy_eta0.Filter(l2_tight)
-
-                dfT_012_light_eta1 = dfL_012_light_eta1.Filter(l2_tight)
-                dfT_012_heavy_eta1 = dfL_012_heavy_eta1.Filter(l2_tight)
-
-                dfT_012_light_eta2 = dfL_012_light_eta2.Filter(l2_tight)
-                dfT_012_heavy_eta2 = dfL_012_heavy_eta2.Filter(l2_tight)
-                print '\ttight 012 defined.'
-
-                _dfT_012_light = [dfT_012_light_eta0, dfT_012_light_eta1, dfT_012_light_eta2]
-                _dfT_012_heavy = [dfT_012_heavy_eta0, dfT_012_heavy_eta1, dfT_012_heavy_eta2]
-
-                _dfL_012_light = [dfL_012_light_eta0, dfL_012_light_eta1, dfL_012_light_eta2]
-                _dfL_012_heavy = [dfL_012_heavy_eta0, dfL_012_heavy_eta1, dfL_012_heavy_eta2]
-######################################################################################
-
-######################################################################################
-def checkIsoPDF(ch='mmm',ID='No',eta_split=True,mode='sfr',dR='03',fullSplit=False):
-
-    sfr = False; dfr = False; print '\n\tmode: %s, \tch: %s' %(mode, ch)
-    if mode == 'sfr': sfr = True
-    if mode == 'dfr': dfr = True
-
-    plotDir = makeFolder('checkIsoPDF_%s' %ch)
-    print '\n\tplotDir:', plotDir
-    sys.stdout = Logger(plotDir + 'checkIsoPDF_%s' %ch)
-
-    l_eta = None; l_eta = OrderedDict()
-    l_eta['_eta_all'] = '1 == 1'
-
-    if eta_split == True: 
-
-        if ch == 'mem':
-            l_eta = None; l_eta = OrderedDict()
-            l_eta ['_eta_00t08'] = 'abs(l1_eta) < 0.8'; l_eta ['_eta_08t15'] = 'abs(l1_eta) > 0.8 && abs(l1_eta) < 1.479'; l_eta ['_eta_15t25'] = 'abs(l1_eta) > 1.479 && abs(l1_eta) < 2.5'
-
-
-        if ch == 'mmm':
-            l_eta = None; l_eta = OrderedDict()
-            l_eta ['_eta_00t12'] = 'abs(l1_eta) < 1.2'; l_eta ['_eta_12t21'] = 'abs(l1_eta) > 1.2 && abs(l1_eta) < 2.1'; l_eta ['_eta_21t24'] = 'abs(l1_eta) > 2.1 && abs(l1_eta) < 2.4'
-
-        if dfr: 
-            l_eta = None; l_eta = OrderedDict()
-            l_eta ['_eta_00t12'] = 'abs(l1_eta) < 1.2'; l_eta ['_eta_12t21'] = 'abs(l1_eta) > 1.2 && abs(l1_eta) < 2.1'; l_eta ['_eta_21t24'] = 'abs(l1_eta) > 2.1 && abs(l1_eta) < 2.4'
-            for i in l_eta.keys(): l_eta[i] = re.sub('l1', 'hnl_hn_vis', l_eta[i])
-
-    print '\n\teta:', l_eta
-
-    ### PREPARE CUTS AND FILES
-    SFR, DFR, dirs = selectCuts(ch)
-
-    SFR_021_L, SFR_012_L, SFR_021_LNT, SFR_012_LNT, SFR_021_T, SFR_012_T = SFR 
-    DFR_L, DFR_T, DFR_LNT = DFR
-    DYBB_dir, DY10_dir, DY50_dir, DY50_ext_dir, TT_dir, W_dir, W_ext_dir, DATA = dirs   
-
-    dRdefList, sHdefList = selectDefs(ch)
-
-    l0_is_fake, no_fakes, one_fake_xor, two_fakes, twoFakes_sameJet = dRdefList
-
-    ### PREPARE TREES
-    t = None
-    t = rt.TChain('tree')
-#    t.Add(DYBB_dir + suffix)
-#    t.Add(DY10_dir + suffix)
-    t.Add(DY50_dir + suffix)
-    t.Add(DY50_ext_dir + suffix)
-#    t.Add(TT_dir + suffix)
-##    t.Add(W_dir + suffix)
-#    t.Add(W_ext_dir + suffix)
-#    fin = rt.TFile('/afs/cern.ch/work/m/manzoni/public/forVinzenzDavid/mme_tree.root'); t = fin.Get('tree')
-    df = rdf(t)
-    print'\n\tchain made.'
-    N_ENTRIES = df.Count()
-
-    if sfr:
-
-        #### GENERAL 
-        ptconel1 = PTCONEL1
-        ptconel2 = PTCONEL2
-        print '\n\tdrawing single fakes ...'
-        mode021 = False; mode012 = False
-
-        cuts_FR = 'hnl_dr_12 > 0.3'
-        L1ID = ''
-        L2ID = ''
-
-        #### CHANNEL SPECIFIC
-        if ch == 'mem':
-            mode021 = True
-            cuts_FR += ' && abs(l1_gen_match_pdgid) != 22'
-            cuts_FR_021 = cuts_FR + ' && hnl_dr_01 > 0.3 && ' + SFR_MEM_021_L
-            if ID == 'M':
-                L1ID = ' && l1_MediumNoIso == 1'
-            if ID == 'L':
-                L1ID = ' && l1_LooseNoIso == 1'
-
-        if ch == 'eem':
-           mode012 = True
-           cuts_FR_012 = cuts_FR + ' && ' + SFR_EEM_012_L
-           if ID == 'M':
-                L2ID = ' && l2_Medium == 1'
-
-        if ch == 'mmm':
-           cuts_FR_012 = cuts_FR + ' && hnl_dr_02 > 0.3 && ' + SFR_MMM_012_L
-           cuts_FR_021 = cuts_FR + ' && hnl_dr_01 > 0.3 && ' + SFR_MMM_021_L
-           mode012 = True
-           mode021 = True
-           if ID == 'M':
-                L1ID = ' && l1_Medium == 1'
-                L2ID = ' && l2_Medium == 1'
-
-    if dfr: ## FOR DFR NO L1 < -- > L2 IS NEEDED => DRAW EVERYTHING WITH MODE021
-
-        #### GENERAL 
-        print '\n\tdrawing double fakes ...'
-        mode021 = False; mode012 = False
-        ptconel1 = PTCONE
-
-        cuts_FR = 'hnl_dr_12 < 0.3'
-        L1ID = ''
-        #### CHANNEL SPECIFIC
-        if ch == 'mem':
-            mode021 = True
-            cuts_FR += ' && abs(l1_gen_match_pdgid) != 22'
-            cuts_FR_021 = cuts_FR + ' && ' + DFR_MEM_L
-            if ID == 'M':
-                L1ID = ' && l1_MediumNoIso == 1 && l2_Medium == 1'
-            if ID == 'L':
-                L1ID = ' && l1_LooseNoIso == 1 && l2_id_l == 1'
-
-
-    ### PREPARE DATAFRAMES
-    if mode021 == True:
-        cuts_l_021 = cuts_FR_021 + ' && l1_jet_flavour_parton != -99' + L1ID 
-        cuts_l_021 = re.sub('abs\(l._reliso_rho_0.\) < ... \&\& ', '', cuts_l_021)
-        print cuts_l_021
-
-        f0_021 = df.Filter(cuts_l_021)
-        print '\n\tloose 021 defined.'
-
-        dfL_021 = f0_021.Define('ptcone021', ptconel1)
-        print '\n\tptcone 021: %s\n' %ptconel1
-        print '\tptcone 021 defined.'
-
-        dfL_021_light = dfL_021.Filter('abs(l1_jet_flavour_parton) != 4 && abs(l1_jet_flavour_parton) != 5')
-        dfL_021_heavy = dfL_021.Filter('abs(l1_jet_flavour_parton) == 4 || abs(l1_jet_flavour_parton) == 5')
-        print '\tflavours 021 defined.'
-
-        dfL_021_light_eta0 = dfL_021_light.Filter(l_eta[l_eta.keys()[0]])
-        dfL_021_heavy_eta0 = dfL_021_heavy.Filter(l_eta[l_eta.keys()[0]])
-
-        dfL_021_light_eta1 = dfL_021_light.Filter(l_eta[l_eta.keys()[1]])
-        dfL_021_heavy_eta1 = dfL_021_heavy.Filter(l_eta[l_eta.keys()[1]])
-
-        dfL_021_light_eta2 = dfL_021_light.Filter(l_eta[l_eta.keys()[2]])
-        dfL_021_heavy_eta2 = dfL_021_heavy.Filter(l_eta[l_eta.keys()[2]])
-        print '\tloose 021 eta defined.'
-
-        _dfL_021_light = [dfL_021_light_eta0, dfL_021_light_eta1, dfL_021_light_eta2]
-        _dfL_021_heavy = [dfL_021_heavy_eta0, dfL_021_heavy_eta1, dfL_021_heavy_eta2]
-
-
-    if mode012 == True:
-        cuts_l_012 = cuts_FR_012 + ' && l2_jet_flavour_parton != -99' + L2ID
-        cuts_l_012 = re.sub('abs\(l._reliso_rho_0.\) < ... \&\& ', '', cuts_l_012)
-        print cuts_l_012
-
-        f0_012 = df.Filter(cuts_l_012)
-        print '\n\tloose 012 defined.'
-
-        dfL_012 = f0_012.Define('ptcone012', ptconel2)
-        print '\n\tptcone 012: %s\n' %ptconel2
-        print '\tptcone 012 defined.'
-
-        dfL_012_light = dfL_012.Filter('abs(l2_jet_flavour_parton) != 4 && abs(l2_jet_flavour_parton) != 5')
-        dfL_012_heavy = dfL_012.Filter('abs(l2_jet_flavour_parton) == 4 || abs(l2_jet_flavour_parton) == 5')
-        print '\tflavours 012 defined.'
-
-        dfL_012_light_eta0 = dfL_012_light.Filter(re.sub('l1_eta','l2_eta',l_eta[l_eta.keys()[0]]))
-        dfL_012_heavy_eta0 = dfL_012_heavy.Filter(re.sub('l1_eta','l2_eta',l_eta[l_eta.keys()[0]]))
-
-        dfL_012_light_eta1 = dfL_012_light.Filter(re.sub('l1_eta','l2_eta',l_eta[l_eta.keys()[1]]))
-        dfL_012_heavy_eta1 = dfL_012_heavy.Filter(re.sub('l1_eta','l2_eta',l_eta[l_eta.keys()[1]]))
-
-        dfL_012_light_eta2 = dfL_012_light.Filter(re.sub('l1_eta','l2_eta',l_eta[l_eta.keys()[2]]))
-        dfL_012_heavy_eta2 = dfL_012_heavy.Filter(re.sub('l1_eta','l2_eta',l_eta[l_eta.keys()[2]]))
-        print '\tloose 012 eta defined.'
-
-        if fullSplit == False:
-            _dfL_012_light = [dfL_012_light_eta0, dfL_012_light_eta1, dfL_012_light_eta2]
-            _dfL_012_heavy = [dfL_012_heavy_eta0, dfL_012_heavy_eta1, dfL_012_heavy_eta2]
-    
-    print '\n\t cuts: %s'                %cuts_FR
-    if mode012 ==True:
-        print '\ttotal 012 loose: %s\n'      %f0_012.Count().GetValue()
-    if mode021 ==True:  
-        print '\ttotal 021 loose: %s\n'      %f0_021.Count().GetValue()
-
-    vars = {'reliso_rho_%s'%dR:[1500,0.01,15.01]}
-    #'pt':[50,0.,102],  'abs_iso_rho': [150,0,150], 'abs_iso_db': [150,0,150]}#,  'l2_pt':[50,2,102], 'l0_pt':[50,2,102], 'abs_dxy':[60,0.05,3.05]}
-    
-    for var in vars.keys():
-
-        print'\n\tdrawing %s \n'%var
-        h_light_021_eta0 = rt.TH1F('l1_'+var+'eta0_light','l1_'+var+'eta0_light',vars[var][0],vars[var][1],vars[var][2])
-        h_heavy_021_eta0 = rt.TH1F('l1_'+var+'eta0_heavy','l1_'+var+'eta0_heavy',vars[var][0],vars[var][1],vars[var][2])
-
-        h_light_021_eta1 = rt.TH1F('l1_'+var+'eta1_light','l1_'+var+'eta1_light',vars[var][0],vars[var][1],vars[var][2])
-        h_heavy_021_eta1 = rt.TH1F('l1_'+var+'eta1_heavy','l1_'+var+'eta1_heavy',vars[var][0],vars[var][1],vars[var][2])
-
-        h_light_021_eta2 = rt.TH1F('l1_'+var+'eta2_light','l1_'+var+'eta2_light',vars[var][0],vars[var][1],vars[var][2])
-        h_heavy_021_eta2 = rt.TH1F('l1_'+var+'eta2_heavy','l1_'+var+'eta2_heavy',vars[var][0],vars[var][1],vars[var][2])
-
-        h_light_012_eta0 = rt.TH1F('l2_'+var+'eta0_light','l2_'+var+'eta0_light',vars[var][0],vars[var][1],vars[var][2])
-        h_heavy_012_eta0 = rt.TH1F('l2_'+var+'eta0_heavy','l2_'+var+'eta0_heavy',vars[var][0],vars[var][1],vars[var][2])
-
-        h_light_012_eta1 = rt.TH1F('l2_'+var+'eta1_light','l2_'+var+'eta1_light',vars[var][0],vars[var][1],vars[var][2])
-        h_heavy_012_eta1 = rt.TH1F('l2_'+var+'eta1_heavy','l2_'+var+'eta1_heavy',vars[var][0],vars[var][1],vars[var][2])
-
-        h_light_012_eta2 = rt.TH1F('l2_'+var+'eta2_light','l2_'+var+'eta2_light',vars[var][0],vars[var][1],vars[var][2])
-        h_heavy_012_eta2 = rt.TH1F('l2_'+var+'eta2_heavy','l2_'+var+'eta2_heavy',vars[var][0],vars[var][1],vars[var][2])
-
-        if ch =='mmm': 
-           mode012 = True
-           mode021 = True
- 
-        if mode021 == True:
-            _h_light_021_eta0 = _dfL_021_light[0].Histo1D(('l1_'+var+'eta0_light','l1_'+var+'eta0_light',vars[var][0],vars[var][1],vars[var][2]),'l1_'+var)
-            _h_heavy_021_eta0 = _dfL_021_heavy[0].Histo1D(('l1_'+var+'eta0_heavy','l1_'+var+'eta0_heavy',vars[var][0],vars[var][1],vars[var][2]),'l1_'+var)
-
-            _h_light_021_eta1 = _dfL_021_light[1].Histo1D(('l1_'+var+'eta1_light','l1_'+var+'eta1_light',vars[var][0],vars[var][1],vars[var][2]),'l1_'+var)
-            _h_heavy_021_eta1 = _dfL_021_heavy[1].Histo1D(('l1_'+var+'eta1_heavy','l1_'+var+'eta1_heavy',vars[var][0],vars[var][1],vars[var][2]),'l1_'+var)
-
-            _h_light_021_eta2 = _dfL_021_light[2].Histo1D(('l1_'+var+'eta2_light','l1_'+var+'eta2_light',vars[var][0],vars[var][1],vars[var][2]),'l1_'+var)
-            _h_heavy_021_eta2 = _dfL_021_heavy[2].Histo1D(('l1_'+var+'eta2_heavy','l1_'+var+'eta2_heavy',vars[var][0],vars[var][1],vars[var][2]),'l1_'+var)
-
-            h_light_021_eta0 = _h_light_021_eta0.GetPtr()
-            h_heavy_021_eta0 = _h_heavy_021_eta0.GetPtr()
-
-            h_light_021_eta1 = _h_light_021_eta1.GetPtr()
-            h_heavy_021_eta1 = _h_heavy_021_eta1.GetPtr()
-
-            h_light_021_eta2 = _h_light_021_eta2.GetPtr()
-            h_heavy_021_eta2 = _h_heavy_021_eta2.GetPtr()
-
-        if mode012 == True:
-            _h_light_012_eta0 = _dfL_012_light[0].Histo1D(('l2_'+var+'eta0_light','l2_'+var+'eta0_light',vars[var][0],vars[var][1],vars[var][2]),'l2_'+var)
-            _h_heavy_012_eta0 = _dfL_012_heavy[0].Histo1D(('l2_'+var+'eta0_heavy','l2_'+var+'eta0_heavy',vars[var][0],vars[var][1],vars[var][2]),'l2_'+var)
-
-            _h_light_012_eta1 = _dfL_012_light[1].Histo1D(('l2_'+var+'eta1_light','l2_'+var+'eta1_light',vars[var][0],vars[var][1],vars[var][2]),'l2_'+var)
-            _h_heavy_012_eta1 = _dfL_012_heavy[1].Histo1D(('l2_'+var+'eta1_heavy','l2_'+var+'eta1_heavy',vars[var][0],vars[var][1],vars[var][2]),'l2_'+var)
-
-            _h_light_012_eta2 = _dfL_012_light[2].Histo1D(('l2_'+var+'eta2_light','l2_'+var+'eta2_light',vars[var][0],vars[var][1],vars[var][2]),'l2_'+var)
-            _h_heavy_012_eta2 = _dfL_012_heavy[2].Histo1D(('l2_'+var+'eta2_heavy','l2_'+var+'eta2_heavy',vars[var][0],vars[var][1],vars[var][2]),'l2_'+var)
-
-            h_light_012_eta0 = _h_light_012_eta0.GetPtr()
-            h_heavy_012_eta0 = _h_heavy_012_eta0.GetPtr()
-
-            h_light_012_eta1 = _h_light_012_eta1.GetPtr()
-            h_heavy_012_eta1 = _h_heavy_012_eta1.GetPtr()
- 
-            h_light_012_eta2 = _h_light_012_eta2.GetPtr()
-            h_heavy_012_eta2 = _h_heavy_012_eta2.GetPtr()
-
-        h_light_012_eta0.Add(h_light_021_eta0); h_light_eta0 = h_light_012_eta0
-        h_heavy_012_eta0.Add(h_heavy_021_eta0); h_heavy_eta0 = h_heavy_012_eta0
-
-        h_light_012_eta1.Add(h_light_021_eta1); h_light_eta1 = h_light_012_eta1
-        h_heavy_012_eta1.Add(h_heavy_021_eta1); h_heavy_eta1 = h_heavy_012_eta1
-
-        h_light_012_eta2.Add(h_light_021_eta2); h_light_eta2 = h_light_012_eta2
-        h_heavy_012_eta2.Add(h_heavy_021_eta2); h_heavy_eta2 = h_heavy_012_eta2
-
-        h_light_eta0.SetMarkerStyle(1); h_light_eta0.SetMarkerSize(0.7); h_light_eta0.SetMarkerColor(rt.kBlue+2); h_light_eta0.SetLineColor(rt.kBlue+2);  h_light_eta0.SetTitle('light_eta0')
-        h_heavy_eta0.SetMarkerStyle(1); h_heavy_eta0.SetMarkerSize(0.7); h_heavy_eta0.SetMarkerColor(rt.kRed+2);  h_heavy_eta0.SetLineColor(rt.kRed+2);   h_heavy_eta0.SetTitle('heavy_eta0')
-
-        h_light_eta1.SetMarkerStyle(1); h_light_eta1.SetMarkerSize(0.7); h_light_eta1.SetMarkerColor(rt.kBlue+2); h_light_eta1.SetLineColor(rt.kBlue+2);  h_light_eta1.SetTitle('light_eta1')
-        h_heavy_eta1.SetMarkerStyle(1); h_heavy_eta1.SetMarkerSize(0.7); h_heavy_eta1.SetMarkerColor(rt.kRed+2);  h_heavy_eta1.SetLineColor(rt.kRed+2);   h_heavy_eta1.SetTitle('heavy_eta1')
-
-        h_light_eta2.SetMarkerStyle(1); h_light_eta2.SetMarkerSize(0.7); h_light_eta2.SetMarkerColor(rt.kBlue+2); h_light_eta2.SetLineColor(rt.kBlue+2);  h_light_eta2.SetTitle('light_eta2')
-        h_heavy_eta2.SetMarkerStyle(1); h_heavy_eta2.SetMarkerSize(0.7); h_heavy_eta2.SetMarkerColor(rt.kRed+2);  h_heavy_eta2.SetLineColor(rt.kRed+2);   h_heavy_eta2.SetTitle('heavy_eta2')
-
-        _h_light = [h_light_eta0, h_light_eta1, h_light_eta2] 
-        _h_heavy = [h_heavy_eta0, h_heavy_eta1, h_heavy_eta2] 
-
-        i = 0
-        for i_eta in l_eta.keys():
-            print '\n\tcheck if correct:', i_eta, 'eta%d'%i
-
-            h_light = _h_light[i]
-            h_heavy = _h_heavy[i]
-
-            print '\n\tevents:', h_light.Integral(), h_heavy.Integral()
-            h_light.Scale(1./h_light.Integral())
-            h_heavy.Scale(1./h_heavy.Integral())
-
-            CH=ch
-            if l_eta[i_eta] != '1': CH=ch+i_eta
-
-            c = rt.TCanvas(var,var)
-            h_light.Draw()
-            h_heavy.Draw('same')
-            c.BuildLegend()
-            pf.showlogoprelimsim('CMS')
-            pf.showlumi(CH+'_'+var)
-            save(c, sample='checkIsoPDF_ID'+ID, ch=CH, DIR=plotDir)
-
-            h_light_cdf = h_light.GetCumulative()
-            h_heavy_cdf = h_heavy.GetCumulative()
-
-            h_light_cdf.SetMarkerStyle(1); h_light_cdf.SetMarkerSize(0.5); h_light_cdf.SetLineColor(rt.kGreen+2); h_light_cdf.SetMarkerColor(rt.kGreen+2); h_light_cdf.SetTitle('light')
-            h_heavy_cdf.SetMarkerStyle(1); h_heavy_cdf.SetMarkerSize(0.5); h_heavy_cdf.SetLineColor(rt.kRed+2);   h_heavy_cdf.SetMarkerColor(rt.kRed+2);   h_heavy_cdf.SetTitle('heavy')
-
-            c = rt.TCanvas('cdf_'+'rho_'+dR,'cdf_'+'rho_'+dR)
-            h_light_cdf.Draw()
-            h_heavy_cdf.Draw('same')
-            c.BuildLegend()
-            pf.showlogoprelimsim('CMS')
-            pf.showlumi(CH+'cdf_'+'rho_'+dR)
-            save(c, sample='checkIsoCDF_ID'+ID, ch=CH, DIR=plotDir)
-
-            h_heavy_over_light = rt.TH1F('cdf_div','cdf_div', vars[var][0], vars[var][1], vars[var][2])
-            h_heavy_over_light.Divide(h_heavy_cdf, h_light_cdf)
-
-            c = rt.TCanvas('cdf_div_'+'rho_'+dR,'cdf_div_'+'rho_'+dR)
-            h_heavy_over_light.GetXaxis().SetRangeUser(0.01,10)
-            h_heavy_over_light.Draw()
-            pf.showlogoprelimsim('CMS')
-            pf.showlumi(CH+'_cdf_div_'+'rho_'+dR)
-            c.SetLogx()
-            save(c, sample='checkIsoCDF_ID'+ID, ch=CH, DIR=plotDir)
-            i += 1
-
-    sys.stderr = sys.__stderr__
-    sys.stdout = sys.__stdout__
 ###########################################################################################################################################################################################
     #############       UTILS       ###############
 ###########################################################################################################################################################################################
@@ -1885,9 +850,9 @@ def selectCuts(channel):
         TT_dir         =   TT_dir_eem
         data           =   [data_B_eem, data_C_eem, data_D_eem, data_E_eem, data_F_eem]
 
-        DFR_T          =   DFR_EMM_T
-        DFR_L          =   DFR_EMM_L
-        DFR_LNT        =   DFR_EMM_LNT
+        DFR_T          =   ''
+        DFR_L          =   ''
+        DFR_LNT        =   ''
 
         SFR_012_L       =  SFR_EEM_012_L  
         SFR_012_LNT     =  SFR_EEM_012_LNT
@@ -2009,6 +974,9 @@ def save(knvs, iso=0, sample='', ch='', eta='', DIR=plotDir):
             knvs.SaveAs('{dr}{smpl}_{ch}_{ttl}.png' .format(dr=DIR, smpl=sample, ttl=knvs.GetTitle(), ch=ch))
             knvs.SaveAs('{dr}{smpl}_{ch}_{ttl}.pdf' .format(dr=DIR, smpl=sample, ttl=knvs.GetTitle(), ch=ch))
             knvs.SaveAs('{dr}{smpl}_{ch}_{ttl}.root'.format(dr=DIR, smpl=sample, ttl=knvs.GetTitle(), ch=ch))
+    knvs.SetLogy()
+    knvs.SaveAs('{dr}{smpl}_{ch}_{ttl}_log.png' .format(dr=DIR, smpl=sample, ttl=knvs.GetTitle(), ch=ch))
+    knvs.SaveAs('{dr}{smpl}_{ch}_{ttl}_log.pdf' .format(dr=DIR, smpl=sample, ttl=knvs.GetTitle(), ch=ch))
 ######################################################################################
 
 ######################################################################################
@@ -2042,7 +1010,3 @@ def makeLabel(sample_dir, ch='mmm', lbl='1',era='B'):
     for br in ['event', 'lumi', 'label']:
         bL.push_back(br)
     df.Snapshot('tree', plotDir + 'friend_tree_label_%s_%s%s.root'%(ch,lbl,era), bL)
-
-def multiDraw(dataFrameHisto):
-    h = dataFrameHisto.GetPtr()
-    return h
