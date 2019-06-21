@@ -162,7 +162,7 @@ SFR_EEE_L_CUT = ''
 #SFR_MMM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.42 && abs(l1_eta) < 1.2) || (l1_reliso_rho_03 < 0.35 && abs(l1_eta) > 1.2) )'  # dR 03
 SFR_MMM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.6 && abs(l1_eta) < 1.2) || (l1_reliso_rho_03 < 0.95 && abs(l1_eta) > 1.2 && abs(l1_eta) < 2.1) || (l1_reliso_rho_03 < 0.4 && abs(l1_eta) > 2.1) )'  # dR 03 (29.4.19)
 SFR_MMM_L_CUT = '' #try to see what happens...
-SFR_MMM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.38 && abs(l1_eta) < 1.2) || (l1_reliso_rho_03 < 0.29 && abs(l1_eta) > 1.2 && abs(l1_eta) < 2.1) || (l1_reliso_rho_03 < 0.19 && abs(l1_eta) > 2.1) )'  #dR 03 (6.5.19 incl cross dR veto)
+#SFR_MMM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.38 && abs(l1_eta) < 1.2) || (l1_reliso_rho_03 < 0.29 && abs(l1_eta) > 1.2 && abs(l1_eta) < 2.1) || (l1_reliso_rho_03 < 0.19 && abs(l1_eta) > 2.1) )'  #dR 03 (6.5.19 incl cross dR veto)
 #SFR_MEM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.6  && abs(l1_eta) < 0.8) || (l1_reliso_rho_03 < 0.35 && abs(l1_eta) > 0.8) )'  # dR 03
 SFR_MEM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.93  && abs(l1_eta) < 0.8) || (l1_reliso_rho_03 < 0.63 && abs(l1_eta) > 0.8 && abs(l1_eta) < 1.479) || (l1_reliso_rho_03 < 0.41 && abs(l1_eta) > 1.479) )' #dR 03 (7.5.19 incl cross dR veto)
 #SFR_MEM_L_CUT = ' && ( (l1_reliso_rho_04 < 0.4  && abs(l1_eta) < 0.8) || (l1_reliso_rho_04 < 0.7 && abs(l1_eta) > 0.8 && abs(l1_eta) < 1.479) || (l1_reliso_rho_04 < 0.3 && abs(l1_eta) > 1.479) )'  # dR 04
@@ -400,14 +400,14 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
     ### PREPARE TREES
     t = None
     t = rt.TChain('tree')
-    t.Add(eos+'ML_FR/data_geq0p01dxy/data_eem_6_19_output.root')
+    #t.Add(eos+'ML_FR/data_geq0p01dxy/data_eem_6_19_output.root')
     #t.Add(eos+'ML_FR/data_geq0p01dxy/data_6_18_untouched_half_output.root')
-    #t.Add(eos+'ML_FR/data_geq0p01dxy/data_6_18_training_half_output.root')
-    t.AddFriend('dataB = tree',  data_B_eem+suffix)
-    t.AddFriend('dataC = tree',  data_C_eem+suffix)
-    t.AddFriend('dataD = tree',  data_D_eem+suffix)
-    t.AddFriend('dataE = tree',  data_E_eem+suffix)
-    t.AddFriend('dataF = tree',  data_F_eem+suffix) 
+    t.Add(eos+'ML_FR/data_geq0p01dxy/data_6_18_training_half_output.root')
+    t.AddFriend('dataB = tree',  data_B_mmm+suffix)
+    t.AddFriend('dataC = tree',  data_C_mmm+suffix)
+    t.AddFriend('dataD = tree',  data_D_mmm+suffix)
+    t.AddFriend('dataE = tree',  data_E_mmm+suffix)
+    t.AddFriend('dataF = tree',  data_F_mmm+suffix) 
     #t.Add(eos+'ML_FR/DY/DY_6_18_half1_output.root')
     #t.AddFriend('DY = tree',      DY50Dir_mmm    +suffix)
     #t.AddFriend('DY_ext = tree',  DY50_extDir_mmm+suffix)
@@ -498,7 +498,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
     dfL_021   = f1_021#.Define('abs_l1_eta', 'abs(l1_eta)')
 
     dfLNT0_021 = dfL_021.Filter(lnt_021)
-    dfLNT1_021 = dfLNT0_021.Define('fover1minusf021', 'score/(1-score) * 1.70')
+    dfLNT1_021 = dfLNT0_021.Define('fover1minusf021', 'ml_fr_weight/(1-ml_fr_weight)')
     dfLNT2_021 = dfLNT1_021.Define('lnt_021_evt_wht', 'fover1minusf021 * weight * lhe_weight')
     if isData == False: 
         dfLNT_021 = dfLNT2_021 
@@ -536,7 +536,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
     dfL_012   = f1_012#.Define('abs_l2_eta', 'abs(l2_eta)')
 
     dfLNT0_012 = dfL_012.Filter(lnt_012)
-    dfLNT1_012 = dfLNT0_012.Define('fover1minusf012', 'score/(1-score) * 1.70')
+    dfLNT1_012 = dfLNT0_012.Define('fover1minusf012', 'ml_fr_weight/(1-ml_fr_weight)')
     dfLNT2_012 = dfLNT1_012.Define('lnt_012_evt_wht', 'fover1minusf012 * weight * lhe_weight')
     if isData == False: 
         dfLNT_012 = dfLNT2_012 
