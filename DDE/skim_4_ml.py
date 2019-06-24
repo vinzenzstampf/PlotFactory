@@ -18,15 +18,20 @@ from multiprocessing import Pool
 from multiprocessing.dummy import Pool
 from itertools import product
 
+eos       = '/eos/user/v/vstampf/'
+eos_david = '/eos/user/d/dezhu/HNL/'
+if platform.platform() in['Linux-2.6.32-754.3.5.el6.x86_64-x86_64-with-redhat-6.6-Carbon', 'Linux-3.10.0-862.14.4.el7.x86_64-x86_64-with-redhat-7.5-Maipo']:
+   eos       = '/t3home/vstampf/eos/'
+   eos_david = '/t3home/vstampf/eos-david/'
 
 #idk why but this doesn't work
 #ROOT.EnableImplicitMT(8)
 
-mmm_17B = 'root://cms-xrd-transit.cern.ch//store/user/dezhu/2_ntuples/HN3Lv2.2/mmm/ntuples/Single_mu_2017B/HNLTreeProducer/tree.root'
-mmm_17C = 'root://cms-xrd-transit.cern.ch//store/user/dezhu/2_ntuples/HN3Lv2.2/mmm/ntuples/Single_mu_2017C/HNLTreeProducer/tree.root'
-mmm_17D = 'root://cms-xrd-transit.cern.ch//store/user/dezhu/2_ntuples/HN3Lv2.2/mmm/ntuples/Single_mu_2017D/HNLTreeProducer/tree.root'
-mmm_17E = 'root://cms-xrd-transit.cern.ch//store/user/dezhu/2_ntuples/HN3Lv2.2/mmm/ntuples/Single_mu_2017E/HNLTreeProducer/tree.root'
-mmm_17F = 'root://cms-xrd-transit.cern.ch//store/user/dezhu/2_ntuples/HN3Lv2.2/mmm/ntuples/Single_mu_2017F/HNLTreeProducer/tree.root'
+mmm_17B = '/work/dezhu/4_production/production_20190411_Data_mmm/ntuples/Single_mu_2017B/HNLTreeProducer/tree.root'
+mmm_17C = '/work/dezhu/4_production/production_20190411_Data_mmm/ntuples/Single_mu_2017C/HNLTreeProducer/tree.root'
+mmm_17D = '/work/dezhu/4_production/production_20190411_Data_mmm/ntuples/Single_mu_2017D/HNLTreeProducer/tree.root'
+mmm_17E = '/work/dezhu/4_production/production_20190411_Data_mmm/ntuples/Single_mu_2017E/HNLTreeProducer/tree.root'
+mmm_17F = '/work/dezhu/4_production/production_20190411_Data_mmm/ntuples/Single_mu_2017F/HNLTreeProducer/tree.root'
 
 eem_17B = '/work/dezhu/4_production/production_20190511_Data_eem/ntuples/Single_ele_2017B/HNLTreeProducer/tree.root'
 eem_17C = '/work/dezhu/4_production/production_20190511_Data_eem/ntuples/Single_ele_2017C/HNLTreeProducer/tree.root'
@@ -80,26 +85,20 @@ l2_e_lnt    = l2_e_loose + ' && (l2_LooseNoIso == 0 || l2_reliso_rho_03 > 0.2)'
 ###########################################################################################################################################################################################
               ##                 SINGLE FAKE RATE                   ##  
 ###########################################################################################################################################################################################
-### SFR:: LOOSE CUTS OBTAINED THROUGH CDF HEAVY/LIGHT COMPARISON 
-SFR_MMM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.6 && abs(l1_eta) < 1.2) || (l1_reliso_rho_03 < 0.95 && abs(l1_eta) > 1.2 && abs(l1_eta) < 2.1) || (l1_reliso_rho_03 < 0.4 && abs(l1_eta) > 2.1) )'  # dR 03 (29.4.19)
-
 ### DY - SELECTION
 ### SFR::MMM 
 SFR_MMM_021_L   =  l0_m + ' && ' + l2_m + ' && ' + l1_m_loose 
 SFR_MMM_021_L   += ' && hnl_q_02 == 0'                                  # opposite charge 
-SFR_MMM_021_L   += SFR_MMM_L_CUT                                    # reliso bound for LOOSE cf. checkIso_mmm_220319 
 SFR_MMM_021_LNT =  SFR_MMM_021_L + ' && ' + l1_m_lnt
 SFR_MMM_021_T   =  SFR_MMM_021_L + ' && ' + l1_m_tight 
 
 SFR_MMM_012_L   =  l0_m + ' && ' + l1_m + ' && ' + l2_m_loose 
 SFR_MMM_012_L   += ' && hnl_q_01 == 0'                                  # opposite charge 
-SFR_MMM_012_L   += re.sub('l1', 'l2', SFR_MMM_L_CUT)                # reliso bound for LOOSE cf. checkIso_mmm_220319 
 SFR_MMM_012_LNT =  SFR_MMM_012_L + ' && ' + l2_m_lnt
 SFR_MMM_012_T   =  SFR_MMM_012_L + ' && ' + l2_m_tight 
 
 SFR_EEM_012_L   =  l0_e + ' && ' + l1_e + ' && ' + l2_m_loose 
 SFR_EEM_012_L   += ' && hnl_q_01 == 0'                                  # opposite charge 
-#SFR_EEM_012_L   += re.sub('l1', 'l2', SFR_MMM_L_CUT)                # reliso bound for LOOSE cf. checkIso_mmm_220319 
 SFR_EEM_012_LNT =  SFR_EEM_012_L + ' && ' + l2_m_lnt
 SFR_EEM_012_T   =  SFR_EEM_012_L + ' && ' + l2_m_tight 
 ###########################################################################################################################################################################################
@@ -152,4 +151,4 @@ def skim(sample='DY',ch='mmm'):
     for br in ['event', 'lumi', 'run', 'TIGHT', 'l2_reliso_rho_03', 'l2_Medium', 'l2_eta', 'l2_pt', 'l2_dxy', 'l2_dz', 'ptcone']:
         branchList.push_back(br)
  
-    df2.Snapshot('tree', '%s_%s_6_19.root'%(sample,ch), branchList)
+    df2.Snapshot('tree', eos+'/ML_FR/data_geq0p01dxy_noLooseIso/%s_%s_6_24.root'%(sample,ch), branchList)

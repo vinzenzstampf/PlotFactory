@@ -1,6 +1,6 @@
 from __future__ import division
 from ROOT import gROOT as gr
-from ROOT import RDataFrame as rdf
+from ROOT import RDataFrame as RDF
 import os, platform
 import ROOT as rt
 import numpy as np
@@ -18,6 +18,23 @@ from multiprocessing import Pool
 from multiprocessing.dummy import Pool
 from itertools import product
 
+import root_pandas
+import uproot as ur
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from itertools import product
+
+from root_numpy import root2array
+
+from keras.models import Sequential, Model, load_model
+from keras.layers import Dense, Input
+from keras.utils import plot_model
+
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import roc_curve, roc_auc_score
+
 today   = datetime.now()
 date    = today.strftime('%y%m%d')
 hour    = str(today.hour)
@@ -31,7 +48,7 @@ Linux-3.10.0-957.1.3.el7.x86_64-x86_64-with-centos-7.6.1810-Core      #LX+
 '''
 eos       = '/eos/user/v/vstampf/'
 eos_david = '/eos/user/d/dezhu/HNL/'
-if platform.platform() == 'Linux-2.6.32-754.3.5.el6.x86_64-x86_64-with-redhat-6.6-Carbon':
+if platform.platform() in['Linux-2.6.32-754.3.5.el6.x86_64-x86_64-with-redhat-6.6-Carbon', 'Linux-3.10.0-862.14.4.el7.x86_64-x86_64-with-redhat-7.5-Maipo']:
    eos       = '/t3home/vstampf/eos/'
    eos_david = '/t3home/vstampf/eos-david/'
 
@@ -39,6 +56,8 @@ pf.setpfstyle()
 #rt.TStyle.SetOptStat(0)
 #BATCH MODE
 gr.SetBatch(True)
+
+#rt.ROOT.EnableImplicitMT(8)
 
 pi = rt.TMath.Pi()
 ###########################################################################################################################################################################################
@@ -160,44 +179,44 @@ DFR_MEM_T   =  DFR_MEM_L + ' && ' + l1_e_tight + ' && ' + l2_m_tight
 ### SFR:: LOOSE CUTS OBTAINED THROUGH CDF HEAVY/LIGHT COMPARISON 
 SFR_EEE_L_CUT = ''
 #SFR_MMM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.42 && abs(l1_eta) < 1.2) || (l1_reliso_rho_03 < 0.35 && abs(l1_eta) > 1.2) )'  # dR 03
-SFR_MMM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.6 && abs(l1_eta) < 1.2) || (l1_reliso_rho_03 < 0.95 && abs(l1_eta) > 1.2 && abs(l1_eta) < 2.1) || (l1_reliso_rho_03 < 0.4 && abs(l1_eta) > 2.1) )'  # dR 03 (29.4.19)
+#SFR_MMM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.6 && abs(l1_eta) < 1.2) || (l1_reliso_rho_03 < 0.95 && abs(l1_eta) > 1.2 && abs(l1_eta) < 2.1) || (l1_reliso_rho_03 < 0.4 && abs(l1_eta) > 2.1) )'  # dR 03 (29.4.19)
 SFR_MMM_L_CUT = '' #try to see what happens...
 #SFR_MMM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.38 && abs(l1_eta) < 1.2) || (l1_reliso_rho_03 < 0.29 && abs(l1_eta) > 1.2 && abs(l1_eta) < 2.1) || (l1_reliso_rho_03 < 0.19 && abs(l1_eta) > 2.1) )'  #dR 03 (6.5.19 incl cross dR veto)
 #SFR_MEM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.6  && abs(l1_eta) < 0.8) || (l1_reliso_rho_03 < 0.35 && abs(l1_eta) > 0.8) )'  # dR 03
-SFR_MEM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.93  && abs(l1_eta) < 0.8) || (l1_reliso_rho_03 < 0.63 && abs(l1_eta) > 0.8 && abs(l1_eta) < 1.479) || (l1_reliso_rho_03 < 0.41 && abs(l1_eta) > 1.479) )' #dR 03 (7.5.19 incl cross dR veto)
+#SFR_MEM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.93  && abs(l1_eta) < 0.8) || (l1_reliso_rho_03 < 0.63 && abs(l1_eta) > 0.8 && abs(l1_eta) < 1.479) || (l1_reliso_rho_03 < 0.41 && abs(l1_eta) > 1.479) )' #dR 03 (7.5.19 incl cross dR veto)
 #SFR_MEM_L_CUT = ' && ( (l1_reliso_rho_04 < 0.4  && abs(l1_eta) < 0.8) || (l1_reliso_rho_04 < 0.7 && abs(l1_eta) > 0.8 && abs(l1_eta) < 1.479) || (l1_reliso_rho_04 < 0.3 && abs(l1_eta) > 1.479) )'  # dR 04
 
 ### DY - SELECTION
 ### SFR::MMM 
 SFR_EEE_021_L   =  l0_e + ' && ' + l2_e + ' && ' + l1_e_loose 
 SFR_EEE_021_L   += charge_02                                        # opposite charge 
-SFR_EEE_021_L   += SFR_EEE_L_CUT                                    # reliso bound for LOOSE cf. checkIso_mmm_220319 
+#SFR_EEE_021_L   += SFR_EEE_L_CUT                                    # reliso bound for LOOSE cf. checkIso_mmm_220319 
 SFR_EEE_021_LNT =  SFR_EEE_021_L + ' && ' + l1_e_lnt
 SFR_EEE_021_T   =  SFR_EEE_021_L + ' && ' + l1_e_tight 
 
 SFR_EEE_012_L   =  l0_e + ' && ' + l1_e + ' && ' + l2_e_loose 
 SFR_EEE_012_L   += re.sub('02', '01', charge_02)                    # opposite charge 
-SFR_EEE_012_L   += re.sub('l1', 'l2', SFR_EEE_L_CUT)                # reliso bound for LOOSE cf. checkIso_mmm_220319 
+#SFR_EEE_012_L   += re.sub('l1', 'l2', SFR_EEE_L_CUT)                # reliso bound for LOOSE cf. checkIso_mmm_220319 
 SFR_EEE_012_LNT =  SFR_EEE_012_L + ' && ' + l2_e_lnt
 SFR_EEE_012_T   =  SFR_EEE_012_L + ' && ' + l2_e_tight 
 
 ### SFR::MMM 
 SFR_MMM_021_L   =  l0_m + ' && ' + l2_m + ' && ' + l1_m_loose 
 SFR_MMM_021_L   += charge_02                                        # opposite charge 
-SFR_MMM_021_L   += SFR_MMM_L_CUT                                    # reliso bound for LOOSE cf. checkIso_mmm_220319 
+#SFR_MMM_021_L   += SFR_MMM_L_CUT                                    # reliso bound for LOOSE cf. checkIso_mmm_220319 
 SFR_MMM_021_LNT =  SFR_MMM_021_L + ' && ' + l1_m_lnt
 SFR_MMM_021_T   =  SFR_MMM_021_L + ' && ' + l1_m_tight 
 
 SFR_MMM_012_L   =  l0_m + ' && ' + l1_m + ' && ' + l2_m_loose 
 SFR_MMM_012_L   += re.sub('02', '01', charge_02)                    # opposite charge 
-SFR_MMM_012_L   += re.sub('l1', 'l2', SFR_MMM_L_CUT)                # reliso bound for LOOSE cf. checkIso_mmm_220319 
+#SFR_MMM_012_L   += re.sub('l1', 'l2', SFR_MMM_L_CUT)                # reliso bound for LOOSE cf. checkIso_mmm_220319 
 SFR_MMM_012_LNT =  SFR_MMM_012_L + ' && ' + l2_m_lnt
 SFR_MMM_012_T   =  SFR_MMM_012_L + ' && ' + l2_m_tight 
 
 ### SFR::MEM 
 SFR_MEM_021_L   =  l0_m + ' && ' + l2_m + ' && ' + l1_e_loose 
 SFR_MEM_021_L   += charge_02                                        # opposite charge 
-SFR_MEM_021_L   += SFR_MEM_L_CUT                                    # reliso bound for LOOSE cf. checkIso_mmm_220319 
+#SFR_MEM_021_L   += SFR_MEM_L_CUT                                    # reliso bound for LOOSE cf. checkIso_mmm_220319 
 SFR_MEM_021_LNT =  SFR_MEM_021_L + ' && ' + l1_e_lnt
 SFR_MEM_021_T   =  SFR_MEM_021_L + ' && ' + l1_e_tight 
 
@@ -258,79 +277,6 @@ framer.GetYaxis().SetRangeUser(0.,0.5)
 ############################################################################################################################################################################
 
 ############################################################################################################################################################################
-def selectBins(ch='mem', lep=1, isData=False):
-
-    input = 'MC' if isData == False else 'DATA'
-    mu_sfr = False
-
-    f_in = rt.TFile(plotDir+'%s_T2Lratio_%s_ptCone_eta.root' %(input,ch) )
-
-    l_pt   = { '_pt0t5'   : 'ptcone < 5',                  '_pt5t10' : 'ptcone > 5 && ptcone < 10',  '_pt10t15' : 'ptcone > 10 && ptcone < 15', '_pt15t20' : 'ptcone > 15 && ptcone < 20',
-               '_pt20t25' : 'ptcone > 20 && ptcone < 25', '_pt25t35' : 'ptcone > 25 && ptcone < 35', '_pt35t50' : 'ptcone > 35 && ptcone < 50', '_pt50t70' : 'ptcone > 50',# && ptcone < 70'}
-               '_pt10t20' : 'ptcone > 10 && ptcone < 20', '_pt20t70' : 'ptcone > 20'}
-    for i in l_pt.keys(): 
-        l_pt[i] = re.sub('ptcone','ptcone021',l_pt[i])
-
-    if ch == 'eee' or ch == 'mem':
-        l_eta = {'eta_bin_0' : 'abs(l1_eta) < 0.8', 'eta_bin_1' : 'abs(l1_eta) > 0.8 && abs(l1_eta) < 1.479', 'eta_bin_2' : 'abs(l1_eta) > 1.479 && abs(l1_eta) < 2.5'}
-
-    if ch == 'mmm' or ch == 'eem':
-        l_eta = {'eta_bin_0' : 'abs(l1_eta) < 1.2', 'eta_bin_1' : 'abs(l1_eta) > 1.2 && abs(l1_eta) < 2.1', 'eta_bin_2' : 'abs(l1_eta) > 2.1 && abs(l1_eta) < 2.4'}
-        mu_sfr = True
-  
-    if lep == 2: 
-        for i in l_eta.keys(): 
-            l_eta[i] = re.sub('l1_eta','l2_eta',l_eta[i])
-        for i in l_pt.keys(): 
-            l_pt[i] = re.sub('ptcone021','ptcone012',l_pt[i])
-
-    c = f_in.Get('ptCone_eta')
-    h = c.GetPrimitive('pt_eta_T_012')
-
-    if mu_sfr == False:
-        sfr =  '   ({eta00t08} && {pt0t5})   * {eta00t08_pt0t5}'  .format(eta00t08 = l_eta['eta_bin_0'], pt0t5   = l_pt['_pt0t5']  , eta00t08_pt0t5   = h.GetBinContent(1,1)/(1-h.GetBinContent(1,1))) 
-        sfr += ' + ({eta00t08} && {pt5t10})  * {eta00t08_pt5t10}' .format(eta00t08 = l_eta['eta_bin_0'], pt5t10  = l_pt['_pt5t10'] , eta00t08_pt5t10  = h.GetBinContent(2,1)/(1-h.GetBinContent(2,1)))
-        sfr += ' + ({eta00t08} && {pt10t15}) * {eta00t08_pt10t15}'.format(eta00t08 = l_eta['eta_bin_0'], pt10t15 = l_pt['_pt10t15'], eta00t08_pt10t15 = h.GetBinContent(3,1)/(1-h.GetBinContent(3,1)))
-        sfr += ' + ({eta00t08} && {pt15t20}) * {eta00t08_pt15t20}'.format(eta00t08 = l_eta['eta_bin_0'], pt15t20 = l_pt['_pt15t20'], eta00t08_pt15t20 = h.GetBinContent(4,1)/(1-h.GetBinContent(4,1)))
-        sfr += ' + ({eta00t08} && {pt20t25}) * {eta00t08_pt20t25}'.format(eta00t08 = l_eta['eta_bin_0'], pt20t25 = l_pt['_pt20t25'], eta00t08_pt20t25 = h.GetBinContent(5,1)/(1-h.GetBinContent(5,1)))
-        sfr += ' + ({eta00t08} && {pt25t35}) * {eta00t08_pt25t35}'.format(eta00t08 = l_eta['eta_bin_0'], pt25t35 = l_pt['_pt25t35'], eta00t08_pt25t35 = h.GetBinContent(6,1)/(1-h.GetBinContent(6,1)))
-        sfr += ' + ({eta00t08} && {pt35t50}) * {eta00t08_pt35t50}'.format(eta00t08 = l_eta['eta_bin_0'], pt35t50 = l_pt['_pt35t50'], eta00t08_pt35t50 = h.GetBinContent(7,1)/(1-h.GetBinContent(7,1)))
-        sfr += ' + ({eta00t08} && {pt50t70}) * {eta00t08_pt50t70}'.format(eta00t08 = l_eta['eta_bin_0'], pt50t70 = l_pt['_pt50t70'], eta00t08_pt50t70 = h.GetBinContent(8,1)/(1-h.GetBinContent(8,1)))
-        sfr += ' + ({eta08t15} && {pt0t5})   * {eta08t15_pt0t5}'  .format(eta08t15 = l_eta['eta_bin_1'], pt0t5   = l_pt['_pt0t5']  , eta08t15_pt0t5   = h.GetBinContent(1,2)/(1-h.GetBinContent(1,2))) 
-        sfr += ' + ({eta08t15} && {pt5t10})  * {eta08t15_pt5t10}' .format(eta08t15 = l_eta['eta_bin_1'], pt5t10  = l_pt['_pt5t10'] , eta08t15_pt5t10  = h.GetBinContent(2,2)/(1-h.GetBinContent(2,2)))
-        sfr += ' + ({eta08t15} && {pt10t15}) * {eta08t15_pt10t15}'.format(eta08t15 = l_eta['eta_bin_1'], pt10t15 = l_pt['_pt10t15'], eta08t15_pt10t15 = h.GetBinContent(3,2)/(1-h.GetBinContent(3,2)))
-        sfr += ' + ({eta08t15} && {pt15t20}) * {eta08t15_pt15t20}'.format(eta08t15 = l_eta['eta_bin_1'], pt15t20 = l_pt['_pt15t20'], eta08t15_pt15t20 = h.GetBinContent(4,2)/(1-h.GetBinContent(4,2)))
-        sfr += ' + ({eta08t15} && {pt20t25}) * {eta08t15_pt20t25}'.format(eta08t15 = l_eta['eta_bin_1'], pt20t25 = l_pt['_pt20t25'], eta08t15_pt20t25 = h.GetBinContent(5,2)/(1-h.GetBinContent(5,2)))
-        sfr += ' + ({eta08t15} && {pt25t35}) * {eta08t15_pt25t35}'.format(eta08t15 = l_eta['eta_bin_1'], pt25t35 = l_pt['_pt25t35'], eta08t15_pt25t35 = h.GetBinContent(6,2)/(1-h.GetBinContent(6,2)))
-        sfr += ' + ({eta08t15} && {pt35t50}) * {eta08t15_pt35t50}'.format(eta08t15 = l_eta['eta_bin_1'], pt35t50 = l_pt['_pt35t50'], eta08t15_pt35t50 = h.GetBinContent(7,2)/(1-h.GetBinContent(7,2)))
-        sfr += ' + ({eta08t15} && {pt50t70}) * {eta08t15_pt50t70}'.format(eta08t15 = l_eta['eta_bin_1'], pt50t70 = l_pt['_pt50t70'], eta08t15_pt50t70 = h.GetBinContent(8,2)/(1-h.GetBinContent(8,2)))
-        sfr += ' + ({eta15t25} && {pt0t5})   * {eta15t25_pt0t5}'  .format(eta15t25 = l_eta['eta_bin_2'], pt0t5   = l_pt['_pt0t5']  , eta15t25_pt0t5   = h.GetBinContent(1,3)/(1-h.GetBinContent(1,3))) 
-        sfr += ' + ({eta15t25} && {pt5t10})  * {eta15t25_pt5t10}' .format(eta15t25 = l_eta['eta_bin_2'], pt5t10  = l_pt['_pt5t10'] , eta15t25_pt5t10  = h.GetBinContent(2,3)/(1-h.GetBinContent(2,3)))
-        sfr += ' + ({eta15t25} && {pt10t15}) * {eta15t25_pt10t15}'.format(eta15t25 = l_eta['eta_bin_2'], pt10t15 = l_pt['_pt10t15'], eta15t25_pt10t15 = h.GetBinContent(3,3)/(1-h.GetBinContent(3,3)))
-        sfr += ' + ({eta15t25} && {pt15t20}) * {eta15t25_pt15t20}'.format(eta15t25 = l_eta['eta_bin_2'], pt15t20 = l_pt['_pt15t20'], eta15t25_pt15t20 = h.GetBinContent(4,3)/(1-h.GetBinContent(4,3)))
-        sfr += ' + ({eta15t25} && {pt20t25}) * {eta15t25_pt20t25}'.format(eta15t25 = l_eta['eta_bin_2'], pt20t25 = l_pt['_pt20t25'], eta15t25_pt20t25 = h.GetBinContent(5,3)/(1-h.GetBinContent(5,3)))
-        sfr += ' + ({eta15t25} && {pt25t35}) * {eta15t25_pt25t35}'.format(eta15t25 = l_eta['eta_bin_2'], pt25t35 = l_pt['_pt25t35'], eta15t25_pt25t35 = h.GetBinContent(6,3)/(1-h.GetBinContent(6,3)))
-        sfr += ' + ({eta15t25} && {pt35t50}) * {eta15t25_pt35t50}'.format(eta15t25 = l_eta['eta_bin_2'], pt35t50 = l_pt['_pt35t50'], eta15t25_pt35t50 = h.GetBinContent(7,3)/(1-h.GetBinContent(7,3)))
-        sfr += ' + ({eta15t25} && {pt50t70}) * {eta15t25_pt50t70}'.format(eta15t25 = l_eta['eta_bin_2'], pt50t70 = l_pt['_pt50t70'], eta15t25_pt50t70 = h.GetBinContent(8,3)/(1-h.GetBinContent(8,3)))
-
-    if mu_sfr == True:
-        sfr =  '   ({eta00t08} && {pt0t5})   * {eta00t08_pt0t5}'  .format(eta00t08 = l_eta['eta_bin_0'], pt0t5   = l_pt['_pt0t5']  , eta00t08_pt0t5   = h.GetBinContent(1,1)/(1-h.GetBinContent(1,1))) 
-        sfr += ' + ({eta00t08} && {pt5t10})  * {eta00t08_pt5t10}' .format(eta00t08 = l_eta['eta_bin_0'], pt5t10  = l_pt['_pt5t10'] , eta00t08_pt5t10  = h.GetBinContent(2,1)/(1-h.GetBinContent(2,1)))
-        sfr += ' + ({eta00t08} && {pt10t20}) * {eta00t08_pt10t20}'.format(eta00t08 = l_eta['eta_bin_0'], pt10t20 = l_pt['_pt10t20'], eta00t08_pt10t20 = h.GetBinContent(3,1)/(1-h.GetBinContent(3,1)))
-        sfr += ' + ({eta00t08} && {pt20t70}) * {eta00t08_pt20t70}'.format(eta00t08 = l_eta['eta_bin_0'], pt20t70 = l_pt['_pt20t70'], eta00t08_pt20t70 = h.GetBinContent(4,1)/(1-h.GetBinContent(4,1)))
-        sfr += ' + ({eta08t15} && {pt0t5})   * {eta08t15_pt0t5}'  .format(eta08t15 = l_eta['eta_bin_1'], pt0t5   = l_pt['_pt0t5']  , eta08t15_pt0t5   = h.GetBinContent(1,2)/(1-h.GetBinContent(1,2))) 
-        sfr += ' + ({eta08t15} && {pt5t10})  * {eta08t15_pt5t10}' .format(eta08t15 = l_eta['eta_bin_1'], pt5t10  = l_pt['_pt5t10'] , eta08t15_pt5t10  = h.GetBinContent(2,2)/(1-h.GetBinContent(2,2)))
-        sfr += ' + ({eta08t15} && {pt10t20}) * {eta08t15_pt10t20}'.format(eta08t15 = l_eta['eta_bin_1'], pt10t20 = l_pt['_pt10t20'], eta08t15_pt10t20 = h.GetBinContent(3,2)/(1-h.GetBinContent(3,2)))
-        sfr += ' + ({eta08t15} && {pt20t70}) * {eta08t15_pt20t70}'.format(eta08t15 = l_eta['eta_bin_1'], pt20t70 = l_pt['_pt20t70'], eta08t15_pt20t70 = h.GetBinContent(4,2)/(1-h.GetBinContent(4,2)))
-        sfr += ' + ({eta15t25} && {pt0t5})   * {eta15t25_pt0t5}'  .format(eta15t25 = l_eta['eta_bin_2'], pt0t5   = l_pt['_pt0t5']  , eta15t25_pt0t5   = h.GetBinContent(1,3)/(1-h.GetBinContent(1,3))) 
-        sfr += ' + ({eta15t25} && {pt5t10})  * {eta15t25_pt5t10}' .format(eta15t25 = l_eta['eta_bin_2'], pt5t10  = l_pt['_pt5t10'] , eta15t25_pt5t10  = h.GetBinContent(2,3)/(1-h.GetBinContent(2,3)))
-        sfr += ' + ({eta15t25} && {pt10t20}) * {eta15t25_pt10t20}'.format(eta15t25 = l_eta['eta_bin_2'], pt10t20 = l_pt['_pt10t20'], eta15t25_pt10t20 = h.GetBinContent(3,3)/(1-h.GetBinContent(3,3)))
-        sfr += ' + ({eta15t25} && {pt20t70}) * {eta15t25_pt20t70}'.format(eta15t25 = l_eta['eta_bin_2'], pt20t70 = l_pt['_pt20t70'], eta15t25_pt20t70 = h.GetBinContent(4,3)/(1-h.GetBinContent(4,3)))
-
-    return sfr
-############################################################################################################################################################################
-
-######################################################################################
 def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, verbose=True, output=False, fr=False, full=False):
     
     input = 'MC' if isData == False else 'DATA'
@@ -400,59 +346,88 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
     ### PREPARE TREES
     t = None
     t = rt.TChain('tree')
-    #t.Add(eos+'ML_FR/data_geq0p01dxy/data_eem_6_19_output.root')
-    #t.Add(eos+'ML_FR/data_geq0p01dxy/data_6_18_untouched_half_output.root')
-    t.Add(eos+'ML_FR/data_geq0p01dxy/data_6_18_training_half_output.root')
-    t.AddFriend('dataB = tree',  data_B_mmm+suffix)
-    t.AddFriend('dataC = tree',  data_C_mmm+suffix)
-    t.AddFriend('dataD = tree',  data_D_mmm+suffix)
-    t.AddFriend('dataE = tree',  data_E_mmm+suffix)
-    t.AddFriend('dataF = tree',  data_F_mmm+suffix) 
+    t.Add(data_B_mmm+suffix)
+    #t.Add(data_C_mmm+suffix)
+    #t.Add(data_D_mmm+suffix)
+    #t.Add(data_E_mmm+suffix)
+    #t.Add(data_F_mmm+suffix) 
     #t.Add(eos+'ML_FR/DY/DY_6_18_half1_output.root')
     #t.AddFriend('DY = tree',      DY50Dir_mmm    +suffix)
     #t.AddFriend('DY_ext = tree',  DY50_extDir_mmm+suffix)
 
-    ## FRIEND TREES
-    if 3==4:
-        try: 
-            for d in DATA: 
-                era = d[-2:-1]
-                t.AddFriend('ftdata = tree',  oldPlotDir + 'friend_tree_label_%s_0%s.root'%(ch,era))
-                copyfile(oldPlotDir+'friend_tree_label_%s_0%s.root'%(ch,era), plotDir+'friend_tree_label_%s_0%s.root'%(ch,era))
-        except: 
-            for d in DATA: 
-                era = d[-2:-1]
-                makeLabel(d, ch, '0', era=era)
-                print '\n\tmaking label for data era %s...' %era
-                t.AddFriend('ftdata = tree',  oldPlotDir + 'friend_tree_label_%s_0%s.root'%(ch,era))
-                copyfile(oldPlotDir+'friend_tree_label_%s_0%s.root'%(ch,era), plotDir+'friend_tree_label_%s_0%s.root'%(ch,era))
+    #try: t.AddFriend('ml_fr = tree', eos+'plost/DDE/closureTest_190624_15h_35m/data_weights.root')
+    #sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__; set_trace()
+    try: 
+   #     t.AddFriend('ML = tree', eos+'ML_FR/data_geq0p01dxy/data_6_18_training_half_weights.root')
+   #     t.AddFriend('ML = tree', 'data_weights.root')
+   #     #try: t.AddFriend('ML = tree', eos+'ML_FR/data_geq0p01dxy/data_weights.root')
+    except:
+        sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__; set_trace()
+        #uf_dataB = ur.open(eos+'ML_FR/data_geq0p01dxy/data_6_18_training_half.root')
+        uf_dataB = ur.open(data_B_mmm+suffix)
+        #uf_dataC = ur.open(data_C_mmm+suffix)
+        #uf_dataD = ur.open(data_D_mmm+suffix)
+        #uf_dataE = ur.open(data_E_mmm+suffix)
+        #uf_dataF = ur.open(data_F_mmm+suffix)
 
-        try: 
-            copyfile(oldPlotDir+'friend_tree_label_%s_1.root'%ch, plotDir+'friend_tree_label_%s_1.root'%ch)
-            t.AddFriend('ftdy = tree',   oldPlotDir + 'friend_tree_label_%s_1.root'%ch)
-        except: 
-            print '\n\tmaking label for DY...'
-            makeLabel(DY50_ext_dir, ch, '1')
-            t.AddFriend('ftdy = tree',    oldPlotDir + 'friend_tree_label_%s_1.root'%ch)
-            copyfile(oldPlotDir+'friend_tree_label_%s_1.root'%ch, plotDir+'friend_tree_label_%s_1.root'%ch)
-    #t.AddFriend('fttt = tree',   oldPlotDir + 'friend_tree_label_%s_2.root'%ch)
-#    t.AddFriend('ft = tree', plotDir+'label.root')
+        ut_dataB = uf_dataB['tree']
+        #ut_dataC = uf_dataC['tree']
+        #ut_dataD = uf_dataD['tree']
+        #ut_dataE = uf_dataE['tree']
+        #ut_dataF = uf_dataF['tree']
 
-    df0 = rdf(t)
+        pdf_dataB = ut_dataB.pandas.df(['event','lumi','run','l2_pt','l2_dxy','l2_eta', 'l2_reliso_rho_03'])
+        #pdf_dataC = ut_dataC.pandas.df(['event','lumi','run','l2_pt','l2_dxy','l2_eta'])
+        #pdf_dataD = ut_dataD.pandas.df(['event','lumi','run','l2_pt','l2_dxy','l2_eta'])
+        #pdf_dataE = ut_dataE.pandas.df(['event','lumi','run','l2_pt','l2_dxy','l2_eta'])
+        #pdf_dataF = ut_dataF.pandas.df(['event','lumi','run','l2_pt','l2_dxy','l2_eta'])
+
+        # https://pandas.pydata.org/pandas-docs/stable/user_guide/merging.html
+        pdf_data = pd.concat([pdf_dataB])#,pdf_dataC, pdf_dataD, pdf_dataE, pdf_dataF]
+        pdf_data['l2_abs_dxy'] = np.abs(pdf_data.l2_dxy)
+        pdf_data['l2_abs_eta'] = np.abs(pdf_data.l2_eta)
+        pdf_data['l2_ptcone']  = pdf_data.l2_pt * (1 + np.maximum(0, pdf_data.l2_reliso_rho_03 - 0.2) )
+
+        # RUN CLASSIFIER HERE
+        features = ['l2_ptcone','l2_abs_dxy','l2_abs_eta']
+
+        classifier = load_model('net.h5')
+        print '\n\tpredicting on', pdf_data.shape[0], 'events'
+        x  = pd.DataFrame(pdf_data, columns=features)
+        y = classifier.predict(x)
+
+        # add the score to the data1 sample
+        #pdf_data.insert(len(pdf_data.columns), 'score', y)
+        #k = np.sum(pdf_data.score)
+        #T = np.count_nonzero(pdf_data.TIGHT)
+        #K = T/k 
+        #print(k, T, K)
+
+        pdf_data.insert(len(pdf_data.columns), 'ml_fr_weight', y)
+        #pdf_data.to_root(eos+'ML_FR/data_geq0p01dxy/data_weights.root','tree')
+        pdf_data.to_root(eos+'ML_FR/data_geq0p01dxy/data_6_18_training_half_weights.root','tree')
+        #t.AddFriend('ML = tree', eos+'ML_FR/data_geq0p01dxy/data_weights.root')
+        t.AddFriend('ML = tree', eos+'ML_FR/data_geq0p01dxy/data_6_18_training_half_weights.root')
+
+    sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__; set_trace()
+
+    df0 = RDF(t)
     print '\n\tentries:', df0.Count().GetValue()
     df  = df0.Define('_norm_', '1')
     df  = df.Define('abs_l1_eta', 'abs(l1_eta)')
     df  = df.Define('abs_l2_eta', 'abs(l2_eta)')
     df  = df.Define('abs_l1_dxy', 'abs(l1_dxy)')
     df  = df.Define('abs_l2_dxy', 'abs(l2_dxy)')
-    ## DIRRRTY TRICK, USING REALLY OLD NTUPLES
-    if ch == 'eee':
-        df.Define('l0_reliso_rho_03', 'l0_reliso05')
-        df.Define('l1_reliso_rho_03', 'l1_reliso05')
-        df.Define('l2_reliso_rho_03', 'l2_reliso05')
-        df.Define('l1_gen_match_isPrompt', 'l1_gen_match_isPromptFinalState') 
-        df.Define('l2_gen_match_isPrompt', 'l2_gen_match_isPromptFinalState') 
     print'\n\tchain made.'
+    sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__; set_trace()
+
+    ## VALIDATIO OF FRIEND TREE
+    print '\n\t: VALIDATION                      :'
+    vld_evt = df.Filter('ML.event - event != 0').Count().GetValue()
+    print '\t: ML.event - event != 0: %d events :'%vld_evt
+    vld_pt = df.Filter('ML.l2_pt - l2_pt != 0').Count().GetValue()
+    print '\t: ML.l2_pt - l2_pt != 0: %d events :'%vld_pt
+    if vld_pt != 0 or vld_evt != 0: sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__; set_trace()
 
     ''' SCALE MC #TODO PUT THIS IN A FUNCTION
     ### lumi = 4792.0 /pb data B
@@ -490,15 +465,16 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
        l0 and l2 prompt, l1 is tested'''
     cuts_l_021 = cuts_FR_021
     f0_021 = df.Filter(cuts_l_021)
-    if mode021 == True: print '\n\tloose df 021 defined.'
-
-    if mode021 == True: print '\n\tloose df 021 events:', f0_021.Count().GetValue()
+    if mode021 == True:
+        print '\n\tloose df 021 defined.'
+        print '\n\tloose df 021 events:', f0_021.Count().GetValue()
+    #    print '\n\tTIGHT df 021 events:', f0_021.Filter('ML.TIGHT==1').Count().GetValue()
 
     f1_021    = f0_021.Define('ptcone021', ptconel1)
     dfL_021   = f1_021#.Define('abs_l1_eta', 'abs(l1_eta)')
 
     dfLNT0_021 = dfL_021.Filter(lnt_021)
-    dfLNT1_021 = dfLNT0_021.Define('fover1minusf021', 'ml_fr_weight/(1-ml_fr_weight)')
+    dfLNT1_021 = dfLNT0_021.Define('fover1minusf021', 'ML.ml_fr_weight/(1-ML.ml_fr_weight)')
     dfLNT2_021 = dfLNT1_021.Define('lnt_021_evt_wht', 'fover1minusf021 * weight * lhe_weight')
     if isData == False: 
         dfLNT_021 = dfLNT2_021 
@@ -535,8 +511,12 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
     f1_012    = f0_012.Define('ptcone012', ptconel2)
     dfL_012   = f1_012#.Define('abs_l2_eta', 'abs(l2_eta)')
 
+    print '\n\t: VALIDATION                      :'
+    vld_ptc = df1_012.Filter('ML.ptcone012 - l2_ptcone != 0').Count().GetValue()
+    print '\t: ML.ptcone - ptcone != 0: %d events :'%vld_ptc
+
     dfLNT0_012 = dfL_012.Filter(lnt_012)
-    dfLNT1_012 = dfLNT0_012.Define('fover1minusf012', 'ml_fr_weight/(1-ml_fr_weight)')
+    dfLNT1_012 = dfLNT0_012.Define('fover1minusf012', 'ML.ml_fr_weight/(1-ML.ml_fr_weight)')
     dfLNT2_012 = dfLNT1_012.Define('lnt_012_evt_wht', 'fover1minusf012 * weight * lhe_weight')
     if isData == False: 
         dfLNT_012 = dfLNT2_012 
@@ -980,6 +960,29 @@ def save(knvs, iso=0, sample='', ch='', eta='', DIR=plotDir):
 ######################################################################################
 
 ######################################################################################
+def validateFriendTree():
+
+    tfile = rt.TFile(eos+'ML_FR/data_geq0p01dxy/data_6_18_training_half_output.root')
+    t = tfile.Get('tree')
+    t.AddFriend('dataB = tree', data_B_mmm+suffix)
+    t.AddFriend('dataC = tree', data_C_mmm+suffix)
+    t.AddFriend('dataD = tree', data_D_mmm+suffix)
+    t.AddFriend('dataE = tree', data_E_mmm+suffix)
+    t.AddFriend('dataF = tree', data_F_mmm+suffix) 
+
+    t.Scan('event:dataB.event:dataC.event:dataD.event:dataE.event:dataF.event:l2_pt:dataB.l2_pt:dataC.l2_pt:dataD.l2_pt:dataE.l2_pt:dataF.l2_pt')
+
+    t = rt.TChain('tree')
+    t.Add(data_B_mmm+suffix)
+    t.Add(data_C_mmm+suffix)
+    t.Add(data_D_mmm+suffix)
+    t.Add(data_E_mmm+suffix)
+    t.Add(data_F_mmm+suffix) 
+    t.AddFriend('ML = tree', eos+'ML_FR/data_geq0p01dxy/data_6_18_training_half_output.root')
+
+######################################################################################
+
+######################################################################################
 # https://stackoverflow.com/questions/616645/how-to-duplicate-sys-stdout-to-a-log-file
 class Logger(object):
     def __init__(self, fileName):
@@ -1010,3 +1013,5 @@ def makeLabel(sample_dir, ch='mmm', lbl='1',era='B'):
     for br in ['event', 'lumi', 'label']:
         bL.push_back(br)
     df.Snapshot('tree', plotDir + 'friend_tree_label_%s_%s%s.root'%(ch,lbl,era), bL)
+
+
