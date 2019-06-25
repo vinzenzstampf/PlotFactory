@@ -61,6 +61,7 @@ gr.SetBatch(True)
 
 pi = rt.TMath.Pi()
 ###########################################################################################################################################################################################
+saveDir = eos+'ML_FR/repr_6_19/'
 skimDir = eos+'ntuples/skimmed_trees/'
 plotDir = eos+'plots/DDE/'
 suffix  = 'HNLTreeProducer/tree.root'
@@ -179,8 +180,8 @@ DFR_MEM_T   =  DFR_MEM_L + ' && ' + l1_e_tight + ' && ' + l2_m_tight
 ### SFR:: LOOSE CUTS OBTAINED THROUGH CDF HEAVY/LIGHT COMPARISON 
 SFR_EEE_L_CUT = ''
 #SFR_MMM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.42 && abs(l1_eta) < 1.2) || (l1_reliso_rho_03 < 0.35 && abs(l1_eta) > 1.2) )'  # dR 03
-#SFR_MMM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.6 && abs(l1_eta) < 1.2) || (l1_reliso_rho_03 < 0.95 && abs(l1_eta) > 1.2 && abs(l1_eta) < 2.1) || (l1_reliso_rho_03 < 0.4 && abs(l1_eta) > 2.1) )'  # dR 03 (29.4.19)
-SFR_MMM_L_CUT = '' #try to see what happens...
+SFR_MMM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.6 && abs(l1_eta) < 1.2) || (l1_reliso_rho_03 < 0.95 && abs(l1_eta) > 1.2 && abs(l1_eta) < 2.1) || (l1_reliso_rho_03 < 0.4 && abs(l1_eta) > 2.1) )'  # dR 03 (29.4.19)
+#SFR_MMM_L_CUT = '' #try to see what happens...
 #SFR_MMM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.38 && abs(l1_eta) < 1.2) || (l1_reliso_rho_03 < 0.29 && abs(l1_eta) > 1.2 && abs(l1_eta) < 2.1) || (l1_reliso_rho_03 < 0.19 && abs(l1_eta) > 2.1) )'  #dR 03 (6.5.19 incl cross dR veto)
 #SFR_MEM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.6  && abs(l1_eta) < 0.8) || (l1_reliso_rho_03 < 0.35 && abs(l1_eta) > 0.8) )'  # dR 03
 #SFR_MEM_L_CUT = ' && ( (l1_reliso_rho_03 < 0.93  && abs(l1_eta) < 0.8) || (l1_reliso_rho_03 < 0.63 && abs(l1_eta) > 0.8 && abs(l1_eta) < 1.479) || (l1_reliso_rho_03 < 0.41 && abs(l1_eta) > 1.479) )' #dR 03 (7.5.19 incl cross dR veto)
@@ -203,13 +204,13 @@ SFR_EEE_012_T   =  SFR_EEE_012_L + ' && ' + l2_e_tight
 ### SFR::MMM 
 SFR_MMM_021_L   =  l0_m + ' && ' + l2_m + ' && ' + l1_m_loose 
 SFR_MMM_021_L   += charge_02                                        # opposite charge 
-#SFR_MMM_021_L   += SFR_MMM_L_CUT                                    # reliso bound for LOOSE cf. checkIso_mmm_220319 
+SFR_MMM_021_L   += SFR_MMM_L_CUT                                    # reliso bound for LOOSE cf. checkIso_mmm_220319 
 SFR_MMM_021_LNT =  SFR_MMM_021_L + ' && ' + l1_m_lnt
 SFR_MMM_021_T   =  SFR_MMM_021_L + ' && ' + l1_m_tight 
 
 SFR_MMM_012_L   =  l0_m + ' && ' + l1_m + ' && ' + l2_m_loose 
 SFR_MMM_012_L   += re.sub('02', '01', charge_02)                    # opposite charge 
-#SFR_MMM_012_L   += re.sub('l1', 'l2', SFR_MMM_L_CUT)                # reliso bound for LOOSE cf. checkIso_mmm_220319 
+SFR_MMM_012_L   += re.sub('l1', 'l2', SFR_MMM_L_CUT)                # reliso bound for LOOSE cf. checkIso_mmm_220319 
 SFR_MMM_012_LNT =  SFR_MMM_012_L + ' && ' + l2_m_lnt
 SFR_MMM_012_T   =  SFR_MMM_012_L + ' && ' + l2_m_tight 
 
@@ -295,10 +296,10 @@ def produceLightTree(sample='DY',ch='mmm'):
 
     if sample == 'data':
         t.Add(d17B)
-        t.Add(d17C)
-        t.Add(d17D)
-        t.Add(d17E)
-        t.Add(d17F)
+       #t.Add(d17C)
+       #t.Add(d17D)
+       #t.Add(d17E)
+       #t.Add(d17F)
 
     print '\n\ttotal entries:', t.GetEntries()
 
@@ -317,7 +318,19 @@ def produceLightTree(sample='DY',ch='mmm'):
     branchList = rt.vector('string')()
     for br in ['event', 'lumi', 'run', 'LOOSE', 'TIGHT', 'l2_reliso_rho_03', 'l2_Medium', 'l2_eta', 'l2_pt', 'l2_dxy', 'l2_dz', 'ptcone']:
         branchList.push_back(br)
-    df2.Snapshot('tree', saveDir+'/%s_%s_6_24.root'%(sample,ch), branchList)
+    df2.Snapshot('tree', saveDir+'/%s_%s_6_24B_Lcut_29_4.root'%(sample,ch), branchList)
+
+def split(file_name): #without.root
+
+    tfile = rt.TFile(file_name+'.root')
+    tree = tfile.Get('tree')
+
+    df = RDF(tree)
+    n = tree.GetEntries()
+    df1 = df.Range(0,int(n/2))
+    df2 = df.Range(int(n/2),0)
+    df1.Snapshot('tree', '%s_training_half.root'%file_name)
+    df2.Snapshot('tree', '%s_untouched_half.root'%file_name)
 ############################################################################################################################################################################
 
 ############################################################################################################################################################################
@@ -373,7 +386,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
             tight_021 = SFR_MMM_021_T
             tight_012 = SFR_MMM_012_T
             mode012 = True
-            mode021 = True 
+            #mode021 = True 
 
         if ch == 'eem':
             b_eta = b_eta_mu
@@ -402,7 +415,8 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
     #try: t.AddFriend('ml_fr = tree', eos+'plost/DDE/closureTest_190624_15h_35m/data_weights.root')
     #sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__; set_trace()
     try: 
-        t.AddFriend('ML = tree', eos+'ML_FR/data_geq0p01dxy/data_6_18_training_half_weights.root')
+        t.AddFriend('ML = tree', eos+'ML_FR/repr_6_19/data_mmm_6_24B_training_half_output.root')
+        #t.AddFriend('ML = tree', eos+'ML_FR/data_geq0p01dxy/data_6_18_training_half_weights.root')
    #     t.AddFriend('ML = tree', 'data_weights.root')
    #     #try: t.AddFriend('ML = tree', eos+'ML_FR/data_geq0p01dxy/data_weights.root')
     except:
@@ -440,7 +454,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
         x  = pd.DataFrame(pdf_data, columns=features)
         y = classifier.predict(x)
 
-        # add the score to the data1 sample
+        # add the score to the data_train_l sample
         #pdf_data.insert(len(pdf_data.columns), 'score', y)
         #k = np.sum(pdf_data.score)
         #T = np.count_nonzero(pdf_data.TIGHT)
@@ -456,7 +470,10 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
     sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__; set_trace()
 
     df0 = RDF(t)
-    print '\n\tentries:', df0.Count().GetValue()
+    n = df0.Count().GetValue()
+    print '\n\tentries:', n 
+    #for validation with first half of dataset
+    df0 = df0.Range(0,int(n/2))
     df  = df0.Define('_norm_', '1')
     df  = df.Define('abs_l1_eta', 'abs(l1_eta)')
     df  = df.Define('abs_l2_eta', 'abs(l2_eta)')
@@ -555,9 +572,9 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
     f1_012    = f0_012.Define('ptcone012', ptconel2)
     dfL_012   = f1_012#.Define('abs_l2_eta', 'abs(l2_eta)')
 
-    print '\n\t: VALIDATION                      :'
-    vld_ptc = df1_012.Filter('ML.ptcone012 - l2_ptcone != 0').Count().GetValue()
-    print '\t: ML.ptcone - ptcone != 0: %d events :'%vld_ptc
+    #print '\n\t: VALIDATION                      :'
+    #vld_ptc = dfL_012.Filter('ML.ptcone012 - l2_ptcone != 0').Count().GetValue()
+    #print '\t: ML.ptcone - ptcone != 0: %d events :'%vld_ptc
 
     dfLNT0_012 = dfL_012.Filter(lnt_012)
     dfLNT1_012 = dfLNT0_012.Define('fover1minusf012', 'ML.ml_fr_weight/(1-ML.ml_fr_weight)')
@@ -937,49 +954,6 @@ def selectCuts(channel):
 ######################################################################################
 
 ######################################################################################
-def selectDefs(ch):
-
-    promptMode = ch[0]
-    pairMode   = ch[1] + ch[2]
-
-    l0_is_fake_dr, no_fakes_dr, one_fake_xor_dr, two_fakes_dr, twoFakes_sameJet_dr = '','','','','' 
-    l0_is_fake_sh, no_fakes_sh, one_fake_xor_sh, two_fakes_sh, twoFakes_sameJet_sh = '','','','','' 
-    
-    if promptMode == 'm': 
-        l0_is_fake_sh       = None #l0_fake_m_sh
-        l0_is_fake_dr       = l0_fake_m_dr
-
-    if promptMode == 'e':
-        l0_is_fake_dr       = l0_fake_e_dr
-
-
-    if pairMode == 'ee': 
-        no_fakes_dr         = no_fakes_ee_dr
-        one_fake_xor_dr     = one_fake_xor_ee_dr
-        two_fakes_dr        = two_fakes_ee_dr
-        twoFakes_sameJet_dr = twoFakes_sameJet_ee_dr 
-
-#TODO
-#    if pairMode == 'em': 
-#        no_fakes_dr         = no_fakes_em_dr
-#        one_fake_xor_dr     = one_fake_xor_em_dr
-#        two_fakes_dr        = two_fakes_em_dr
-#        twoFakes_sameJet_dr = twoFakes_sameJet_em_dr 
-
-#TODO
-#    if pairMode == 'mm':
-#        no_fakes_dr         = no_fakes_mm_dr
-#        one_fake_xor_dr     = one_fake_xor_mm_dr
-#        two_fakes_dr        = two_fakes_mm_dr
-#        twoFakes_sameJet_dr = twoFakes_sameJet_mm_dr 
-
-    dRdefList = [l0_is_fake_dr, no_fakes_dr, one_fake_xor_dr, two_fakes_dr, twoFakes_sameJet_dr]
-    sHdefList = [l0_is_fake_sh, no_fakes_sh, one_fake_xor_sh, two_fakes_sh, twoFakes_sameJet_sh]
- 
-    return dRdefList, sHdefList 
-######################################################################################
-
-######################################################################################
 def save(knvs, iso=0, sample='', ch='', eta='', DIR=plotDir):
     if iso == 0: iso_str = '' 
     if iso != 0: iso_str = '_iso' + str(int(iso * 100))
@@ -1005,11 +979,9 @@ def save(knvs, iso=0, sample='', ch='', eta='', DIR=plotDir):
 ######################################################################################
 
 ######################################################################################
-
 class nn(object):
 
     def __init__(self):
-        saveDir = eos+'ML_FR/repr_6_19/'
         np.random.seed(1986)
         self.branches = [
         #     'event',        
@@ -1021,6 +993,9 @@ class nn(object):
              'l2_abs_dxy',        
         #     'l2_dz',        
         ]
+
+        self.features = self.branches
+
         classifier_input  = Input((len(self.branches),))
         #classifier_dense1 = Dense(64, activation='tanh'   )(classifier_input )
         #classifier_dense2 = Dense(64, activation='relu'   )(classifier_dense1)
@@ -1031,72 +1006,63 @@ class nn(object):
         self.classifier.compile('Adam', loss='binary_crossentropy', loss_weights=[1])        
         plot_model(self.classifier, show_shapes=True, show_layer_names=True, to_file=saveDir+'classifier.png')
 
-        def prepareInput(self):
-            try: 
-                self.data1 = pd.DataFrame( root2array(saveDir+'data_6_24_training_half.root') )
-                self.data2 = pd.DataFrame( root2array(saveDir+'data_6_24_untouched_half.root') )
-                #data2 = pd.DataFrame( root2array('data_eem_6_19.root') )
+       #self.ndf_training_half        = root2array(saveDir+'data_mmm_6_24B_training_half.root' , 'tree')
+       #self.ndf_training_half_LOOSE  = root2array(saveDir+'data_mmm_6_24B_training_half.root' , 'tree', selection='LOOSE == 1')
+       #self.ndf_untouched_half       = root2array(saveDir+'data_mmm_6_24B_untouched_half.root', 'tree')
+        self.ndf_training_half_LOOSE  = root2array(saveDir+'data_mmm_6_24B_Lcut_29_4.root' , 'tree', selection='LOOSE == 1')
+        self.ndf_training_half        = root2array(saveDir+'data_mmm_6_24B_training_half.root' , 'tree', selection='LOOSE == 1')
 
-            except:
-                print ('\n\tNOT SPLIT FOUND!\n')
-                tfile = rt.TFile(data_B_mmm + suffix)
-                tree = tfile.Get('tree')
+        self.data_train_l = pd.DataFrame( self.ndf_training_half_LOOSE )
+        self.data_train   = pd.DataFrame( self.ndf_training_half       )
+#       self.data_untouch = pd.DataFrame( self.ndf_untouched_half      )
+#
+#       self.data_untouch['l2_ptcone']  = self.data_untouch.l2_pt * (1 + np.maximum(0, self.data_untouch.l2_reliso_rho_03 - 0.2) )
+#       self.data_untouch['l2_abs_eta'] = np.abs(self.data_untouch.l2_eta) 
+#       self.data_untouch['l2_abs_dxy'] = np.abs(self.data_untouch.l2_dxy)
 
-                file_name='data_6_24'
-                df = RDF(tree)
-                n = tree.GetEntries()
-                df1 = df.Range(0,int(n/2))
-                df2 = df.Range(int(n/2),0)
-                df1.Snapshot('tree', saveDir+'%s_training_half.root'%file_name)
-                df2.Snapshot('tree', saveDir+'%s_untouched_half.root'%file_name)
-                self.data1 = pd.DataFrame( root2array(saveDir+'%s_training_half.root'%file_name) )
-                self.data2 = pd.DataFrame( root2array(saveDir+'%s_untouched_half.root'%file_name) )
+        self.data_train_l['l2_ptcone']  = self.data_train_l.l2_pt * (1 + np.maximum(0, self.data_train_l.l2_reliso_rho_03 - 0.2) )
+        self.data_train_l['l2_abs_eta'] = np.abs(self.data_train_l.l2_eta) 
+        self.data_train_l['l2_abs_dxy'] = np.abs(self.data_train_l.l2_dxy)
+        
+        self.data_train['l2_ptcone']  = self.data_train.l2_pt * (1 + np.maximum(0, self.data_train.l2_reliso_rho_03 - 0.2) )
+        self.data_train['l2_abs_eta'] = np.abs(self.data_train.l2_eta) 
+        self.data_train['l2_abs_dxy'] = np.abs(self.data_train.l2_dxy)
 
-            self.data1['l2_ptcone']  = self.data1.l2_pt * (1 + np.maximum(0, self.data1.l2_reliso_rho_03 - 0.2) )
-            #self.data1['l2_ptcone']  = self.data1.ptcone #data1.l2_pt * max(1, 1 + data1.l2_reliso_rho_03 - 0.2)
-            self.data1['l2_abs_eta'] = np.abs(self.data1.l2_eta) 
-            self.data1['l2_abs_dxy'] = np.abs(self.data1.l2_dxy)
-            
-            self.data2['l2_ptcone']  = self.data2.l2_pt * (1 + np.maximum(0, self.data2.l2_reliso_rho_03 - 0.2) )
-            #self.data2['l2_ptcone']  = self.data2.ptcone #data1.l2_pt * max(1, 1 + data1.l2_reliso_rho_03 - 0.2)
-            self.data2['l2_abs_eta'] = np.abs(self.data2.l2_eta) 
-            self.data2['l2_abs_dxy'] = np.abs(self.data2.l2_dxy)
+        self.data_train_l = self.data_train_l.sample(frac=1, replace=True, random_state=1986)
 
-            self.data1 = self.data1.sample(frac=1, replace=True, random_state=1986)
-
-            self.X = pd.DataFrame(self.data1, columns=branches)
-            self.Y = pd.DataFrame(self.data1, columns=['TIGHT'])
-
-
+        self.X = pd.DataFrame(self.data_train_l, columns=self.branches)
+        self.Y = pd.DataFrame(self.data_train_l, columns=['TIGHT'])
 
 
     def train(self):
         print ('training classifier')
-        self.classifier.fit(X[features], Y, epochs=100, validation_split=0.3)  
-        self.classifier.save(saveDir+'net_6_24.h5')
+        self.classifier.fit(self.X[self.features], self.Y, epochs=10, validation_split=0.3)  
+        self.classifier.save(saveDir+'net_6_24B_Lcut_29_4.h5')
 
 
     def predict(self):
-    # calculate predictions on the data1 sample
-        print ('predicting on', data1.shape[0], 'events')
-        x1 = pd.DataFrame(self.data1, columns=self.features)
-        x2 = pd.DataFrame(self.data2, columns=self.features)
-        y1 = self.classifier.predict(x1)
-        y2 = self.classifier.predict(x2)
+    # calculate predictions on the data_train_l sample
+        print ('predicting on', self.data_train.shape[0], 'events')
+        self.x1 = pd.DataFrame(self.data_train, columns=self.features)
+        self.x2 = pd.DataFrame(self.data_untouch, columns=self.features)
+        self.y1 = self.classifier.predict(self.x1)
+        self.y2 = self.classifier.predict(self.x2)
 
-    # add the score to the data1 sample
-        data1.insert(len(data1.columns), 'score', y1)
-        k = np.sum(data1.score)
-        T = np.count_nonzero(data1.TIGHT)
+    # add the score to the data_train_l sample
+        self.data_train.insert(len(self.data_train.columns), 'score', self.y1)
+        k = np.sum(self.data_train.score)
+        T = np.count_nonzero(self.data_train.TIGHT)
         K = T/k 
         print(k, T, K)
 
-        data1.insert(len(data1.columns), 'ml_fr_weight', K*y1)
-        data2.insert(len(data2.columns), 'ml_fr_weight', K*y2)
+        K = 1.0
+
+        self.data_train.insert(len(self.data_train.columns), 'ml_fr_weight', K*self.y1)
+        self.data_untouch.insert(len(self.data_untouch.columns), 'ml_fr_weight', K*self.y2)
 
         roc = False
         if roc == True:
-            fpr, tpr, wps = roc_curve(data1.TIGHT, data1.score)
+            fpr, tpr, wps = roc_curve(self.data_train.TIGHT, self.data_train.score)
 
             plt.xscale('log')
             plt.plot(fpr, tpr, color='m', label=r'Z=$\mathcal{N}(0, 1)$')
@@ -1113,8 +1079,8 @@ class nn(object):
             plt.savefig('roc.pdf')
             plt.clf()
 
-        data1.to_root(saveDir+'data_6_18_training_half_output.root', key = 'tree')
-        data2.to_root(saveDir+'%s_untouched_half_output.root'%file_name, key = 'tree')
+        self.data_train.to_root(saveDir+'data_mmm_6_24B_training_half_output.root', key = 'tree')
+        self.data_untouch.to_root(saveDir+'data_mmm_6_24B_untouched_half_output.root', key = 'tree')
 
     def checkFakeRate(self,file_name='data_6_24'):
 
