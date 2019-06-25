@@ -2,6 +2,7 @@ import hashlib
 from multiprocessing import Pool, Process, cpu_count
 # from multiprocessing.dummy import Pool, Process, cpu_count
 
+from nn import run_nn 
 from array import array
 import numpy as np
 import time
@@ -119,7 +120,10 @@ class CreateHists(object):
             # attach the trees to the first DataMCPlot
             plot = self.plots[self.vcfgs[0].name]
             try:
-                dataframe = plot.makeRootDataFrameFromTree(file_name, cfg.tree_name, verbose=verbose)
+                if cfg.is_data: 
+                    friend_name = 'ML' 
+                    friend_file_name = run_nn(file_name) # SFR_TREE_DIR
+                dataframe = plot.makeRootDataFrameFromTree(file_name, cfg.tree_name, verbose=verbose, friend_file_name=friend_file_name)
             except:
                 set_trace()
 
@@ -223,8 +227,12 @@ class CreateHists(object):
                                 .Define('abs_hnl_hn_vis_eta','abs(hnl_hn_vis_eta)')\
                                 .Define('doubleFakeRate','dfr_namespace::getDoubleFakeRate(pt_cone, abs_hnl_hn_eta, hnl_dr_12, hnl_2d_disp)')\
                                 .Define('doubleFakeWeight','doubleFakeRate/(1.0-doubleFakeRate)')\
-                                .Define('singleFakeRate','sfr_namespace::getSingleFakeRate(pt_cone, abs_hnl_hn_eta)')\
-                                .Define('singleFakeWeight','singleFakeRate/(1.0-doubleFakeRate)')
+
+        if not cfg.is_data: dataframe.Define('singleFakeRate','sfr_namespace::getSingleFakeRate(pt_cone, abs_hnl_hn_eta)')
+
+        if cfg.is_data:     dataframe.Define('singleFakeRate','ML.ml_fr_weight') #ML = name of FriendTree with FR weights from NN
+
+        dataframe.Define('singleFakeWeight','singleFakeRate/(1.0-doubleFakeRate)')
                                 # .Define('doubleFakeRate','dfr_namespace::getDoubleFakeRate(pt_cone, abs_hnl_hn_eta)')\
                                 # .Define('doubleFakeRate','dfr_namespace::getDoubleFakeRate(pt_cone, abs_hnl_hn_eta, hnl_dr_12, hnl_2d_disp)')\
 
