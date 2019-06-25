@@ -277,6 +277,50 @@ framer.GetYaxis().SetRangeUser(0.,0.5)
 ############################################################################################################################################################################
 
 ############################################################################################################################################################################
+def produceLightTree(sample='DY',ch='mmm'):
+
+    if ch == 'mmm':
+        d17B = data_B_mmm+suffix; d17C = data_C_mmm+suffix; d17D = data_D_mmm+suffix; d17E = data_E_mmm+suffix; d17F = data_F_mmm+suffix; 
+        SFR_012_L = SFR_MMM_012_L
+        l2_tight = l2_m_tight
+
+    if ch == 'eem':
+        d17B = data_B_eem+suffix; d17C = data_C_eem+suffix; d17D = data_D_eem+suffix; d17E = data_E_eem+suffix; d17F = data_F_eem+suffix; 
+
+    t = rt.TChain('tree')
+
+    if sample == 'DY':
+        t.Add(DY)
+        t.Add(DY_ext)
+
+    if sample == 'data':
+        t.Add(d17B)
+        t.Add(d17C)
+        t.Add(d17D)
+        t.Add(d17E)
+        t.Add(d17F)
+
+    print '\n\ttotal entries:', t.GetEntries()
+
+    df = RDF(t)
+    df1 = df.Define('LOOSE', '1 * (' + SFR_012_L + ' && hnl_dr_12 > 0.3 && hnl_dr_02 > 0.3 && abs(hnl_m_01 - 91.19) < 10 && hnl_q_01 == 0 )' )
+    df2 = df1.Define('TIGHT', '1 * (' + SFR_012_L + ' && hnl_dr_12 > 0.3 && hnl_dr_02 > 0.3 && abs(hnl_m_01 - 91.19) < 10 && hnl_q_01 == 0 && ' + l2_tight + ')' )
+
+    num_L = df2.Filter('LOOSE == 1').Count().GetValue()
+    print '\n\tloose entries in MR:', num_L 
+
+    num_T = df2.Filter('TIGHT == 1').Count().GetValue()
+    print '\n\ttight entries in MR:', num_T
+
+    df2 = df2.Define('ptcone', PTCONEL2)
+
+    branchList = rt.vector('string')()
+    for br in ['event', 'lumi', 'run', 'LOOSE', 'TIGHT', 'l2_reliso_rho_03', 'l2_Medium', 'l2_eta', 'l2_pt', 'l2_dxy', 'l2_dz', 'ptcone']:
+        branchList.push_back(br)
+    df2.Snapshot('tree', saveDir+'/%s_%s_6_24.root'%(sample,ch), branchList)
+############################################################################################################################################################################
+
+############################################################################################################################################################################
 def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, verbose=True, output=False, fr=False, full=False):
     
     input = 'MC' if isData == False else 'DATA'
@@ -358,7 +402,7 @@ def closureTest(ch='mmm', mode='sfr', isData=True, CONV=True, subtract=True, ver
     #try: t.AddFriend('ml_fr = tree', eos+'plost/DDE/closureTest_190624_15h_35m/data_weights.root')
     #sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__; set_trace()
     try: 
-   #     t.AddFriend('ML = tree', eos+'ML_FR/data_geq0p01dxy/data_6_18_training_half_weights.root')
+        t.AddFriend('ML = tree', eos+'ML_FR/data_geq0p01dxy/data_6_18_training_half_weights.root')
    #     t.AddFriend('ML = tree', 'data_weights.root')
    #     #try: t.AddFriend('ML = tree', eos+'ML_FR/data_geq0p01dxy/data_weights.root')
     except:
@@ -957,28 +1001,164 @@ def save(knvs, iso=0, sample='', ch='', eta='', DIR=plotDir):
     knvs.SetLogy()
     knvs.SaveAs('{dr}{smpl}_{ch}_{ttl}_log.png' .format(dr=DIR, smpl=sample, ttl=knvs.GetTitle(), ch=ch))
     knvs.SaveAs('{dr}{smpl}_{ch}_{ttl}_log.pdf' .format(dr=DIR, smpl=sample, ttl=knvs.GetTitle(), ch=ch))
-######################################################################################
 
 ######################################################################################
-def validateFriendTree():
 
-    tfile = rt.TFile(eos+'ML_FR/data_geq0p01dxy/data_6_18_training_half_output.root')
-    t = tfile.Get('tree')
-    t.AddFriend('dataB = tree', data_B_mmm+suffix)
-    t.AddFriend('dataC = tree', data_C_mmm+suffix)
-    t.AddFriend('dataD = tree', data_D_mmm+suffix)
-    t.AddFriend('dataE = tree', data_E_mmm+suffix)
-    t.AddFriend('dataF = tree', data_F_mmm+suffix) 
+######################################################################################
 
-    t.Scan('event:dataB.event:dataC.event:dataD.event:dataE.event:dataF.event:l2_pt:dataB.l2_pt:dataC.l2_pt:dataD.l2_pt:dataE.l2_pt:dataF.l2_pt')
+class nn(object):
 
-    t = rt.TChain('tree')
-    t.Add(data_B_mmm+suffix)
-    t.Add(data_C_mmm+suffix)
-    t.Add(data_D_mmm+suffix)
-    t.Add(data_E_mmm+suffix)
-    t.Add(data_F_mmm+suffix) 
-    t.AddFriend('ML = tree', eos+'ML_FR/data_geq0p01dxy/data_6_18_training_half_output.root')
+    def __init__(self):
+        saveDir = eos+'ML_FR/repr_6_19/'
+        np.random.seed(1986)
+        self.branches = [
+        #     'event',        
+        #     'lumi',        
+        #     'run',        
+        #     'TIGHT',        
+             'l2_abs_eta',        
+             'l2_ptcone',        
+             'l2_abs_dxy',        
+        #     'l2_dz',        
+        ]
+        classifier_input  = Input((len(self.branches),))
+        #classifier_dense1 = Dense(64, activation='tanh'   )(classifier_input )
+        #classifier_dense2 = Dense(64, activation='relu'   )(classifier_dense1)
+        classifier_dense1 = Dense(128, activation='tanh'  )(classifier_input)
+        classifier_output = Dense( 1, activation='sigmoid')(classifier_dense1)
+
+        self.classifier = Model(classifier_input, classifier_output)
+        self.classifier.compile('Adam', loss='binary_crossentropy', loss_weights=[1])        
+        plot_model(self.classifier, show_shapes=True, show_layer_names=True, to_file=saveDir+'classifier.png')
+
+        def prepareInput(self):
+            try: 
+                self.data1 = pd.DataFrame( root2array(saveDir+'data_6_24_training_half.root') )
+                self.data2 = pd.DataFrame( root2array(saveDir+'data_6_24_untouched_half.root') )
+                #data2 = pd.DataFrame( root2array('data_eem_6_19.root') )
+
+            except:
+                print ('\n\tNOT SPLIT FOUND!\n')
+                tfile = rt.TFile(data_B_mmm + suffix)
+                tree = tfile.Get('tree')
+
+                file_name='data_6_24'
+                df = RDF(tree)
+                n = tree.GetEntries()
+                df1 = df.Range(0,int(n/2))
+                df2 = df.Range(int(n/2),0)
+                df1.Snapshot('tree', saveDir+'%s_training_half.root'%file_name)
+                df2.Snapshot('tree', saveDir+'%s_untouched_half.root'%file_name)
+                self.data1 = pd.DataFrame( root2array(saveDir+'%s_training_half.root'%file_name) )
+                self.data2 = pd.DataFrame( root2array(saveDir+'%s_untouched_half.root'%file_name) )
+
+            self.data1['l2_ptcone']  = self.data1.l2_pt * (1 + np.maximum(0, self.data1.l2_reliso_rho_03 - 0.2) )
+            #self.data1['l2_ptcone']  = self.data1.ptcone #data1.l2_pt * max(1, 1 + data1.l2_reliso_rho_03 - 0.2)
+            self.data1['l2_abs_eta'] = np.abs(self.data1.l2_eta) 
+            self.data1['l2_abs_dxy'] = np.abs(self.data1.l2_dxy)
+            
+            self.data2['l2_ptcone']  = self.data2.l2_pt * (1 + np.maximum(0, self.data2.l2_reliso_rho_03 - 0.2) )
+            #self.data2['l2_ptcone']  = self.data2.ptcone #data1.l2_pt * max(1, 1 + data1.l2_reliso_rho_03 - 0.2)
+            self.data2['l2_abs_eta'] = np.abs(self.data2.l2_eta) 
+            self.data2['l2_abs_dxy'] = np.abs(self.data2.l2_dxy)
+
+            self.data1 = self.data1.sample(frac=1, replace=True, random_state=1986)
+
+            self.X = pd.DataFrame(self.data1, columns=branches)
+            self.Y = pd.DataFrame(self.data1, columns=['TIGHT'])
+
+
+
+
+    def train(self):
+        print ('training classifier')
+        self.classifier.fit(X[features], Y, epochs=100, validation_split=0.3)  
+        self.classifier.save(saveDir+'net_6_24.h5')
+
+
+    def predict(self):
+    # calculate predictions on the data1 sample
+        print ('predicting on', data1.shape[0], 'events')
+        x1 = pd.DataFrame(self.data1, columns=self.features)
+        x2 = pd.DataFrame(self.data2, columns=self.features)
+        y1 = self.classifier.predict(x1)
+        y2 = self.classifier.predict(x2)
+
+    # add the score to the data1 sample
+        data1.insert(len(data1.columns), 'score', y1)
+        k = np.sum(data1.score)
+        T = np.count_nonzero(data1.TIGHT)
+        K = T/k 
+        print(k, T, K)
+
+        data1.insert(len(data1.columns), 'ml_fr_weight', K*y1)
+        data2.insert(len(data2.columns), 'ml_fr_weight', K*y2)
+
+        roc = False
+        if roc == True:
+            fpr, tpr, wps = roc_curve(data1.TIGHT, data1.score)
+
+            plt.xscale('log')
+            plt.plot(fpr, tpr, color='m', label=r'Z=$\mathcal{N}(0, 1)$')
+            xy = [i*j for i,j in product([10.**i for i in range(-2, 0)], [1,2,4,8])]+[1]
+            plt.plot(xy, xy, color='grey', linestyle='--')
+
+            plt.xlabel(r'$\epsilon(\tau)$')
+            plt.ylabel(r'$\epsilon(\mu)$')
+            plt.xlim([0.0, 1.0])
+            plt.ylim([0.0, 1.0])
+
+            plt.grid(True)
+            plt.legend(loc='lower right')
+            plt.savefig('roc.pdf')
+            plt.clf()
+
+        data1.to_root(saveDir+'data_6_18_training_half_output.root', key = 'tree')
+        data2.to_root(saveDir+'%s_untouched_half_output.root'%file_name, key = 'tree')
+
+    def checkFakeRate(self,file_name='data_6_24'):
+
+        tfile1 = rt.TFile(saveDir+'data_6_18_training_half_output.root')
+        #tfile2 = rt.TFilesaveDir+''%s_untouched_half_output.root'%file_name)
+        tfile2 = rt.TFile(saveDir+'data_eem_6_19_output.root')
+
+        tree1 = tfile1.Get('tree')
+        tree2 = tfile2.Get('tree')
+
+        tree1.Draw('score>>SCORE_T_trained(100,0,1)',   'TIGHT==1')
+        tree1.Draw('score>>SCORE_LNT_trained(100,0,1)', 'TIGHT==0')
+        tree2.Draw('score>>SCORE_T_free(100,0,1)',   'TIGHT==1')
+        tree2.Draw('score>>SCORE_LNT_free(100,0,1)', 'TIGHT==0')
+
+        h_T_trained   = rt.gDirectory.Get('SCORE_T_trained')
+        h_LNT_trained = rt.gDirectory.Get('SCORE_LNT_trained')
+        h_T_free   = rt.gDirectory.Get('SCORE_T_free')
+        h_LNT_free = rt.gDirectory.Get('SCORE_LNT_free')
+
+        h_T_trained.SetLineColor(rt.kRed+2)
+        h_LNT_trained.SetLineColor(rt.kGreen+2)
+        h_T_free.SetLineColor(rt.kRed+2)
+        h_LNT_free.SetLineColor(rt.kGreen+2)
+
+        c1 = rt.TCanvas('training_half','training_half'); c1.cd()
+        h_LNT_trained.SetAxisRange(0.0,0.3,'X')
+        h_LNT_trained.SetTitle('')
+        h_T_trained.SetTitle('')
+        h_LNT_trained.DrawNormalized()
+        h_T_trained.DrawNormalized('same')
+        c1.BuildLegend(0.5,0.5,0.9,0.75)
+        c1.SaveAs(saveDir+'training_half.root')
+        c1.SaveAs(saveDir+'training_half.pdf')
+
+        c2 = rt.TCanvas('untouched_half','untouched_half'); c2.cd()
+        h_LNT_free.SetAxisRange(0.0,0.3,'X')
+        h_LNT_free.SetTitle('')
+        h_T_free.SetTitle('')
+        h_LNT_free.DrawNormalized()
+        h_T_free.DrawNormalized('same')
+        c2.BuildLegend(0.5,0.5,0.9,0.75)
+        c2.SaveAs(saveDir+'untouched_half.root')
+        c2.SaveAs(saveDir+'untouched_half.pdf')
 
 ######################################################################################
 
@@ -1013,5 +1193,4 @@ def makeLabel(sample_dir, ch='mmm', lbl='1',era='B'):
     for br in ['event', 'lumi', 'label']:
         bL.push_back(br)
     df.Snapshot('tree', plotDir + 'friend_tree_label_%s_%s%s.root'%(ch,lbl,era), bL)
-
 
