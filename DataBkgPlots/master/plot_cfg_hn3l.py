@@ -155,7 +155,7 @@ def producePlots(promptLeptonType, L1L2LeptonType, multiprocess = False, datafra
     usr = getuser()
     hostname = gethostname()
 
-    if 't3ui02' in hostname:
+    if 't3ui02' in hostname or 't3ui07' in hostname:
         if usr == 'dezhu':   plotDirBase = '/work/dezhu/3_figures/1_DataMC/FinalStates/'
         if usr == 'vstampf': plotDirBase = '/t3home/vstampf/eos/plots/'
 
@@ -198,7 +198,7 @@ def producePlots(promptLeptonType, L1L2LeptonType, multiprocess = False, datafra
     if "lxplus" in hostname:
         analysis_dir = '/eos/user/v/vstampf/ntuples/'
    
-    if "t3ui02" in hostname:
+    if "t3ui02" in hostname or 't3ui07' in hostname:
         analysis_dir = '/work/dezhu/4_production/'
 
     if "starseeker" in hostname:
