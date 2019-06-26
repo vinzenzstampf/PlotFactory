@@ -219,6 +219,7 @@ def producePlots(promptLeptonType, L1L2LeptonType, multiprocess = False, datafra
     line = handle.read()
     handle.close()
     cmsBaseDir = line.strip('\n')
+    if len(cmsBaseDir) < 1: cmsBaseDir = '/t3home/vstampf/CMSSW_9_4_6_patch1/'
 
     for region in regions:
         regionDir = plotDir+region.name
@@ -269,7 +270,7 @@ def producePlots(promptLeptonType, L1L2LeptonType, multiprocess = False, datafra
         total_weight, 
         sample_dict, 
         make_plots=True,
-        multiprocess=True,
+        multiprocess=False,
         dataframe=dataframe,
         server=hostname,
         channel_dir=channel,
