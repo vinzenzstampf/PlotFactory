@@ -150,26 +150,26 @@ def split(file_name): #without.root
 #        self.Y = pd.DataFrame(self.data_train_l, columns=['TIGHT'])
 
 
-def run_nn(self, file_name=''):
+def run_nn(file_name=''):
     # calculate predictions on sample
 
     path_to_tree = file_name + 'sfr_weights.root'
     if os.path.isfile(path_to_tree): return path_to_tree
 
     features = ['l2_abs_dxy', 'l2_abs_eta', 'l2_ptcone']
-    branches = ['event', 'lumi', 'l2_pt', 'l2_dxy', 'l2_eta', 'l2_dz'] 
+    branches = ['event', 'lumi', 'l2_pt', 'l2_dxy', 'l2_eta', 'l2_dz', 'l2_reliso_rho_03'] 
 
     f = ur.open(file_name)
     t = f['tree']
-    df = t.pandas.t(branches)
+    df = t.pandas.df(branches)
 
-    df['l2_abs_dxy'] = np.abs(X.l2_pt)
-    df['l2_abs_eta'] = np.abs(X.l2_pt)
-    df['l2_ptcone']  = X.l2_pt * (1 + np.maximum(0, X.l2_reliso_rho_03 - 0.2) )
+    df['l2_abs_dxy'] = np.abs(df.l2_pt)
+    df['l2_abs_eta'] = np.abs(df.l2_pt)
+    df['l2_ptcone']  = df.l2_pt * (1 + np.maximum(0, df.l2_reliso_rho_03 - 0.2) )
 
     X = pd.DataFrame(df, columns=features)
 
-    classifier = load_model(self.netDir + 'net.h5')
+    classifier = load_model('modules/net.h5')
     print ('predicting on', file_name)
     Y = classifier.predict(X)
 
@@ -182,7 +182,7 @@ def run_nn(self, file_name=''):
     K = 1.0
 
     # add the score to the data_train_l sample
-    df.insert(len(df.columns), 'ml_fr_weight', K * Y)
+    df.insert(len(df.columns), 'ml_fr', K * Y)
     df.to_root(path_to_tree, key = 'tree')
     return path_to_tree
 

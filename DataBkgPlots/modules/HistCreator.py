@@ -16,7 +16,7 @@ from pdb import set_trace
 from ROOT import ROOT, RDataFrame, TH1F, TFile, TTree, TTreeFormula, gInterpreter, gROOT, gSystem
 
 # Enable ROOT's implicit multi-threading for all objects that provide an internal parallelisation mechanism
-ROOT.EnableImplicitMT()
+ROOT.EnableImplicitMT(10)
 
 def initHist(hist, vcfg):
     hist.Sumw2()
@@ -230,7 +230,7 @@ class CreateHists(object):
 
         if not cfg.is_data: dataframe.Define('singleFakeRate','sfr_namespace::getSingleFakeRate(pt_cone, abs_hnl_hn_eta)')
 
-        if cfg.is_data:     dataframe.Define('singleFakeRate','ML.ml_fr_weight') #ML = name of FriendTree with FR weights from NN
+        if cfg.is_data:     dataframe.Define('singleFakeRate','ML.ml_fr') #ML = name of FriendTree with FR weights from NN
 
         dataframe.Define('singleFakeWeight','singleFakeRate/(1.0-doubleFakeRate)')
                                 # .Define('doubleFakeRate','dfr_namespace::getDoubleFakeRate(pt_cone, abs_hnl_hn_eta)')\
