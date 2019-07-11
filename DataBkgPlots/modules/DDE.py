@@ -13,7 +13,9 @@ from pdb import set_trace
 pf.setpfstyle()
 
 # Enable ROOT's implicit multi-threading for all objects that provide an internal parallelisation mechanism
-ROOT.EnableImplicitMT()
+if 't3' in gethostname(): ROOT.EnableImplicitMT(12)
+else: ROOT.EnableImplicitMT()
+
 
 class DDE(object):
 

@@ -184,7 +184,7 @@ class CreateHists(object):
             if cfg.weight_expr:
                 weight = '*'.join([weight, cfg.weight_expr])
 
-            # print '#### FULL CUT ####', norm_cut
+            print '\n#### FULL CUT #### \n%s\n' %norm_cut
 
             # Initialise all hists before the multidraw
             hists = {}
@@ -321,15 +321,15 @@ class CreateHists(object):
             Note "-" sign: this contribution is subtracted from the contribution above (#2)
             '''
 
-            dataframe =   dataframe\
-                            .Define('weight_LL','(singleFakeWeight * singleFakeWeight)')\
-                            .Define('weight_LT','singleFakeWeight')\
-                            .Define('weight_TL','singleFakeWeight')
-
             # dataframe =   dataframe\
-                            # .Define('weight_LL','1')\
-                            # .Define('weight_LT','1')\
-                            # .Define('weight_TL','1')
+                            # .Define('weight_LL','(singleFakeWeight * singleFakeWeight)')\
+                            # .Define('weight_LT','singleFakeWeight')\
+                            # .Define('weight_TL','singleFakeWeight')
+
+            dataframe =   dataframe\
+                            .Define('weight_LL','1')\
+                            .Define('weight_LT','1')\
+                            .Define('weight_TL','1')
 
             # # implement ptCone correction to the single fakes
             # if 'hnl_m_12' in vcfg.drawname:

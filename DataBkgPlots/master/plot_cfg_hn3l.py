@@ -50,7 +50,7 @@ gr.SetBatch(True) # NEEDS TO BE SET FOR MULTIPROCESSING OF plot.Draw()
 
 # get the lumis from here: https://twiki.cern.ch/twiki/bin/viewauth/CMS/PdmV2017Analysis
 int_lumi = 41530.0 # pb ### (all eras), Golden JSON Int.Lumi: from https://twiki.cern.ch/twiki/bin/viewauth/CMS/PdmVAnalysisSummaryTable 
-# int_lumi =  4792.0 # pb (era B)
+int_lumi =  4792.0 # pb (era B)
 
 
 
@@ -167,7 +167,7 @@ def producePlots(promptLeptonType, L1L2LeptonType, multiprocess = False, datafra
     usr = getuser()
     hostname = gethostname()
 
-    if 't3ui02' in hostname:
+    if 't3ui0' in hostname:
         if usr == 'dezhu':   plotDirBase = '/work/dezhu/3_figures/1_DataMC/FinalStates/'
         if usr == 'vstampf': plotDirBase = '/t3home/vstampf/eos/plots/'
 
@@ -210,7 +210,7 @@ def producePlots(promptLeptonType, L1L2LeptonType, multiprocess = False, datafra
     if "lxplus" in hostname:
         analysis_dir = '/eos/user/v/vstampf/ntuples/'
    
-    if "t3ui02" in hostname:
+    if "t3ui0" in hostname:
         analysis_dir = '/work/dezhu/4_production/'
 
     if "starseeker" in hostname:
@@ -231,6 +231,7 @@ def producePlots(promptLeptonType, L1L2LeptonType, multiprocess = False, datafra
     line = handle.read()
     handle.close()
     cmsBaseDir = line.strip('\n')
+ 
 
     for region in regions:
         regionDir = plotDir+region.name
@@ -254,9 +255,10 @@ def producePlots(promptLeptonType, L1L2LeptonType, multiprocess = False, datafra
             copyfile(cmsBaseDir+'/src/PlotFactory/DataBkgPlots/master/plot_cfg_hn3l.py', regionDir+'/plot_cfg_base.py')
             copyfile(cmsBaseDir+'/src/PlotFactory/DataBkgPlots/modules/Selections.py', regionDir+'/Selections.py')
         else:
-            copyfile(cmsBaseDir+'/src/CMGTools/HNL/PlotFactory/DataBkgPlots/0_cfg_hn3l_'+channel+'.py', regionDir+'/plot_cfg.py')
-            copyfile(cmsBaseDir+'/src/CMGTools/HNL/PlotFactory/DataBkgPlots/master/plot_cfg_hn3l.py', regionDir+'/plot_cfg_base.py')
-            copyfile(cmsBaseDir+'/src/CMGTools/HNL/PlotFactory/DataBkgPlots/modules/Selections.py', regionDir+'/Selections.py')
+            if not cmsBaseDir: cmsBaseDir = os.getcwd() 
+            copyfile(cmsBaseDir+'/0_cfg_hn3l_'+channel+'.py', regionDir+'/plot_cfg.py')
+            copyfile(cmsBaseDir+'/master/plot_cfg_hn3l.py', regionDir+'/plot_cfg_base.py')
+            copyfile(cmsBaseDir+'/modules/Selections.py', regionDir+'/Selections.py')
 
         print 'cfg files stored in "',plotDir + region.name + '/"'
 

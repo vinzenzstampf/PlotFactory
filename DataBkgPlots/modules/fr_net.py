@@ -253,6 +253,7 @@ def train(features,branches,features_SF2,branches_SF2,path_to_NeuralNet,newArray
     data.to_root(path_to_NeuralNet + 'output_ntuple.root', key='tree', store_index=False)
 
 def makeFriendtree(tree_file_name,sample_name,net_name,path_to_NeuralNet,branches,features,overwrite):
+    set_trace()
     path_to_tree = path_to_NeuralNet + 'friendtree_fr_%s.root'%sample_name
     if not overwrite:
         if os.path.isfile(path_to_tree): 

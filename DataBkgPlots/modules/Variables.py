@@ -374,7 +374,7 @@ test_vars = [
 
 essential_vars = [
             VCfg(name='_norm_'     , drawname='norm_count', binning={'nbinsx':5, 'xmin':-1.5, 'xmax':3.5}, unit='', xtitle='Normalisation'),
-            # VCfg(name='m_triL_wide', drawname='hnl_w_vis_m',       binning={'nbinsx':40, 'xmin':0., 'xmax':250}, unit='GeV', xtitle='Tri-Lepton Mass'),
+            VCfg(name='m_triL_wide', drawname='hnl_w_vis_m',       binning={'nbinsx':40, 'xmin':0., 'xmax':250}, unit='GeV', xtitle='Tri-Lepton Mass'),
             # VCfg(name='hnl_hn_vis_eta', drawname='hnl_hn_vis_eta', binning={'nbinsx':40, 'xmin':-2.5, 'xmax':2.5 }, unit=None , xtitle='dimuon #eta'),
             # VCfg(name='dilepton_pt', drawname='hnl_hn_vis_pt',      binning={'nbinsx':20, 'xmin':0, 'xmax':50},    unit='GeV', xtitle='dilepton p_{T}'),
             # VCfg(name='hnl_2d_disp', binning={'nbinsx':20, 'xmin':0   , 'xmax':2. }, unit='cm' , xtitle='2D displacement'),
