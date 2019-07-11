@@ -221,7 +221,7 @@ class CreateHists(object):
                                 
         dataframe =   dataframe\
                                 .Define('norm_count','1.')\
-                                .Define('l0_pt_cone','l0_pt * (1 + l0_reliso_rho_03)')\
+                                .Define('l0_pt_cone','((l0_pt * (l0_reliso_rho_03<0.2)) + ((l0_reliso_rho_03>=0.2) * (l0_pt * (1. + l0_reliso_rho_03 - 0.2))))')\
                                 .Define('l1_pt_cone','((l1_pt * (l1_reliso_rho_03<0.2)) + ((l1_reliso_rho_03>=0.2) * (l1_pt * (1. + l1_reliso_rho_03 - 0.2))))')\
                                 .Define('l2_pt_cone','((l2_pt * (l2_reliso_rho_03<0.2)) + ((l2_reliso_rho_03>=0.2) * (l2_pt * (1. + l2_reliso_rho_03 - 0.2))))')\
                                 .Define('abs_l1_eta','abs(l1_eta)')\
@@ -241,16 +241,16 @@ class CreateHists(object):
         if cfg.is_singlefake:     
             dataframe =   dataframe\
                                     .Define('singleFakeRate','ML.ml_fr')\
-                                    .Define('singleFakeWeight','singleFakeRate/(1.0-singleFakeRate)')\
-                                    .Define('doubleFakeRate','dfr_namespace::getDoubleFakeRate(pt_cone, abs_hnl_hn_eta, hnl_dr_12, hnl_2d_disp)')\
-                                    .Define('doubleFakeWeight','doubleFakeRate/(1.0-doubleFakeRate)')
+                                    .Define('singleFakeWeight','1')
+#                                    .Define('singleFakeWeight','singleFakeRate/(1.0-singleFakeRate)')\
         #FIXME: it's not abs_hnl_hn_eta, but a single lepton eta, same with pt_cone
         else:
             dataframe =   dataframe\
                                     .Define('singleFakeRate','sfr_namespace::getSingleFakeRate(pt_cone, abs_hnl_hn_eta)')\
-                                    .Define('singleFakeWeight','singleFakeRate/(1.0-singleFakeRate)')\
+                                    .Define('singleFakeWeight','1')\
                                     .Define('doubleFakeRate','dfr_namespace::getDoubleFakeRate(pt_cone, abs_hnl_hn_eta, hnl_dr_12, hnl_2d_disp)')\
-                                    .Define('doubleFakeWeight','doubleFakeRate/(1.0-doubleFakeRate)')
+                                    .Define('doubleFakeWeight','1')
+#                                    .Define('doubleFakeWeight','doubleFakeRate/(1.0-doubleFakeRate)')
 
         # define additional columns for the ptcone correction
         gSystem.Load("modules/pt_ConeCorrection_h.so")

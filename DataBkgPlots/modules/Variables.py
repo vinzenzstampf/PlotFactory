@@ -114,53 +114,6 @@ electron_l1_vars = [
     
 ]
 
-tau_l1_vars = [
-    VCfg(name='l1_pt', binning={'nbinsx':50, 'xmin':0., 'xmax':400.}, unit='GeV', xtitle='tau_{1} p_{T}'),
-    VCfg(name='l1_eta', binning={'nbinsx':20, 'xmin':-2.5, 'xmax':2.5}, unit=None, xtitle='tau_{1} #eta'),
-    VCfg(name='l1_phi', binning={'nbinsx':40, 'xmin':-3.141593, 'xmax':3.141593}, unit=None, xtitle='tau_{1} #phi'),
-    VCfg(name='l1_mt', drawname='mt', binning={'nbinsx':50, 'xmin':0., 'xmax':200.}, unit='GeV', xtitle='m_{T} #tau_{1}'),
-    VCfg(name='l1_decayMode', binning={'nbinsx':12, 'xmin':-0.5, 'xmax':11.5}, unit=None, xtitle='tau_{1} decay mode'),
-    VCfg(name='l1_mass', binning={'nbinsx':40, 'xmin':0., 'xmax':3.}, unit='GeV', xtitle='tau_{1} mass'),
-    VCfg(name='l1_gen_pdgId', binning={'nbinsx':40, 'xmin':-17.5, 'xmax':22.5}, unit=None, xtitle='tau_{1} gen match PDG ID'),
-    VCfg(name='l1_log_dxy', drawname='log(abs(l1_dxy)+0.00001)', binning={'nbinsx':40, 'xmin':-18., 'xmax':0.5}, unit='log(cm)', xtitle='log(tau_{1} d_{xy})'),
-    VCfg(name='l1_dxy_sig', drawname='log(abs(l1_dxy/l1_dxy_error))', binning={'nbinsx':100, 'xmin':-20., 'xmax':20.}, unit=None, xtitle='tau_{1} log(d_{xy}/#sigma(d_{xy}))'),
-    VCfg(name='l1_log_dz', drawname='log(abs(l1_dz)+0.00001)', binning={'nbinsx':40, 'xmin':-18., 'xmax':0.5}, unit='log(cm)', xtitle='log(tau_{1} d_{z})'),
-    VCfg(name='l1_dz_sig', drawname='log(abs(l1_dz/l1_dz_error))', binning={'nbinsx':100, 'xmin':-20., 'xmax':20.}, unit=None, xtitle='tau_{1} log(d_{z}/#sigma(d_{z}))'),
-    VCfg(name='l1_byCombinedIsolationDeltaBetaCorrRaw3Hits', binning={'nbinsx':100, 'xmin':0., 'xmax':100.}, unit='GeV', xtitle='tau_{1} delta-beta corr. 3-hit isolation'),
-    VCfg(name='l1_byIsolationMVArun2v1DBoldDMwLTraw', binning={'nbinsx':40, 'xmin':0.6, 'xmax':1.}, unit='', xtitle='tau_{1} isolation MVA (old DM w/LT)'),
-    VCfg(name='l1_byIsolationMVArun2v1DBdR03oldDMwLTraw', binning={'nbinsx':40, 'xmin':0.6, 'xmax':1.}, unit='', xtitle='tau_{1} isolation MVA (old DM w/LT cone 0.3)'),
-    VCfg(name='l1_chargedIsoPtSum', binning={'nbinsx':50, 'xmin':0., 'xmax':25.}, unit='GeV', xtitle='tau_{1} charged isolation'),
-    VCfg(name='l1_neutralIsoPtSum', binning={'nbinsx':50, 'xmin':0., 'xmax':25.}, unit='GeV', xtitle='tau_{1} neutral isolation'),
-    VCfg(name='l1_puCorrPtSum', binning={'nbinsx':50, 'xmin':0., 'xmax':25.}, unit='GeV', xtitle='tau_{1} charged PU isolation'),
-    VCfg(name='l1_photonPtSumOutsideSignalCone', binning={'nbinsx':50, 'xmin':0., 'xmax':25.}, unit='GeV', xtitle='tau_{1} #Sigma photon p_{T} outside signal cone'),
-    VCfg(name='l1_zImpact', binning={'nbinsx':30, 'xmin':-600., 'xmax':600.}, unit='', xtitle='tau_{1} z impact'),
-    VCfg(name='l1_jet_charge', binning={'nbinsx':31, 'xmin':-15.5, 'xmax':15.5}, unit='', xtitle='tau_{1} jet charge'),
-    VCfg(name='l1_jet_pt_div_l1_pt', drawname='l1_pt/l1_jet_pt', binning={'nbinsx':30, 'xmin':-0.5, 'xmax':1.5}, unit='', xtitle='tau_{1} p_{T}/jet p_{T}'),
-    VCfg(name='delta_phi_l1_met', drawname='abs(TVector2::Phi_mpi_pi(l1_phi - met_phi))', binning={'nbinsx':40, 'xmin':0, 'xmax':3.141593}, unit=None, xtitle='#Delta #phi (tau_{1}, MET)'),
-    VCfg(name='mt_div_l1_pt', drawname='mt/l1_pt', binning={'nbinsx':40, 'xmin':0, 'xmax':7}, unit=None, xtitle='M_{T}/tau_{1} p_{T}'),
-]
-
-tau_l2_vars = [
-    VCfg(name='l2_pt', binning={'nbinsx':50, 'xmin':0., 'xmax':250.}, unit='GeV', xtitle='tau p_{T}'),
-    VCfg(name='l2_eta', binning={'nbinsx':20, 'xmin':-2.5, 'xmax':2.5}, unit=None, xtitle='tau #eta'),
-    VCfg(name='l2_phi', binning={'nbinsx':40, 'xmin':-3.141593, 'xmax':3.141593}, unit=None, xtitle='tau #phi'),
-    VCfg(name='l2_mt', drawname='mt_leg2', binning={'nbinsx':50, 'xmin':0., 'xmax':200.}, unit='GeV', xtitle='m_{T} #tau'),
-    VCfg(name='l2_decayMode', binning={'nbinsx':12, 'xmin':-0.5, 'xmax':11.5}, unit=None, xtitle='tau decay mode'),
-    VCfg(name='l2_mass', binning={'nbinsx':40, 'xmin':0., 'xmax':3.}, unit='GeV', xtitle='tau mass'),
-    VCfg(name='l2_jet_pt', binning={'nbinsx':40, 'xmin':0., 'xmax':240.}, unit='GeV', xtitle='tau jet p_{T}'),
-    VCfg(name='l2_gen_pdgId', binning={'nbinsx':40, 'xmin':-17.5, 'xmax':22.5}, unit=None, xtitle='tau gen match PDG ID'),
-    VCfg(name='l2_log_dxy', drawname='log(abs(l2_dxy)+0.00001)', binning={'nbinsx':40, 'xmin':-18., 'xmax':0.5}, unit='log(cm)', xtitle='log(tau d_{xy})'),
-    VCfg(name='l2_dxy_sig', drawname='log(abs(l2_dxy/l2_dxy_error))', binning={'nbinsx':100, 'xmin':-20., 'xmax':20.}, unit=None, xtitle='tau log(d_{xy}/#sigma(d_{xy}))'),
-    VCfg(name='l2_log_dz', drawname='log(abs(l2_dz)+0.00001)', binning={'nbinsx':40, 'xmin':-18., 'xmax':0.5}, unit='log(cm)', xtitle='log(tau d_{z})'),
-    VCfg(name='l2_dz_sig', drawname='log(abs(l2_dz/l2_dz_error))', binning={'nbinsx':100, 'xmin':-20., 'xmax':20.}, unit=None, xtitle='tau log(d_{z}/#sigma(d_{z}))'),
-    VCfg(name='l2_byCombinedIsolationDeltaBetaCorrRaw3Hits', binning={'nbinsx':100, 'xmin':0., 'xmax':100.}, unit='GeV', xtitle='tau delta-beta corr. 3-hit isolation'),
-    VCfg(name='l2_byIsolationMVArun2v1DBoldDMwLTraw', binning={'nbinsx':100, 'xmin':-1., 'xmax':1.}, unit='', xtitle='tau isolation MVA (old DM w/LT)'),
-    VCfg(name='l2_byIsolationMVArun2v1DBdR03oldDMwLTraw', binning={'nbinsx':100, 'xmin':0., 'xmax':1.}, unit='', xtitle='tau isolation MVA (old DM w/LT cone 0.3)'),
-    # VCfg(name='l2_nc_ratio', binning={'nbinsx':20, 'xmin':-1., 'xmax':1.}, unit='GeV', xtitle='tau neutral-charged asymmetry'),
-    # VCfg(name='l2_gen_nc_ratio', binning={'nbinsx':20, 'xmin':-1., 'xmax':1.}, unit='GeV', xtitle='tau gen neutral-charged asymmetry'),
-    VCfg(name='delta_phi_l2_met', drawname='abs(TVector2::Phi_mpi_pi(l2_phi-met_phi))', binning={'nbinsx':40, 'xmin':0., 'xmax':3.141593}, unit=None, xtitle='#Delta #phi (tau, MET)'),
-]
-
 muon_l2_vars = [
     VCfg(name='l2_pt', binning={'nbinsx':40, 'xmin':0., 'xmax':100.}, unit='GeV', xtitle='2nd muon p_{T}'),
     VCfg(name='l2_eta', binning={'nbinsx':20, 'xmin':-2.5, 'xmax':2.5}, unit=None, xtitle='2nd muon #eta'),
@@ -224,35 +177,6 @@ additional_tau_vars = [
     VCfg(name='tau1_own_vertexz', drawname='tau1_dz_selfvertex>0', binning={'nbinsx':2, 'xmin':-0.5, 'xmax':1.5}, unit='', xtitle='Is own z vertex'),
     VCfg(name='tau1_jet_mass', binning={'nbinsx':50, 'xmin':0., 'xmax':50.}, unit='GeV', xtitle='Jet mass'),
     VCfg(name='tau1_eta_min_jet_eta', drawname='tau1_eta - tau1_jet_eta', binning={'nbinsx':50, 'xmin':-0.15, 'xmax':0.15}, unit='', xtitle='#eta - jet #eta'),
-]
-
-additional_extra_tau_vars = [
-    VCfg(name='tau1_iso_n_ch', binning={'nbinsx':41, 'xmin':-0.5, 'xmax':40.5}, unit='', xtitle='tau isolation N_{charged hadrons}'),
-    VCfg(name='tau1_iso_n_gamma', binning={'nbinsx':41, 'xmin':-0.5, 'xmax':40.5}, unit='', xtitle='tau isolation N_{photons}'),
-    VCfg(name='tau1_lead_ch_pt', drawname='log(abs(tau_lead_ch_pt)) - 999*(tau_lead_ch_pt<0)', binning={'nbinsx':40, 'xmin':-0.1, 'xmax':6.}, unit='GeV', xtitle='log(tau iso leading CH p_{T})'),
-    VCfg(name='tau1_lead_ch_dxy', drawname='log(abs(tau_lead_ch_dxy))', binning={'nbinsx':40, 'xmin':-12., 'xmax':-2.}, unit='cm', xtitle='log(tau iso leading CH d_{xy})'),
-    VCfg(name='tau1_lead_ch_dz', drawname='log(abs(tau_lead_ch_dz))', binning={'nbinsx':40, 'xmin':-12., 'xmax':3.}, unit='cm', xtitle='log(tau iso leading CH d_{z})'),
-    VCfg(name='tau1_lead_ch_ndof', binning={'nbinsx':34, 'xmin':-0.5, 'xmax':33.5}, unit='', xtitle='tau iso leading CH ndof'),
-    VCfg(name='tau1_lead_ch_normchi2', binning={'nbinsx':100, 'xmin':-0., 'xmax':49.5}, unit='', xtitle='tau iso leading CH normalized chi2'),
-    VCfg(name='tau1_lead_ch_chi2', binning={'nbinsx':100, 'xmin':-0., 'xmax':49.5}, unit='', xtitle='tau iso leading CH  chi2'),
-    VCfg(name='tau1_lead_ch_n_layers_pixel', binning={'nbinsx':6, 'xmin':-0.5, 'xmax':5.5}, unit='', xtitle='tau iso leading CH N_{pixel layers}'),
-    VCfg(name='tau1_lead_ch_n_hits_pixel', binning={'nbinsx':9, 'xmin':-0.5, 'xmax':8.5}, unit='', xtitle='tau iso leading CH N_{pixel hits}'),
-    VCfg(name='tau1_lead_ch_n_layers_tracker', binning={'nbinsx':6, 'xmin':-0.5, 'xmax':5.5}, unit='', xtitle='tau iso leading CH N_{tracker layers}'),
-    VCfg(name='tau1_lead_ch_n_hits', binning={'nbinsx':32, 'xmin':-0.5, 'xmax':31.5}, unit='', xtitle='tau iso leading CH N_{hits}'),
-    VCfg(name='tau1_lead_ch_n_missing_inner', binning={'nbinsx':4, 'xmin':-0.5, 'xmax':3.5}, unit='', xtitle='tau iso leading CH N_{missing inner hits}'),
-
-    VCfg(name='tau1_leadiso_ch_pt', drawname='log(abs(tau_leadiso_ch_pt)) - 999*(tau_leadiso_ch_pt<0)', binning={'nbinsx':40, 'xmin':-0.1, 'xmax':6.}, unit='GeV', xtitle='log(tau iso leading CH p_{T})'),
-    VCfg(name='tau1_leadiso_ch_dxy', drawname='log(abs(tau_leadiso_ch_dxy))', binning={'nbinsx':40, 'xmin':-12., 'xmax':-2.}, unit='cm', xtitle='log(tau iso leading CH d_{xy})'),
-    VCfg(name='tau1_leadiso_ch_dz', drawname='log(abs(tau_leadiso_ch_dz))', binning={'nbinsx':40, 'xmin':-12., 'xmax':3.}, unit='cm', xtitle='log(tau iso leading CH d_{z})'),
-    VCfg(name='tau1_leadiso_ch_ndof', binning={'nbinsx':34, 'xmin':-0.5, 'xmax':33.5}, unit='', xtitle='tau iso leading CH ndof'),
-    VCfg(name='tau1_leadiso_ch_normchi2', binning={'nbinsx':100, 'xmin':-0., 'xmax':49.5}, unit='', xtitle='tau iso leading CH normalized chi2'),
-    VCfg(name='tau1_leadiso_ch_chi2', binning={'nbinsx':100, 'xmin':-0., 'xmax':49.5}, unit='', xtitle='tau iso leading CH  chi2'),
-    VCfg(name='tau1_leadiso_ch_n_layers_pixel', binning={'nbinsx':6, 'xmin':-0.5, 'xmax':5.5}, unit='', xtitle='tau iso leading CH N_{pixel layers}'),
-    VCfg(name='tau1_leadiso_ch_n_hits_pixel', binning={'nbinsx':9, 'xmin':-0.5, 'xmax':8.5}, unit='', xtitle='tau iso leading CH N_{pixel hits}'),
-    VCfg(name='tau1_leadiso_ch_n_layers_tracker', binning={'nbinsx':6, 'xmin':-0.5, 'xmax':5.5}, unit='', xtitle='tau iso leading CH N_{tracker layers}'),
-    VCfg(name='tau1_leadiso_ch_n_hits', binning={'nbinsx':32, 'xmin':-0.5, 'xmax':31.5}, unit='', xtitle='tau iso leading CH N_{hits}'),
-    VCfg(name='tau1_leadiso_ch_n_missing_inner', binning={'nbinsx':4, 'xmin':-0.5, 'xmax':3.5}, unit='', xtitle='tau iso leading CH N_{missing inner hits}'),
-
 ]
 
 full_vars = [
@@ -384,12 +308,12 @@ essential_vars = [
             # VCfg(name='hnl_m_01_wide', drawname = 'hnl_m_01', binning={'nbinsx':40, 'xmin':0.   , 'xmax':110 }, unit='GeV', xtitle='mass(l_{0},#mu_{1})'),
             # VCfg(name='hnl_m_02_wide', drawname = 'hnl_m_02', binning={'nbinsx':40, 'xmin':0.   , 'xmax':110 }, unit='GeV', xtitle='mass(l_{0},#mu_{2})'),
 
-            VCfg(name='l2_ptCone', drawname='l2_pt_cone',      binning={'nbinsx':10, 'xmin':0, 'xmax':70},    unit='GeV', xtitle='p^{Cone}_{T}'),
-            VCfg(name='hnl_2d_disp', binning={'nbinsx':20, 'xmin':0   , 'xmax':.1 }, unit='cm' , xtitle='2D displacement'),
-            VCfg(name='l2_pt'      , binning={'nbinsx':20, 'xmin':0.  , 'xmax':50.}, unit='GeV', xtitle='2nd muon p_{T}'),
             VCfg(name='abs_l2_eta'      , drawname='abs_l2_eta',binning={'nbinsx':20, 'xmin':0.  , 'xmax':2.5}, unit='GeV', xtitle='2nd muon |#eta|'),
-            VCfg(name='abs_l2_dz'      , binning={'nbinsx':20, 'xmin':-200.  , 'xmax':200.}, unit='GeV', xtitle='2nd muon p_{T}'),
-            VCfg(name='abs_l2_dxy'      , binning={'nbinsx':20, 'xmin':-0.1  , 'xmax':.1}, unit='GeV', xtitle='2nd muon p_{T}'),
+#            VCfg(name='l2_ptCone', drawname='l2_pt_cone',      binning={'nbinsx':10, 'xmin':0, 'xmax':70},    unit='GeV', xtitle='p^{Cone}_{T}'),
+            # VCfg(name='hnl_2d_disp', binning={'nbinsx':20, 'xmin':0   , 'xmax':.1 }, unit='cm' , xtitle='2D displacement'),
+            # VCfg(name='l2_pt'      , binning={'nbinsx':20, 'xmin':0.  , 'xmax':50.}, unit='GeV', xtitle='2nd muon p_{T}'),
+            # VCfg(name='abs_l2_dz'      , binning={'nbinsx':20, 'xmin':-200.  , 'xmax':200.}, unit='GeV', xtitle='2nd muon p_{T}'),
+            # VCfg(name='abs_l2_dxy'      , binning={'nbinsx':20, 'xmin':-0.1  , 'xmax':.1}, unit='GeV', xtitle='2nd muon p_{T}'),
 
             # VCfg(name='hnl_dr_12_low', drawname='hnl_dr_12', binning={'nbinsx':30, 'xmin':0   , 'xmax':0.1 }, unit=None, xtitle='#DeltaR (#mu_{1}, #mu_{2})'),
             # VCfg(name='hnl_m_12_corrected' , drawname='hnl_m_12_ConeCorrected', binning={'nbinsx':20, 'xmin':0   , 'xmax':10  }, unit='GeV', xtitle='dimuon mass'),
