@@ -321,12 +321,12 @@ class CreateHists(object):
             Note "-" sign: this contribution is subtracted from the contribution above (#2)
             '''
 
-            # dataframe =   dataframe\
+            dataframe =   dataframe\
                             # .Define('weight_LL','(singleFakeWeight * singleFakeWeight)')\
                             # .Define('weight_LT','singleFakeWeight')\
                             # .Define('weight_TL','singleFakeWeight')
 
-            dataframe =   dataframe\
+            # dataframe =   dataframe\
                             .Define('weight_LL','1')\
                             .Define('weight_LT','1')\
                             .Define('weight_TL','1')
@@ -356,7 +356,7 @@ class CreateHists(object):
             hist_sf_TL.Add(hist_sf_LL,-1)       
             hists[vcfg.name] = hist_sf_TL      
 
-            set_trace()
+            #set_trace()
             
         
         if cfg.is_doublefake:

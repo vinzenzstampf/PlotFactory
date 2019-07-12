@@ -188,7 +188,7 @@ def train(features,branches,features_SF2,branches_SF2,path_to_NeuralNet,newArray
     qt = QuantileTransformer(output_distribution='normal', random_state=1986)
     qt.fit(X[features])
     xx = qt.transform(X[features])
-    pickle.dump( qt, open( path_to_NeuralNet + 'quantile_tranformation.pck', 'w' ) )
+    pickle.dump( qt, open( path_to_NeuralNet + 'quantile_transformation.pck', 'w' ) )
     
     # xx = X[features] # use this to bypass the quantile transformer
     # alternative way to scale the inputs
@@ -219,7 +219,7 @@ def train(features,branches,features_SF2,branches_SF2,path_to_NeuralNet,newArray
     # xx = x[features]# use this to bypass the quantile transformer
 
     # apply the Quantile Transformer also for the evaluation process
-    qt = pickle.load(open( path_to_NeuralNet + 'quantile_tranformation.pck', 'r' ))
+    qt = pickle.load(open( path_to_NeuralNet + 'quantile_transformation.pck', 'r' ))
     xx = qt.transform(x[features])
 
     y = model.predict(xx)
@@ -253,7 +253,6 @@ def train(features,branches,features_SF2,branches_SF2,path_to_NeuralNet,newArray
     data.to_root(path_to_NeuralNet + 'output_ntuple.root', key='tree', store_index=False)
 
 def makeFriendtree(tree_file_name,sample_name,net_name,path_to_NeuralNet,branches,features,overwrite):
-    set_trace()
     path_to_tree = path_to_NeuralNet + 'friendtree_fr_%s.root'%sample_name
     if not overwrite:
         if os.path.isfile(path_to_tree): 
@@ -270,16 +269,19 @@ def makeFriendtree(tree_file_name,sample_name,net_name,path_to_NeuralNet,branche
 
     from sklearn.preprocessing import QuantileTransformer
     # xx = QuantileTransformer(output_distribution='normal').fit_transform(X[features])
-    qt = pickle.load(open( path_to_NeuralNet + 'quantile_tranformation.pck', 'r' ))
+    #set_trace()
+    qt = pickle.load(open( path_to_NeuralNet + 'quantile_transformation.pck', 'r' ))
     xx = qt.transform(x[features])
     # xx = X[features] # use this to bypass the quantile transformer
 
     classifier = load_model(net_name)
     print 'predicting on' + tree_file_name
+    #set_trace()
     Y = classifier.predict(xx)
     scale = 1.0
     # add the score to the data_train_l sample
     df.insert(len(df.columns), 'ml_fr', scale * Y)
+    #set_trace()
     df.to_root(path_to_tree, key = 'tree')
     print 'friend tree stored in %s'%path_to_tree
     return path_to_tree
@@ -509,7 +511,6 @@ def features_SF2():
         'l2_pt',
         'l2_dxy',
         'l2_dz',
-        'l2_reliso_rho_03',
     ]
     return features
 
