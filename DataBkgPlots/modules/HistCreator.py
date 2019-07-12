@@ -311,30 +311,28 @@ class CreateHists(object):
         if cfg.is_singlefake:
             '''
             in this section we introduce singlefakes, which is made of the following components:
+
             1. tight prompt lepton + tight displaced lepton + loose-not-tight displaced lepton 
-            - an application region for single fakes (SFR), these events are weighted 
-            by SFR/(1-SFR) where SFR is taken for loose-not-tight displaced lepton;
+               - an application region for single fakes (SFR), these events are weighted 
+               by SFR/(1-SFR) where SFR is taken for loose-not-tight displaced lepton;
+
             2. tight prompt lepton + two loose-not-tight displaced leptons where these displaced 
-            leptons are not clustered into a single jet 
-            - an application region for single FR, these events are weighted 
-            by -SFR1/(1-SFR1)*SFR2/(1-SFR2).
+               leptons are not clustered into a single jet 
+               - an application region for single FR, these events are weighted 
+               by -SFR1/(1-SFR1)*SFR2/(1-SFR2).
+
             Note "-" sign: this contribution is subtracted from the contribution above (#2)
             '''
 
             dataframe =   dataframe\
-                            # .Define('weight_LL','(singleFakeWeight * singleFakeWeight)')\
-                            # .Define('weight_LT','singleFakeWeight')\
-                            # .Define('weight_TL','singleFakeWeight')
+                            .Define('weight_LL','(singleFakeWeight * singleFakeWeight)')\
+                            .Define('weight_LT','singleFakeWeight')\
+                            .Define('weight_TL','singleFakeWeight')
 
             # dataframe =   dataframe\
-                            .Define('weight_LL','1')\
-                            .Define('weight_LT','1')\
-                            .Define('weight_TL','1')
-
-            # # implement ptCone correction to the single fakes
-            # if 'hnl_m_12' in vcfg.drawname:
-                # vcfg.drawname = 'hnl_m_12_ConeCorrected'
-
+                            # .Define('weight_LL','1')\
+                            # .Define('weight_LT','1')\
+                            # .Define('weight_TL','1')
 
             hist_sf_LL = dataframe\
                             .Filter(self.norm_cut_LL)\
@@ -352,11 +350,12 @@ class CreateHists(object):
             hist_sf_TL = hist_sf_TL.Clone() # convert the ROOT.ROOT::RDF::RResultPtr<TH1D> object into a ROOT.TH1D object
 
 
+            print '\nSF components. LT:', hist_sf_LT.GetEntries(), 'TL:', hist_sf_TL.GetEntries(), 'LL:', hist_sf_LL.GetEntries(), '\n'
             hist_sf_TL.Add(hist_sf_LT)       
             hist_sf_TL.Add(hist_sf_LL,-1)       
             hists[vcfg.name] = hist_sf_TL      
 
-            #set_trace()
+            set_trace()
             
         
         if cfg.is_doublefake:
