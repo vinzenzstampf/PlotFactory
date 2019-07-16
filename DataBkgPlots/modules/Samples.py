@@ -35,7 +35,7 @@ def createSampleLists(analysis_dir='',
             # data_dir = 'root://t3dcachedb.psi.ch:1094///pnfs/psi.ch/cms/trivcat/store/user/dezhu/2_ntuples/HN3Lv2.0/mmm/data/'
             data_dir = analysis_dir + 'production_20190411_Data_mmm/ntuples'
             bkg_dir = 'production_20190411_Bkg_mmm/ntuples/'
-            sig_dir = 'signal/ntuples'
+            sig_dir = 'production_20190411_Signal_mmm/ntuples/'
             DY_dir = analysis_dir + bkg_dir
         if 'starseeker' in server:
             data_dir = analysis_dir+'production_20190411_Data_mmm/ntuples'
@@ -322,8 +322,39 @@ def createSampleLists(analysis_dir='',
     #   SampleCfg(name='doublefake_F', dir_name=dataF_name, ana_dir=data_dir, tree_prod_name=tree_prod_name, is_data=False, is_doublefake=True, norm_cut=add_data_cut),                                
     ]
 
+    CH = None #TODO check if the exact same couplings are used for e** and m** samples
+    if ch[0] == 'm': CH = 'mu'
+    if ch[0] == 'e': CH = 'e'
+    assert CH != None
+
     samples_signal = [
-        SampleCfg(name='HN3L', dir_name='HN3L_M_2_V_0p022360679775_mu_massiveAndCKM_LO', ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),    
+        SampleCfg(name='M2_V.022', dir_name='HN3L_M_2_V_0p022360679775_%s_massiveAndCKM_LO' %CH  , ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),    
+        # SampleCfg(name='M2_V.022', dir_name='HN3L_M_2_V_0p022360679775_%s_massiveAndCKM_LO' %CH  , ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),    
+        # SampleCfg(name='M2_V.010' , dir_name='HN3L_M_2_V_0p01_%s_massiveAndCKM_LO' %CH           , ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),
+        # SampleCfg(name='M2_V.002', dir_name='HN3L_M_2_V_0p00244948974278_%s_massiveAndCKM_LO' %CH, ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),   
+        # SampleCfg(name='M2_V.002', dir_name='HN3L_M_2_V_0p00282842712475_%s_massiveAndCKM_LO' %CH, ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),   
+        # SampleCfg(name='M2_V.003', dir_name='HN3L_M_2_V_0p00316227766017_%s_massiveAndCKM_LO' %CH, ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),   
+        # SampleCfg(name='M2_V.004', dir_name='HN3L_M_2_V_0p004472135955_%s_massiveAndCKM_LO' %CH  , ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),     
+        # SampleCfg(name='M2_V.005', dir_name='HN3L_M_2_V_0p00547722557505_%s_massiveAndCKM_LO' %CH, ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),   
+        # SampleCfg(name='M2_V.007', dir_name='HN3L_M_2_V_0p00707106781187_%s_massiveAndCKM_LO' %CH, ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),   
+        # SampleCfg(name='M2_V.008', dir_name='HN3L_M_2_V_0p00836660026534_%s_massiveAndCKM_LO' %CH, ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ), 
+        # SampleCfg(name='M2_V.014', dir_name='HN3L_M_2_V_0p0141421356237_%s_massiveAndCKM_LO' %CH , ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),  
+        # SampleCfg(name='M2_V.017', dir_name='HN3L_M_2_V_0p0173205080757_%s_massiveAndCKM_LO' %CH , ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),  
+        # SampleCfg(name='M2_V.010', dir_name='HN3L_M_2_V_0p01_%s_massiveAndCKM_LO' %CH            , ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),             
+        SampleCfg(name='M2_V.022', dir_name='HN3L_M_2_V_0p022360679775_%s_massiveAndCKM_LO' %CH  , ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),   
+        SampleCfg(name='M5_V.002', dir_name='HN3L_M_5_V_0p00244948974278_%s_massiveAndCKM_LO' %CH, ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ), 
+        # SampleCfg(name='M5_V.002', dir_name='HN3L_M_5_V_0p00282842712475_%s_massiveAndCKM_LO' %CH, ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),  
+        # SampleCfg(name='M5_V.003', dir_name='HN3L_M_5_V_0p00316227766017_%s_massiveAndCKM_LO' %CH, ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),  
+        # SampleCfg(name='M5_V.004', dir_name='HN3L_M_5_V_0p004472135955_%s_massiveAndCKM_LO' %CH  , ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),    
+        # SampleCfg(name='M5_V.005', dir_name='HN3L_M_5_V_0p00547722557505_%s_massiveAndCKM_LO' %CH, ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),  
+        # SampleCfg(name='M5_V.007', dir_name='HN3L_M_5_V_0p00707106781187_%s_massiveAndCKM_LO' %CH, ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),  
+        # SampleCfg(name='M5_V.008', dir_name='HN3L_M_5_V_0p00836660026534_%s_massiveAndCKM_LO' %CH, ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),   
+        SampleCfg(name='M5_V.010', dir_name='HN3L_M_5_V_0p01_%s_massiveAndCKM_LO' %CH            , ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ), 
+        SampleCfg(name='M8_V.002', dir_name='HN3L_M_8_V_0p00244948974278_%s_massiveAndCKM_LO' %CH, ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ), 
+        # SampleCfg(name='M8_V.002', dir_name='HN3L_M_8_V_0p00282842712475_%s_massiveAndCKM_LO' %CH, ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ), 
+        # SampleCfg(name='M8_V.003', dir_name='HN3L_M_8_V_0p00316227766017_%s_massiveAndCKM_LO' %CH, ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),
+        # SampleCfg(name='M8_V.004', dir_name='HN3L_M_8_V_0p004472135955_%s_massiveAndCKM_LO' %CH  , ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),
+        SampleCfg(name='M8_V.005', dir_name='HN3L_M_8_V_0p00547722557505_%s_massiveAndCKM_LO' %CH, ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),
     ]
 
 
@@ -333,10 +364,13 @@ def createSampleLists(analysis_dir='',
     # samples_bkg = samples_mc 
 
     samples_mc =  samples_Diboson + samples_SingleConversions 
+    samples_mc =  samples_Diboson + samples_DY 
     samples_bkg =  samples_singlefake + samples_doublefake + samples_mc
+    samples_bkg =  samples_mc
     
     # samples_all = samples_bkg + samples_data
     samples_all = samples_singlefake + samples_doublefake + samples_data
+    samples_all = samples_mc + samples_data + samples_signal
     # samples_all = samples_singlefake + samples_data
     # samples_all = samples_singlefake
 
