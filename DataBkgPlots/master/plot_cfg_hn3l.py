@@ -58,7 +58,7 @@ def prepareRegions(channel):
     regions = []
     # regions.append(Region('SR',channel,'SR'))
     # regions.append(Region('SR_orth',channel,'SR_orth'))
-    regions.append(Region('MR_DF',channel,'MR_DF'))
+    regions.append(Region('SR_bugged',channel,'SR'))
     # regions.append(Region('MR_DF_closure',channel,'MR_DF_closure'))
     # regions.append(Region('MR_SF',channel,'MR_SF'))
     # regions.append(Region('Conversion',channel,'Conversion'))

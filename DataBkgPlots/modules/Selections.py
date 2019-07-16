@@ -58,7 +58,7 @@ def SR(channel):
                  # '&& abs(l2_dxy) > 0.01'
                  '&& (l1_q != l2_q) '
                  # '&& nbj == 0 ' 
-                 '&& nbj > 0 ' #activate for orthogonal SR
+                 '&& nbj == 0 ' #activate for orthogonal SR
                  '&& 50 < hnl_w_vis_m && hnl_w_vis_m < 85'
                  # '&& 85 < hnl_w_vis_m' #activate for orthogal SR
                  '&& abs(hnl_dphi_hnvis0) > 1.0 '
