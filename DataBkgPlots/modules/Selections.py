@@ -415,6 +415,7 @@ class Region(object):
                                           getSelection(channel,'T_T'),\
                                           ]) + ')' 
         self.MC                         = self.data 
+        self.signal                     = self.data 
         self.SF_LT                      = '(' + ' && '\
                                           .join([\
                                           self.baseline,\

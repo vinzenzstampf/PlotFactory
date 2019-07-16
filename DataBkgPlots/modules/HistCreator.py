@@ -70,6 +70,7 @@ class CreateHists(object):
                 # result = self.makealltheplots(self.hist_cfg.cfgs[i]) 
                 try:
                     result = self.makealltheplots(self.hist_cfg.cfgs[i]) 
+                    # if '_V' in cfg.name: set_trace()
                 except:
                     set_trace()
 
