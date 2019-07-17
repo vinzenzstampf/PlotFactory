@@ -1,0 +1,96 @@
+###########################################################################
+
+###########################################################################
+hnl_m2vp002_dc.txt
+Expected  2.5%: r < 176.6016
+Expected 16.0%: r < 240.1096
+Expected 50.0%: r < 342.5000
+Expected 84.0%: r < 496.7698
+Expected 97.5%: r < 694.6573
+
+HN3L_M_2_V_0p00244948974278_e_massiveAndCKM_LO    .ctau =    3202.92 
+HN3L_M_2_V_0p00244948974278_e_massiveAndCKM_LO    .v2 =      6e-06 
+HN3L_M_2_V_0p00244948974278_e_massiveAndCKM_LO    .mass =        2.0 
+HN3L_M_2_V_0p00244948974278_e_massiveAndCKM_LO    .nGenEvents =     100000 
+HN3L_M_2_V_0p00244948974278_e_massiveAndCKM_LO    .xs =    0.02558 
+HN3L_M_2_V_0p00244948974278_e_massiveAndCKM_LO    .xse =  0.0001392
+###########################################################################
+
+###########################################################################
+hnl_m2vp022_dc.txt
+Expected  2.5%: r < 2.7634
+Expected 16.0%: r < 3.7369
+Expected 50.0%: r < 5.3594
+Expected 84.0%: r < 7.7734
+Expected 97.5%: r < 10.8699
+
+HN3L_M_2_V_0p022360679775_mu_massiveAndCKM_LO     .ctau =      38.87 
+HN3L_M_2_V_0p022360679775_mu_massiveAndCKM_LO     .v2 =     0.0005 
+HN3L_M_2_V_0p022360679775_mu_massiveAndCKM_LO     .mass =        2.0 
+HN3L_M_2_V_0p022360679775_mu_massiveAndCKM_LO     .nGenEvents =     100000 
+HN3L_M_2_V_0p022360679775_mu_massiveAndCKM_LO     .xs =      2.182 
+HN3L_M_2_V_0p022360679775_mu_massiveAndCKM_LO     .xse =    0.01143
+###########################################################################
+
+###########################################################################
+hnl_m5vp002_dc.txt
+Expected  2.5%: r < 2.3767
+Expected 16.0%: r < 3.2314
+Expected 50.0%: r < 4.6094
+Expected 84.0%: r < 6.6672
+Expected 97.5%: r < 9.2796
+
+HN3L_M_5_V_0p00244948974278_mu_massiveAndCKM_LO   .ctau =      24.61 
+HN3L_M_5_V_0p00244948974278_mu_massiveAndCKM_LO   .v2 =      6e-06 
+HN3L_M_5_V_0p00244948974278_mu_massiveAndCKM_LO   .mass =        5.0 
+HN3L_M_5_V_0p00244948974278_mu_massiveAndCKM_LO   .nGenEvents =      92000 
+HN3L_M_5_V_0p00244948974278_mu_massiveAndCKM_LO   .xs =    0.02401 
+HN3L_M_5_V_0p00244948974278_mu_massiveAndCKM_LO   .xse =  0.0001301
+###########################################################################
+
+###########################################################################
+hnl_m5vp010_dc.txt
+Expected  2.5%: r < 1.5590
+Expected 16.0%: r < 2.1196
+Expected 50.0%: r < 3.0234
+Expected 84.0%: r < 4.3732
+Expected 97.5%: r < 6.0868
+
+HN3L_M_5_V_0p01_mu_massiveAndCKM_LO               .ctau =       1.48 
+HN3L_M_5_V_0p01_mu_massiveAndCKM_LO               .v2 =     0.0001 
+HN3L_M_5_V_0p01_mu_massiveAndCKM_LO               .mass =        5.0 
+HN3L_M_5_V_0p01_mu_massiveAndCKM_LO               .nGenEvents =      98000 
+HN3L_M_5_V_0p01_mu_massiveAndCKM_LO               .xs =     0.4066 
+HN3L_M_5_V_0p01_mu_massiveAndCKM_LO               .xse =   0.002129
+###########################################################################
+
+###########################################################################
+hnl_m8vp002_dc.txt
+Expected  2.5%: r < 1.0273
+Expected 16.0%: r < 1.4126
+Expected 50.0%: r < 2.0547
+Expected 84.0%: r < 3.0539
+Expected 97.5%: r < 4.3889
+
+HN3L_M_8_V_0p00244948974278_mu_massiveAndCKM_LO   .ctau =       2.09 
+HN3L_M_8_V_0p00244948974278_mu_massiveAndCKM_LO   .v2 =      6e-06 
+HN3L_M_8_V_0p00244948974278_mu_massiveAndCKM_LO   .mass =        8.0 
+HN3L_M_8_V_0p00244948974278_mu_massiveAndCKM_LO   .nGenEvents =     100000 
+HN3L_M_8_V_0p00244948974278_mu_massiveAndCKM_LO   .xs =    0.02444 
+HN3L_M_8_V_0p00244948974278_mu_massiveAndCKM_LO   .xse =  0.0001311
+###########################################################################
+
+###########################################################################
+hnl_m8vp005_dc.txt
+Expected  2.5%: r < 1.1719
+Expected 16.0%: r < 1.6022
+Expected 50.0%: r < 2.3438
+Expected 84.0%: r < 3.4835
+Expected 97.5%: r < 5.0064
+
+HN3L_M_8_V_0p00547722557505_mu_massiveAndCKM_LO   .ctau =       0.42 
+HN3L_M_8_V_0p00547722557505_mu_massiveAndCKM_LO   .v2 =      3e-05 
+HN3L_M_8_V_0p00547722557505_mu_massiveAndCKM_LO   .mass =        8.0 
+HN3L_M_8_V_0p00547722557505_mu_massiveAndCKM_LO   .nGenEvents =     100000 
+HN3L_M_8_V_0p00547722557505_mu_massiveAndCKM_LO   .xs =      0.124 
+HN3L_M_8_V_0p00547722557505_mu_massiveAndCKM_LO   .xse =  0.0006705

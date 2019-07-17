@@ -1,0 +1,38 @@
+#### WITH 20 bin: hnl_mll.input.root  ####
+
+[vstampf@t3ui07 htautau]$ combine -d hnl_shape_dc.txt --run blind
+ <<< Combine >>>
+>>> including systematics
+Will use a-priori expected background instead of a-posteriori one.
+>>> method used is AsymptoticLimits
+>>> random number generator seed is 123456
+Channel mll has bin 18 fill in data but empty in all backgrounds
+Computing results starting from observation (a-posteriori)
+
+ -- AsymptoticLimits ( CLs ) --
+Expected  2.5%: r < 0.2810
+Expected 16.0%: r < 0.3880
+Expected 50.0%: r < 0.5664
+Expected 84.0%: r < 0.8396
+Expected 97.5%: r < 1.1913
+
+Done in 0.00 min (cpu), 0.00 min (real)
+
+
+
+#### WITH 3 BINS: hnl_mll_b3.input.root ####
+
+[vstampf@t3ui07 htautau]$ combine -d hnl_shape_dc.txt --run blind
+ <<< Combine >>>
+>>> including systematics
+Will use a-priori expected background instead of a-posteriori one.
+>>> method used is AsymptoticLimits
+>>> random number generator seed is 123456
+Computing results starting from observation (a-posteriori)
+
+ -- AsymptoticLimits ( CLs ) --
+Expected  2.5%: r < 0.3438
+Expected 16.0%: r < 0.4668
+Expected 50.0%: r < 0.6719
+Expected 84.0%: r < 0.9772
+Expected 97.5%: r < 1.3727

@@ -378,6 +378,7 @@ essential_vars = [
             # VCfg(name='dilepton_pt', drawname='hnl_hn_vis_pt',      binning={'nbinsx':20, 'xmin':0, 'xmax':50},    unit='GeV', xtitle='dilepton p_{T}'),
             # VCfg(name='hnl_2d_disp', binning={'nbinsx':20, 'xmin':0   , 'xmax':2. }, unit='cm' , xtitle='2D displacement'),
             # VCfg(name='hnl_dr_12_low', drawname='hnl_dr_12', binning={'nbinsx':20, 'xmin':0   , 'xmax':0.3 }, unit=None, xtitle='#DeltaR (#mu_{1}, #mu_{2})'),
+            VCfg(name='hnl_m_12_low_b3' , drawname='hnl_m_12', binning={'nbinsx':3 , 'xmin':0   , 'xmax':10  }, unit='GeV', xtitle='dimuon mass'),
             VCfg(name='hnl_m_12_low' , drawname='hnl_m_12', binning={'nbinsx':20, 'xmin':0   , 'xmax':10  }, unit='GeV', xtitle='dimuon mass'),
             # VCfg(name='hnl_m_01_wide', drawname = 'hnl_m_01', binning={'nbinsx':40, 'xmin':0.   , 'xmax':110 }, unit='GeV', xtitle='mass(l_{0},#mu_{1})'),
             # VCfg(name='hnl_m_02_wide', drawname = 'hnl_m_02', binning={'nbinsx':40, 'xmin':0.   , 'xmax':110 }, unit='GeV', xtitle='mass(l_{0},#mu_{2})'),

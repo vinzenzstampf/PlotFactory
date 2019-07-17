@@ -1,0 +1,19 @@
+max     1     number of categories
+jmax    2     number of samples minus one
+kmax    *     number of nuisance parameters
+---------------------------------------------------------
+shapes *   * hnl_mll_b3.input.root $CHANNEL/$PROCESS $CHANNEL/$PROCESS_$SYSTEMATIC
+---------------------------------------------------------
+bin                      mll      
+observation              95
+---------------------------------------------------------
+bin                      mll          mll          mll      
+process                  0            1            2
+process                  M8_Vp002     DY           VV
+rate                     5.34         49.91        0.21
+---------------------------------------------------------                  
+lumi             lnN     1.026        1.026        1.026   lumi affects both signal and gg->WW (mc-driven). lnN = lognormal   
+xs_VV            lnN     -            -            1.10    10% uncertainty on VV cross section                                
+xs_DY            lnN     -            1.010        -       1%  uncertainty on DY cross section                                
+xs_sig_m8vp002   lnN     1.05         -            -       5% uncertainty on sig cross section                                
+

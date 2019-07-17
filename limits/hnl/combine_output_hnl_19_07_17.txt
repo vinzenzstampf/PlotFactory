@@ -1,0 +1,96 @@
+hnl_m2vp002_dc.txt
+ <<< Combine >>> 
+>>> including systematics
+>>> method used is AsymptoticLimits
+>>> random number generator seed is 123456
+Computing results starting from observation (a-posteriori)
+
+ -- AsymptoticLimits ( CLs ) --
+Observed Limit: r < 873.7222
+Expected  2.5%: r < 174.2812
+Expected 16.0%: r < 236.9548
+Expected 50.0%: r < 338.0000
+Expected 84.0%: r < 490.2429
+Expected 97.5%: r < 685.5305
+
+Done in 0.00 min (cpu), 0.00 min (real)
+hnl_m2vp022_dc.txt
+ <<< Combine >>> 
+>>> including systematics
+>>> method used is AsymptoticLimits
+>>> random number generator seed is 123456
+Computing results starting from observation (a-posteriori)
+
+ -- AsymptoticLimits ( CLs ) --
+Observed Limit: r < 13.6695
+Expected  2.5%: r < 2.7231
+Expected 16.0%: r < 3.7024
+Expected 50.0%: r < 5.2812
+Expected 84.0%: r < 7.6600
+Expected 97.5%: r < 10.7114
+
+Done in 0.00 min (cpu), 0.00 min (real)
+hnl_m5vp002_dc.txt
+ <<< Combine >>> 
+>>> including systematics
+>>> method used is AsymptoticLimits
+>>> random number generator seed is 123456
+Computing results starting from observation (a-posteriori)
+
+ -- AsymptoticLimits ( CLs ) --
+Observed Limit: r < 14.9854
+Expected  2.5%: r < 2.3622
+Expected 16.0%: r < 3.1985
+Expected 50.0%: r < 4.5469
+Expected 84.0%: r < 6.5768
+Expected 97.5%: r < 9.1538
+
+Done in 0.00 min (cpu), 0.00 min (real)
+hnl_m5vp010_dc.txt
+ <<< Combine >>> 
+>>> including systematics
+>>> method used is AsymptoticLimits
+>>> random number generator seed is 123456
+Computing results starting from observation (a-posteriori)
+
+ -- AsymptoticLimits ( CLs ) --
+Observed Limit: r < 10.0223
+Expected  2.5%: r < 1.5388
+Expected 16.0%: r < 2.0922
+Expected 50.0%: r < 2.9844
+Expected 84.0%: r < 4.3167
+Expected 97.5%: r < 6.0082
+
+Done in 0.00 min (cpu), 0.00 min (real)
+hnl_m8vp002_dc.txt
+ <<< Combine >>> 
+>>> including systematics
+>>> method used is AsymptoticLimits
+>>> random number generator seed is 123456
+Computing results starting from observation (a-posteriori)
+
+ -- AsymptoticLimits ( CLs ) --
+Observed Limit: r < 9.0417
+Expected  2.5%: r < 1.0117
+Expected 16.0%: r < 1.3911
+Expected 50.0%: r < 2.0234
+Expected 84.0%: r < 3.0074
+Expected 97.5%: r < 4.3099
+
+Done in 0.00 min (cpu), 0.00 min (real)
+hnl_m8vp005_dc.txt
+ <<< Combine >>> 
+>>> including systematics
+>>> method used is AsymptoticLimits
+>>> random number generator seed is 123456
+Computing results starting from observation (a-posteriori)
+
+ -- AsymptoticLimits ( CLs ) --
+Observed Limit: r < 9.1101
+Expected  2.5%: r < 1.1523
+Expected 16.0%: r < 1.5845
+Expected 50.0%: r < 2.3047
+Expected 84.0%: r < 3.4346
+Expected 97.5%: r < 4.9283
+
+Done in 0.00 min (cpu), 0.00 min (real)

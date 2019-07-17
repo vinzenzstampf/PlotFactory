@@ -1,0 +1,38 @@
+# Simple counting experiment, with six signals and a two background processes 
+
+imax 1  number of channels
+jmax 2  number of backgrounds
+kmax 4  number of nuisance parameters (sources of systematical uncertainties)
+------------
+# we have just one channel, in which we observe events
+bin mll
+observation 169
+------------
+# now we list the expected events for signal and all backgrounds in that bin
+# the second 'process' line must have a positive number for backgrounds, and 0 for signal
+# then we list the independent sources of uncertainties, and give their effect (syst. error)
+# on each process and bin
+#bin                     mll         mll         mll         mll         mll         mll         mll          mll
+#process                 m2vp002     m2vp022     m5vp002     m5vp010     m8vp002     m8vp005     DY           VV
+#process                 -5          -4          -3          -2          -1          0           1            2 
+#rate                    0.0         2.6         3.3         5.0         5.3         4.7         81.4         1.0
+#------------                                                                                        
+#lumi             lnN    1.026       1.026       1.026       1.026       1.026       1.026       1.026        1.026   lumi affects both signal and gg->WW (mc-driven). lnN = lognormal   
+#xs_VV            lnN    -           -           -           -           -           -           -            1.10    10% uncertainty on VV cross section                                
+#xs_DY            lnN    -           -           -           -           -           -           1.010        -       1%  uncertainty on DY cross section                                
+#xs_sig_m2vp002   lnN    1.05        -           -           -           -           -           -            -       5% uncertainty on sig cross section                                
+#xs_sig_m2vp022   lnN    -           1.05        -           -           -           -           -            -       5% uncertainty on sig cross section                                
+#xs_sig_m5vp002   lnN    -           -           1.05        -           -           -           -            -       5% uncertainty on sig cross section                                
+#xs_sig_m5vp010   lnN    -           -           -           1.05        -           -           -            -       5% uncertainty on sig cross section                                
+#xs_sig_m8vp002   lnN    -           -           -           -           1.05        -           -            -       5% uncertainty on sig cross section                                
+#xs_sig_m8vp005   lnN    -           -           -           -           -           1.05        -            -       5% uncertainty on sig cross section                                
+
+bin                     mll     mll          mll
+process                 m5vp010 DY           VV
+process                 -2      1            2 
+rate                    5.0     81.4         1.0
+------------                        
+lumi             lnN    1.026   1.026        1.026   lumi affects both signal and gg->WW (mc-driven). lnN = lognormal
+xs_VV            lnN    -       -            1.10    10% uncertainty on VV cross section                                  
+xs_DY            lnN    -       1.010        -       1%  uncertainty on DY cross section                                  
+xs_sig_m5vp010   lnN    1.05    -            -       5% uncertainty on sig cross section                                
