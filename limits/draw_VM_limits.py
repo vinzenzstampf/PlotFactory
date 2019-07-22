@@ -21,7 +21,8 @@ def getLimitYN ( h_lim_mu, r_exluded=1):
     return h_lim_yn
     
 # def getLimitXS ( h_lim_mu, h_xs):
-def getLimitXS ( h_lim_mu, signals):
+def getLimitXS (h_lim_mu, verbose=False):
+    signals = get_signals()
     name = h_lim_mu.GetName().replace("mu","xs")
     h_lim_xs = h_lim_mu.Clone(name)
     for ix in range(1,h_lim_xs.GetNbinsX()+1):
@@ -29,27 +30,27 @@ def getLimitXS ( h_lim_mu, signals):
         for iy in range(1,h_lim_xs.GetNbinsY()+1):
             r = h_lim_xs.GetBinContent(ix,iy)
             V2 = h_lim_xs.GetYaxis().GetBinCenter(iy)
-            set_trace()
-            xs = signals[get_sig(V2, m)]
-            if r == 0: xs = 0
-            print r, m, V2, xs
-            # xs  = h_xs.GetBinContent(h_xs.FindBin(m))
+            xs = signals[get_sig_name(V2, m)]['xsec']
+            # if r == 0: xs = 0
+            if verbose: print r, m, V2, xs
             h_lim_xs.SetBinContent(ix, iy, r*xs)
-            set_trace()
     return h_lim_xs
 
-def get_sig(V2, m):
+def get_sig_name(V2, m):
 
     signals = get_signals()
+    best_guess_v2 = 1000; match = None; v2_match = None
 
-    best_fit = 1000; match = None; v2_match = None
-    for sig in [sig for sig in signals.keys() if 'mu' in sig and 'M'+str(m) in sig]:
-        print abs(exp(V2) - exp(signals[sig]['V2'])), abs(exp(V2) - exp(signals[sig]['V2'])) < best_fit
-        if abs(exp(V2) - exp(signals[sig]['V2'])) < best_fit: 
-            best_fit = signals[sig]['V2'] 
-            print best_fit
+    for sig in [sig for sig in signals.keys() if 'mu' in sig and 'M'+str(int(m)) in sig]:
+        guess_v2 = signals[sig]['V2']
+        diff      = abs(V2 - guess_v2) 
+        best_diff = abs(V2 - best_guess_v2)
+        # print diff, best_diff, V2, guess_v2, diff < best_diff
+        if diff < best_diff: 
+            best_guess_v2 = signals[sig]['V2'] 
             match = sig 
-    print match, best_fit, V2 
+            # print best_guess_v2, sig, '\n'
+    # print match, best_guess_v2, V2 
     return match
 
 def prepare_limits(h_lims_mu0=None, h_lims_xs0=None, h_lims_yn0=None):
@@ -289,8 +290,6 @@ def main():
     mN = "m_{N}" 
     V2 = "|V_{#mu N}|^{2}"
 
-    set_trace()
-
     # create histos
     for lim in limits:
         # uniform 25 GeV binning
@@ -308,25 +307,22 @@ def main():
         h_lims_yn0[lim].SetYTitle(V2)
         h_lims_xs0[lim].SetYTitle(V2)
 
-    set_trace()
-
     # read txt file with limits (map defined above)
     print "reading file..."
     prepare_limits(h_lims_mu0, h_lims_xs0, h_lims_yn0)
 
-    set_trace()
     # output = INPUT.replace(".txt", ("-OneFold" if (model=="T2qq" and doOneFold) else "") + ".root")
     output = 'hnl_test.root'
     fout = ROOT.TFile(output, "RECREATE")
     fout.cd()
 
-    '''
     print "interpolating..."
     for lim in limits:
         # set_trace()
         # fillHorizontalBelowZero(h_lims_mu0[lim])
         # interpolation done automatically by TGraph2D using Delaunay method
         g2_lims_mu[lim] = ROOT.TGraph2D(h_lims_mu0[lim])
+    '''
         xbinSize_inter = xbinSize/2.
         #xbinSize_inter = xbinSize/2. if model!='T2cc' else ybinSize # bin size of interpolation graph (12.5 GeV as decided in dec7 meeting @ R40) 
         ybinSize_inter = ybinSize/2. if model!='T2cc' else ybinSize # bin size of interpolation graph (12.5 GeV as decided in dec7 meeting @ R40) 
@@ -355,20 +351,17 @@ def main():
         #    unexcludeDiagonal( h_lims_mu[lim],37.5 )    
         
         # h_lims_yn[lim] = getLimitYN ( h_lims_mu[lim] )
-        h_lims_yn[lim] = getLimitYN ( h_lims_mu0[lim] )
+        h_lims_yn[lim] = getLimitYN ( h_lims_mu0[lim] ) #TODO (VS) this should be done with interpolated plots
         # h_lims_xs[lim] = getLimitXS ( h_lims_mu[lim], h_xs )
-        h_lims_xs[lim] = getLimitXS ( h_lims_mu0[lim], get_signals())
+        h_lims_xs[lim] = getLimitXS ( h_lims_mu0[lim] ) #TODO (VS) this should be done with interpolated plots
+        # print lim; set_trace()
         
         h_lims_mu0[lim].Write()
         h_lims_xs0[lim].Write()
         h_lims_yn0[lim].Write()
-        h_lims_mu [lim].Write()
+        # h_lims_mu [lim].Write() #TODO (VS) comes from interpolation
         h_lims_xs [lim].Write()
         h_lims_yn [lim].Write()
-
-    fout.Close()
-
-def new():
 
     graphs0 = {}
     graphs1 = {}  # smoothed
@@ -390,7 +383,10 @@ def new():
     #        graphs0[lim]=mergeGraphs([graphs[0][1],graphs[1][1]])
         graphs0[lim].SetName("gr_"+lim)
         graphs0[lim].Write()
-        
+
+    fout.Close()
+
+def new():
 
     print "smoothing..."
     for lim in limits:
@@ -470,7 +466,6 @@ def get_signals(verbose=False):
         line = re.sub('_massiveAndCKM_LO', '', line)
         line = re.sub('_', '', line)
         line = re.sub(' ', '', line)
-        #set_trace()
         if line == '': continue
 
         mass = re.sub('V.*', '', line)
