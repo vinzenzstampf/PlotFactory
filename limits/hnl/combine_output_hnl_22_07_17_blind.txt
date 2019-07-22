@@ -1,0 +1,96 @@
+hnl_m2vp00244948974278_mu_dc.txt
+ <<< Combine >>> 
+>>> including systematics
+Will use a-priori expected background instead of a-posteriori one.
+>>> method used is AsymptoticLimits
+>>> random number generator seed is 123456
+Computing results starting from observation (a-posteriori)
+
+ -- AsymptoticLimits ( CLs ) --
+Expected  2.5%: r < 176.6016
+Expected 16.0%: r < 240.1096
+Expected 50.0%: r < 342.5000
+Expected 84.0%: r < 496.7698
+Expected 97.5%: r < 694.6573
+
+Done in 0.00 min (cpu), 0.00 min (real)
+hnl_m2vp022360679775_mu_dc.txt
+ <<< Combine >>> 
+>>> including systematics
+Will use a-priori expected background instead of a-posteriori one.
+>>> method used is AsymptoticLimits
+>>> random number generator seed is 123456
+Computing results starting from observation (a-posteriori)
+
+ -- AsymptoticLimits ( CLs ) --
+Expected  2.5%: r < 2.7634
+Expected 16.0%: r < 3.7369
+Expected 50.0%: r < 5.3594
+Expected 84.0%: r < 7.7734
+Expected 97.5%: r < 10.8699
+
+Done in 0.00 min (cpu), 0.00 min (real)
+hnl_m5vp00244948974278_mu_dc.txt
+ <<< Combine >>> 
+>>> including systematics
+Will use a-priori expected background instead of a-posteriori one.
+>>> method used is AsymptoticLimits
+>>> random number generator seed is 123456
+Computing results starting from observation (a-posteriori)
+
+ -- AsymptoticLimits ( CLs ) --
+Expected  2.5%: r < 2.3767
+Expected 16.0%: r < 3.2314
+Expected 50.0%: r < 4.6094
+Expected 84.0%: r < 6.6672
+Expected 97.5%: r < 9.2796
+
+Done in 0.00 min (cpu), 0.00 min (real)
+hnl_m5vp01_mu_dc.txt
+ <<< Combine >>> 
+>>> including systematics
+Will use a-priori expected background instead of a-posteriori one.
+>>> method used is AsymptoticLimits
+>>> random number generator seed is 123456
+Computing results starting from observation (a-posteriori)
+
+ -- AsymptoticLimits ( CLs ) --
+Expected  2.5%: r < 1.5590
+Expected 16.0%: r < 2.1196
+Expected 50.0%: r < 3.0234
+Expected 84.0%: r < 4.3732
+Expected 97.5%: r < 6.0868
+
+Done in 0.00 min (cpu), 0.00 min (real)
+hnl_m8vp00244948974278_mu_dc.txt
+ <<< Combine >>> 
+>>> including systematics
+Will use a-priori expected background instead of a-posteriori one.
+>>> method used is AsymptoticLimits
+>>> random number generator seed is 123456
+Computing results starting from observation (a-posteriori)
+
+ -- AsymptoticLimits ( CLs ) --
+Expected  2.5%: r < 1.0273
+Expected 16.0%: r < 1.4126
+Expected 50.0%: r < 2.0547
+Expected 84.0%: r < 3.0539
+Expected 97.5%: r < 4.3889
+
+Done in 0.00 min (cpu), 0.00 min (real)
+hnl_m8vp00547722557505_mu_dc.txt
+ <<< Combine >>> 
+>>> including systematics
+Will use a-priori expected background instead of a-posteriori one.
+>>> method used is AsymptoticLimits
+>>> random number generator seed is 123456
+Computing results starting from observation (a-posteriori)
+
+ -- AsymptoticLimits ( CLs ) --
+Expected  2.5%: r < 1.1719
+Expected 16.0%: r < 1.6022
+Expected 50.0%: r < 2.3438
+Expected 84.0%: r < 3.4835
+Expected 97.5%: r < 5.0064
+
+Done in 0.00 min (cpu), 0.00 min (real)

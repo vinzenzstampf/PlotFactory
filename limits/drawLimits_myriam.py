@@ -61,7 +61,8 @@ def getLimitXS ( h_lim_mu, h_xs):
     return h_lim_xs
     
 
-def readLimitsFromFile(INPUT, fileMap, h_lims_mu0, h_lims_xs0, h_lims_yn0):
+#def readLimitsFromFile(INPUT, fileMap, h_lims_mu0, h_lims_xs0, h_lims_yn0):
+def readLimitsFromFile(h_lims_mu0, h_lims_xs0, h_lims_yn0):
     rlim = {}
     for line in open(INPUT, "r"):
         m1        = float(line.split()[0])

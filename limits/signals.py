@@ -1,4 +1,3 @@
-
 HN3L_M_2_V_0p00244948974278_e_massiveAndCKM_LO    .ctau =    3202.92 
 HN3L_M_2_V_0p00244948974278_e_massiveAndCKM_LO    .v2 =      6e-06 
 HN3L_M_2_V_0p00244948974278_e_massiveAndCKM_LO    .mass =        2.0 
