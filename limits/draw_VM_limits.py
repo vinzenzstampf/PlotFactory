@@ -63,8 +63,8 @@ def prepare_limits(h_lims_mu0=None, h_lims_xs0=None, h_lims_yn0=None):
         mN = lim_dict[sig]['mass']
 
         for lim in [lim for lim in lim_dict[sig].keys() if 'e' in lim or 'o' in lim]:
-            rlim[lim] = lim_dict[sig][lim]
-
+            rlim[lim] = lim_dict[sig][lim]/100. #FIXME divide by 100 to see if code makes sense
+ 
         # get xs for the given mass
         # print sig, lim
         xs  = signals[sig]['xsec']
@@ -80,10 +80,13 @@ def prepare_limits(h_lims_mu0=None, h_lims_xs0=None, h_lims_yn0=None):
         binY=h_lims_mu0[lim].GetYaxis().FindBin(V2)
     
         for lim in [lim for lim in lim_dict[sig].keys() if 'e' in lim or 'o' in lim]:
+            # limit on signal-strength multiplier
             h_lims_mu0[lim].SetBinContent(binX, binY, rlim[lim])
+            # limit on cross-section
             h_lims_xs0[lim].SetBinContent(binX, binY, rlim[lim]*xs)
-            h_lims_yn0[lim].SetBinContent(binX, binY, 1 if rlim[lim]<1 else 1e-3)
-
+            # yes/no exclustion plot in terms of signal-strength multiplie #FIXME divide by 100 to see if code makes senser
+            h_lims_yn0[lim].SetBinContent(binX, binY, 1 if rlim[lim]<1 else 1e-3) # VS: idk why 1e-3, but does it matter? 1 = excluded, 0 = not-excluded
+ 
 
 def interpolateDiagonal(hist):
     # interpolate in diagonal direction to fill remaining missing holes
@@ -369,7 +372,7 @@ def main():
     print "extracting contours and saving graphs..."
     for lim in limits:
         # get contour. choose the one with maximum number of points
-        g_list = g2_lims_mu[lim].GetContourList(1.0)
+        g_list = g2_lims_mu[lim].GetContourList(10.0)
         graphs = []
         for il in range(g_list.GetSize()):
             gr = g_list.At(il)
