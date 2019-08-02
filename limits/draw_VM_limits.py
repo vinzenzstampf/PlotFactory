@@ -8,6 +8,7 @@ from collections import OrderedDict
 import re
 from pdb import set_trace
 import numpy as np
+from matplotlib import pyplot as plt
 
 ROOT.gROOT.SetBatch(True)
 
@@ -577,4 +578,37 @@ def get_lim_dict(verbose=False):
 
     return lim_dict
 
-    
+def draw_1D_limits(): 
+    '''here we want to draw limits for 
+       one coupling and 3 different masses
+    '''
+
+    limits  = get_lim_dict()
+    signals = get_signals()
+
+    b    = np.arange(0., 11, 1)
+    b_m  = [2, 5, 8]
+
+    req1   = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    y_exp  = [ limits['M2_V0.00244948974278_mu']['exp'],  limits['M5_V0.00244948974278_mu']['exp'],  limits['M8_V0.00244948974278_mu']['exp']  ]
+    y_ep1s = [ limits['M2_V0.00244948974278_mu']['ep1s'], limits['M5_V0.00244948974278_mu']['ep1s'], limits['M8_V0.00244948974278_mu']['ep1s'] ]
+    y_ep2s = [ limits['M2_V0.00244948974278_mu']['ep2s'], limits['M5_V0.00244948974278_mu']['ep2s'], limits['M8_V0.00244948974278_mu']['ep2s'] ]
+    y_em2s = [ limits['M2_V0.00244948974278_mu']['em2s'], limits['M5_V0.00244948974278_mu']['em2s'], limits['M8_V0.00244948974278_mu']['em2s'] ]
+    y_em1s = [ limits['M2_V0.00244948974278_mu']['em1s'], limits['M5_V0.00244948974278_mu']['em1s'], limits['M8_V0.00244948974278_mu']['em1s'] ]
+
+    plt.plot(b_m, y_exp,  '^', label = 'exp')
+    plt.plot(b_m, y_ep1s, 's', label = 'ep1s')
+    plt.plot(b_m, y_em1s, 's', label = 'em1s')
+    plt.plot(b_m, y_ep2s, 'o', label = 'ep2s')
+    plt.plot(b_m, y_em2s, 'o', label = 'em2s')
+
+    plt.plot(b,  req1, 'r-')
+    plt.axis([0,10,0.1,1000])
+    plt.xlabel('neutrino mass [GeV]')
+    plt.ylabel('r')
+    plt.yscale('log')
+    plt.legend(loc='lower left')
+
+    plt.show()
+
+    print 'done'
