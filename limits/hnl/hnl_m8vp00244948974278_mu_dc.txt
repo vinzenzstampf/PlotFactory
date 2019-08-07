@@ -16,4 +16,6 @@ lumi             lnN     1.026        1.026        1.026   lumi affects both sig
 xs_VV            lnN     -            -            1.10    10% uncertainty on VV cross section                                
 xs_DY            lnN     -            1.010        -       1%  uncertainty on DY cross section                                
 xs_sig_m8vp002   lnN     1.05         -            -       5% uncertainty on sig cross section                                
-
+mll autoMCStats 0 
+# [channel] autoMCStats [threshold] [include-signal = 0] [hist-mode = 1]
+# from here: https://github.com/nucleosynthesis/HiggsAnalysis-CombinedLimit/wiki/bin-wise-stats

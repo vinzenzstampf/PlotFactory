@@ -590,11 +590,11 @@ def draw_1D_limits():
     b_m  = [2, 5, 8]
 
     req1   = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-    y_exp  = [ limits['M2_V0.00244948974278_mu']['exp'],  limits['M5_V0.00244948974278_mu']['exp'],  limits['M8_V0.00244948974278_mu']['exp']  ]
-    y_ep1s = [ limits['M2_V0.00244948974278_mu']['ep1s'], limits['M5_V0.00244948974278_mu']['ep1s'], limits['M8_V0.00244948974278_mu']['ep1s'] ]
-    y_ep2s = [ limits['M2_V0.00244948974278_mu']['ep2s'], limits['M5_V0.00244948974278_mu']['ep2s'], limits['M8_V0.00244948974278_mu']['ep2s'] ]
-    y_em2s = [ limits['M2_V0.00244948974278_mu']['em2s'], limits['M5_V0.00244948974278_mu']['em2s'], limits['M8_V0.00244948974278_mu']['em2s'] ]
-    y_em1s = [ limits['M2_V0.00244948974278_mu']['em1s'], limits['M5_V0.00244948974278_mu']['em1s'], limits['M8_V0.00244948974278_mu']['em1s'] ]
+    y_exp  = [ 1e-2 * limits['M2_V0.00244948974278_mu']['exp'],  1e-1 * limits['M5_V0.00244948974278_mu']['exp'],  0.5 * limits['M8_V0.00244948974278_mu']['exp']  ]
+    y_ep1s = [ 1e-2 * limits['M2_V0.00244948974278_mu']['ep1s'], 1e-1 * limits['M5_V0.00244948974278_mu']['ep1s'], 0.5 * limits['M8_V0.00244948974278_mu']['ep1s'] ]
+    y_ep2s = [ 1e-2 * limits['M2_V0.00244948974278_mu']['ep2s'], 1e-1 * limits['M5_V0.00244948974278_mu']['ep2s'], 0.5 * limits['M8_V0.00244948974278_mu']['ep2s'] ]
+    y_em2s = [ 1e-2 * limits['M2_V0.00244948974278_mu']['em2s'], 1e-1 * limits['M5_V0.00244948974278_mu']['em2s'], 0.5 * limits['M8_V0.00244948974278_mu']['em2s'] ]
+    y_em1s = [ 1e-2 * limits['M2_V0.00244948974278_mu']['em1s'], 1e-1 * limits['M5_V0.00244948974278_mu']['em1s'], 0.5 * limits['M8_V0.00244948974278_mu']['em1s'] ]
 
     plt.plot(b_m, y_exp,  '^', label = 'exp')
     plt.plot(b_m, y_ep1s, 's', label = 'ep1s')
@@ -603,7 +603,8 @@ def draw_1D_limits():
     plt.plot(b_m, y_em2s, 'o', label = 'em2s')
 
     plt.plot(b,  req1, 'r-')
-    plt.axis([0,10,0.1,1000])
+    #plt.axis([0,10,0.1,1000])
+    plt.axis([0,10,0.01,10])
     plt.xlabel('neutrino mass [GeV]')
     plt.ylabel('r')
     plt.yscale('log')
