@@ -4,7 +4,8 @@ import ROOT as rt
 # PREPARE INPUTS #
 ##################
 
-fin = rt.TFile('hnl_m_12_low_b3.root')
+in_folder = '/t3home/vstampf/eos/plots/limits/inputs/'
+fin = rt.TFile(in_folder + 'hnl_m_12_low_b3.root')
 
 can = fin.Get('can')
 pad = can.GetPrimitive('can_1')
