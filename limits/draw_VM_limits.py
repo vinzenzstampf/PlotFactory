@@ -4,11 +4,13 @@ import os, commands
 from sys import argv,exit
 from optparse import OptionParser
 import ROOT
+import ROOT as rt
 from collections import OrderedDict
 import re
 from pdb import set_trace
 import numpy as np
 from matplotlib import pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 ROOT.gROOT.SetBatch(True)
 
@@ -512,7 +514,11 @@ def get_signals(verbose=False):
 
 def get_lim_dict(verbose=False):
 
-    with open('combine_output_hnl_22_07_17_blind.txt', 'r') as f_in:
+    # with open('combine_output_hnl_22_07_17_blind.txt', 'r') as f_in:
+    in_file = 'limits_blind_08aug.txt'
+    os.environ['LIM_FILE']   = in_file
+    os.environ['OUT_FOLDER'] = '/t3home/vstampf/eos/plots/limits/outputs/'
+    with open(in_file, 'r') as f_in:
         array = []
         for line in f_in:
             array.append(line)
@@ -531,8 +537,8 @@ def get_lim_dict(verbose=False):
         if '_tau_' in line: mode = 'tau'
 
         if 'hnl' in line:
-            mass = re.sub(r'.*m([0-9])v.*',r'\1', line)
-            v    = re.sub('.*vp', '', line)
+            mass = re.sub(r'.*M([0-9])_V.*',r'\1', line)
+            v    = re.sub('.*Vp', '', line)
             v    = re.sub('_.*', '', v)
             v    = '0.' + v
             Mass, V = mass, v
@@ -578,7 +584,64 @@ def get_lim_dict(verbose=False):
 
     return lim_dict
 
-def draw_1D_limits(): 
+def draw_v2_limits(): 
+    '''here we want to draw limits for 
+       one coupling and 3 different masses
+    '''
+
+    limits  = get_lim_dict()
+    signals = get_signals()
+
+    b     = np.arange(0., 11, 1)
+    req1  = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+    for m in [2, 5, 8]:
+
+        plt.clf()
+        plt.cla()
+
+        y_exp = []; y_ep1s = []; y_ep2s = []; y_em2s = []; y_em1s = [];  
+        v2s   = [lim for lim in limits if 'M%d' %m in lim]
+        b_V2  = []
+
+        for v2 in v2s:
+            if limits[v2].has_key('exp'):  
+                y_exp .append(limits [v2]['exp' ]) 
+                y_ep1s.append(limits [v2]['ep1s']) 
+                y_ep2s.append(limits [v2]['em1s']) 
+                y_em2s.append(limits [v2]['ep2s']) 
+                y_em1s.append(limits [v2]['em2s']) 
+                b_V2  .append(signals[v2]['V2']) 
+
+        b_V2.sort(reverse=False)
+
+        plt.plot(b_V2, y_exp,  'k^', label = 'exp')
+        plt.plot(b_V2, y_ep1s, 'gs', label = 'ep1s')
+        plt.plot(b_V2, y_em1s, 'gs', label = 'em1s')
+        plt.plot(b_V2, y_ep2s, 'yo', label = 'ep2s')
+        plt.plot(b_V2, y_em2s, 'yo', label = 'em2s')
+
+        plt.rc('text', usetex=True)
+
+        plt.plot(b,  req1, 'r-')
+        plt.title(r'$M_N = %d \, GeV,\; \mu\mu\mu$' %m)
+        plt.rc('font', family='serif')
+        plt.axis([1e-06, 0.001, 0.1, 50000])
+        plt.xlabel(r'${|V_{\mu N}|}^2$')
+        plt.ylabel('r')
+        plt.xscale('log')
+        plt.yscale('log')
+        plt.legend(loc='lower left')
+
+        # plt.show()
+
+        plt.savefig('/t3home/vstampf/eos/plots/limits/outputs/mmm_M%d_12Aug.pdf' %m)
+
+        print 'done'
+
+    os.system('cp $LIM_FILE $OUT_FOLDER')
+
+def draw_mass_limits(): 
     '''here we want to draw limits for 
        one coupling and 3 different masses
     '''
@@ -590,11 +653,11 @@ def draw_1D_limits():
     b_m  = [2, 5, 8]
 
     req1   = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-    y_exp  = [ 1e-2 * limits['M2_V0.00244948974278_mu']['exp'],  1e-1 * limits['M5_V0.00244948974278_mu']['exp'],  0.5 * limits['M8_V0.00244948974278_mu']['exp']  ]
-    y_ep1s = [ 1e-2 * limits['M2_V0.00244948974278_mu']['ep1s'], 1e-1 * limits['M5_V0.00244948974278_mu']['ep1s'], 0.5 * limits['M8_V0.00244948974278_mu']['ep1s'] ]
-    y_ep2s = [ 1e-2 * limits['M2_V0.00244948974278_mu']['ep2s'], 1e-1 * limits['M5_V0.00244948974278_mu']['ep2s'], 0.5 * limits['M8_V0.00244948974278_mu']['ep2s'] ]
-    y_em2s = [ 1e-2 * limits['M2_V0.00244948974278_mu']['em2s'], 1e-1 * limits['M5_V0.00244948974278_mu']['em2s'], 0.5 * limits['M8_V0.00244948974278_mu']['em2s'] ]
-    y_em1s = [ 1e-2 * limits['M2_V0.00244948974278_mu']['em1s'], 1e-1 * limits['M5_V0.00244948974278_mu']['em1s'], 0.5 * limits['M8_V0.00244948974278_mu']['em1s'] ]
+    y_exp  = [ limits['M2_V0.00244948974278_mu']['exp'],  limits['M5_V0.00244948974278_mu']['exp'],  limits['M8_V0.00244948974278_mu']['exp']  ]
+    y_ep1s = [ limits['M2_V0.00244948974278_mu']['ep1s'], limits['M5_V0.00244948974278_mu']['ep1s'], limits['M8_V0.00244948974278_mu']['ep1s'] ]
+    y_ep2s = [ limits['M2_V0.00244948974278_mu']['ep2s'], limits['M5_V0.00244948974278_mu']['ep2s'], limits['M8_V0.00244948974278_mu']['ep2s'] ]
+    y_em2s = [ limits['M2_V0.00244948974278_mu']['em2s'], limits['M5_V0.00244948974278_mu']['em2s'], limits['M8_V0.00244948974278_mu']['em2s'] ]
+    y_em1s = [ limits['M2_V0.00244948974278_mu']['em1s'], limits['M5_V0.00244948974278_mu']['em1s'], limits['M8_V0.00244948974278_mu']['em1s'] ]
 
     plt.plot(b_m, y_exp,  '^', label = 'exp')
     plt.plot(b_m, y_ep1s, 's', label = 'ep1s')
@@ -613,3 +676,135 @@ def draw_1D_limits():
     plt.show()
 
     print 'done'
+
+def draw_2D_limits():
+
+    mpl = False; root = True
+
+    limits  = get_lim_dict()
+    signals = get_signals()
+
+    b     = np.arange(0., 11, 1)
+    b_m   = [2, 5, 8]
+    b_V2  = [6e-06, 8e-06, 1e-05, 2e-05, 3e-05, 5e-05, 7e-05, 0.0001, 0.0002, 0.0003, 0.0005]
+
+    if mpl:
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+
+        for lim in limits.keys():
+            xs = limits[lim]['mass']
+            ys = signals[lim]['V2']
+            try:    
+                zs = limits[lim]['exp'];  m='^'
+                p1 = limits[lim]['ep1s']; m='s'
+                m1 = limits[lim]['em1s']; m='s'
+                p2 = limits[lim]['ep2s']; m='o'
+                m2 = limits[lim]['em2s']; m='o'
+                ax.scatter(xs, ys, p1, zdir='z', s=20, c='g', marker=m)
+                ax.scatter(xs, ys, m1, zdir='z', s=20, c='g', marker=m)
+                ax.scatter(xs, ys, p2, zdir='z', s=20, c='y', marker=m)
+                ax.scatter(xs, ys, m2, zdir='z', s=20, c='y', marker=m)
+                print lim, 'has limits'
+                print xs, ys
+            except KeyError: 
+                zs = 0; c  = 'r'; m='o'
+            ax.scatter(xs, ys, zs, zdir='z', s=20, c=c, marker=m)
+
+        ax.set_xlabel('m_N')
+        ax.set_ylabel('V^2')
+        ax.set_zlabel('r')
+    #    ax.set_yscale('log')
+    #    ax.set_zscale('log')
+
+        plt.show()
+
+    if root: 
+
+        b     = np.arange(0., 11, 1)
+        req1  = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+        LIM_X = []; LIM_Y = []; LIM_exp = []
+        LIM_ep1s = []; LIM_ep2s = []; LIM_em1s = []; LIM_em2s = []
+
+        for k in limits.keys():
+            if limits[k].has_key('exp'):  
+                LIM_X   .append(limits [k]['mass']) 
+                LIM_Y   .append(signals[k]['V2'  ]) 
+                LIM_exp .append(limits [k]['exp' ]) 
+                LIM_ep1s.append(limits [k]['ep1s']) 
+                LIM_em1s.append(limits [k]['em1s']) 
+                LIM_ep2s.append(limits [k]['ep2s']) 
+                LIM_em2s.append(limits [k]['em2s']) 
+        LIM = len(LIM_X)
+
+        LIM_X = np.array(LIM_X); LIM_Y = np.array(LIM_Y); LIM_exp = np.array(LIM_exp)
+        LIM_ep1s = np.array(LIM_ep1s); LIM_ep2s = np.array(LIM_ep2s); LIM_em1s = np.array(LIM_em1s); LIM_em2s = np.array(LIM_em2s)
+
+        graph_exp  = rt.TGraph2D('exp' , 'exp' , LIM, LIM_X, LIM_Y, LIM_exp)
+        graph_ep1s = rt.TGraph2D('ep1s', 'ep1s', LIM, LIM_X, LIM_Y, LIM_ep1s)
+        graph_em1s = rt.TGraph2D('em1s', 'em1s', LIM, LIM_X, LIM_Y, LIM_em1s)
+        graph_ep2s = rt.TGraph2D('ep2s', 'ep2s', LIM, LIM_X, LIM_Y, LIM_ep2s)
+        graph_em2s = rt.TGraph2D('em2s', 'em2s', LIM, LIM_X, LIM_Y, LIM_em2s)
+        graph_r    = rt.TGraph2D('r=1',  'r=1',  LIM, LIM_X, LIM_Y, np.ones(LIM))
+
+        can = rt.TCanvas('graph', 'graph')
+
+        # can.Divide(2,2)
+        # can.cd(2)
+        # can.GetPad(2).SetLogy()
+        # can.GetPad(2).SetLogz()
+        # rt.gStyle.SetPalette(1)
+
+        can.SetLogy()
+        can.SetLogz()
+        graph_exp .SetMarkerStyle(29)
+        graph_ep1s.SetMarkerStyle(29)
+        graph_em1s.SetMarkerStyle(29)
+        graph_ep2s.SetMarkerStyle(29)
+        graph_em2s.SetMarkerStyle(29)
+        graph_r   .SetMarkerStyle(20)
+        graph_em1s.SetMarkerColor(rt.kGreen)
+        graph_ep1s.SetMarkerColor(rt.kGreen)
+        graph_em2s.SetMarkerColor(rt.kYellow)
+        graph_ep2s.SetMarkerColor(rt.kYellow)
+        graph_r   .SetMarkerColor(rt.kRed+2)
+
+        # graph_exp .Draw('p')
+        # graph_ep1s.Draw('psame')
+        # graph_ep2s.Draw('psame')
+        # graph_em1s.Draw('psame')
+        # graph_em2s.Draw('psame')
+        # graph_r   .Draw('psame')
+
+        # set_trace()
+
+        cont_exp  = graph_exp .GetContourList(1)[0]; cont_exp .SetLineColor(rt.kBlack)# ; cont_exp .SetFillColor(rt.kBlack) ; cont_exp .SetFillStyle(1001)
+        cont_em1s = graph_em1s.GetContourList(1)[0]; cont_em1s.SetLineColor(rt.kGreen) ; cont_em1s.SetFillColor(rt.kGreen) ; cont_em1s.SetFillStyle(1001) 
+        cont_ep1s = graph_ep1s.GetContourList(1)[0]; cont_ep1s.SetLineColor(rt.kGreen) ; cont_ep1s.SetFillColor(rt.kGreen) ; cont_ep1s.SetFillStyle(1001) 
+        cont_em2s = graph_em2s.GetContourList(1)[0]; cont_em2s.SetLineColor(rt.kYellow); cont_em2s.SetFillColor(rt.kYellow); cont_em2s.SetFillStyle(1001)
+        cont_ep2s = graph_ep2s.GetContourList(1)[0]; cont_ep2s.SetLineColor(rt.kYellow); cont_ep2s.SetFillColor(rt.kYellow); cont_ep2s.SetFillStyle(1001)
+
+        cont_exp .Draw()
+        cont_em1s.Draw('Fsame')
+        cont_ep1s.Draw('Lsame')
+        cont_em2s.Draw('Fsame')
+        cont_ep2s.Draw('Lsame')
+
+        # can.cd(1)
+        # # set_trace()
+        # can.GetPad(1).SetLogy()
+        # can.GetPad(1).SetLogz()
+        # graph_exp.Draw('surf1')
+
+
+        # can.cd(3)
+        # can.GetPad(3).SetLogy()
+        # can.GetPad(3).SetLogz()
+        # graph_exp.Draw('p0')
+
+        can.SaveAs('/t3home/vstampf/eos/plots/limits/outputs/asdasd.pdf')
+        can.SaveAs('/t3home/vstampf/eos/plots/limits/outputs/asdasd.png')
+        can.SaveAs('/t3home/vstampf/eos/plots/limits/outputs/asdasd.root')
+        
+

@@ -1,3 +1,4 @@
+hnl_M2_Vp00244948974278_mu_dc.txt
  <<< Combine >>> 
 >>> including systematics
 Will use a-priori expected background instead of a-posteriori one.
@@ -70,6 +71,7 @@ Computing results starting from observation (a-posteriori)
  -- AsymptoticLimits ( CLs ) --
 
 Done in 0.05 min (cpu), 0.05 min (real)
+hnl_M2_Vp00282842712475_mu_dc.txt
  <<< Combine >>> 
 >>> including systematics
 Will use a-priori expected background instead of a-posteriori one.
@@ -147,6 +149,7 @@ Expected 84.0%: r < 8049.8193
 Expected 97.5%: r < 12131.2783
 
 Done in 0.05 min (cpu), 0.05 min (real)
+hnl_M2_Vp00316227766017_mu_dc.txt
  <<< Combine >>> 
 >>> including systematics
 Will use a-priori expected background instead of a-posteriori one.
@@ -224,6 +227,7 @@ Expected 84.0%: r < 637.9482
 Expected 97.5%: r < 961.4038
 
 Done in 0.01 min (cpu), 0.01 min (real)
+hnl_M2_Vp004472135955_mu_dc.txt
  <<< Combine >>> 
 >>> including systematics
 Will use a-priori expected background instead of a-posteriori one.
@@ -296,6 +300,7 @@ Computing results starting from observation (a-posteriori)
  -- AsymptoticLimits ( CLs ) --
 
 Done in 0.05 min (cpu), 0.05 min (real)
+hnl_M2_Vp00547722557505_mu_dc.txt
  <<< Combine >>> 
 >>> including systematics
 Will use a-priori expected background instead of a-posteriori one.
@@ -373,6 +378,7 @@ Expected 84.0%: r < 531.2881
 Expected 97.5%: r < 800.6644
 
 Done in 0.00 min (cpu), 0.01 min (real)
+hnl_M2_Vp00707106781187_mu_dc.txt
  <<< Combine >>> 
 >>> including systematics
 Will use a-priori expected background instead of a-posteriori one.
@@ -450,6 +456,7 @@ Expected 84.0%: r < 216.3389
 Expected 97.5%: r < 326.0281
 
 Done in 0.00 min (cpu), 0.00 min (real)
+hnl_M2_Vp00836660026534_mu_dc.txt
  <<< Combine >>> 
 >>> including systematics
 Will use a-priori expected background instead of a-posteriori one.
@@ -527,6 +534,7 @@ Expected 84.0%: r < 94.0823
 Expected 97.5%: r < 141.7843
 
 Done in 0.00 min (cpu), 0.00 min (real)
+hnl_M2_Vp0141421356237_mu_dc.txt
  <<< Combine >>> 
 >>> including systematics
 Will use a-priori expected background instead of a-posteriori one.
@@ -604,6 +612,7 @@ Expected 84.0%: r < 15.1801
 Expected 97.5%: r < 24.0551
 
 Done in 0.00 min (cpu), 0.00 min (real)
+hnl_M2_Vp0173205080757_mu_dc.txt
  <<< Combine >>> 
 >>> including systematics
 Will use a-priori expected background instead of a-posteriori one.
@@ -681,6 +690,7 @@ Expected 84.0%: r < 9.7692
 Expected 97.5%: r < 14.9132
 
 Done in 0.00 min (cpu), 0.00 min (real)
+hnl_M2_Vp01_mu_dc.txt
  <<< Combine >>> 
 >>> including systematics
 Will use a-priori expected background instead of a-posteriori one.
@@ -758,6 +768,7 @@ Expected 84.0%: r < 38.4686
 Expected 97.5%: r < 65.1681
 
 Done in 0.00 min (cpu), 0.00 min (real)
+hnl_M2_Vp022360679775_mu_dc.txt
  <<< Combine >>> 
 >>> including systematics
 Will use a-priori expected background instead of a-posteriori one.
@@ -835,6 +846,7 @@ Expected 84.0%: r < 6.1707
 Expected 97.5%: r < 9.1301
 
 Done in 0.00 min (cpu), 0.00 min (real)
+hnl_M5_Vp00244948974278_mu_dc.txt
  <<< Combine >>> 
 >>> including systematics
 Will use a-priori expected background instead of a-posteriori one.
@@ -912,6 +924,7 @@ Expected 84.0%: r < 5.2051
 Expected 97.5%: r < 7.9110
 
 Done in 0.00 min (cpu), 0.00 min (real)
+hnl_M5_Vp00282842712475_mu_dc.txt
  <<< Combine >>> 
 >>> including systematics
 Will use a-priori expected background instead of a-posteriori one.
@@ -983,7 +996,8 @@ Computing results starting from observation (a-posteriori)
 
  -- AsymptoticLimits ( CLs ) --
 
-Done in 0.09 min (cpu), 0.09 min (real)
+Done in 0.10 min (cpu), 0.10 min (real)
+hnl_M5_Vp00316227766017_mu_dc.txt
  <<< Combine >>> 
 >>> including systematics
 Will use a-priori expected background instead of a-posteriori one.
@@ -1052,3 +1066,792 @@ Bin        Contents        Error           Notes
   => Total parameter prop_binmll_bin10[0.00,-7.00,7.00] to be gaussian constrained
 ------------------------------------------------------------
 Computing results starting from observation (a-posteriori)
+
+ -- AsymptoticLimits ( CLs ) --
+Expected  2.5%: r < 0.9579
+Expected 16.0%: r < 1.2901
+Expected 50.0%: r < 1.8438
+Expected 84.0%: r < 2.6963
+Expected 97.5%: r < 3.8672
+
+Done in 0.00 min (cpu), 0.00 min (real)
+hnl_M5_Vp004472135955_mu_dc.txt
+ <<< Combine >>> 
+>>> including systematics
+Will use a-priori expected background instead of a-posteriori one.
+>>> method used is AsymptoticLimits
+>>> random number generator seed is 123456
+Channel mll will use autoMCStats with settings: event-threshold=0, include-signal=0, hist-mode=1
+============================================================
+Analysing bin errors for: prop_binmll
+Poisson cut-off: 0
+Processes excluded for sums: M5_Vp004472135955
+============================================================
+Bin        Contents        Error           Notes                         
+0          177.762610      20.633400       total sum                     
+0          175.637704      20.606025       excluding marked processes    
+0          73.000000       8.544004        Unweighted events, alpha=2.435104
+  => Total parameter prop_binmll_bin0[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+1          180.206341      18.396548       total sum                     
+1          166.545906      18.192453       excluding marked processes    
+1          84.000000       9.165151        Unweighted events, alpha=2.145314
+  => Total parameter prop_binmll_bin1[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+2          90.710167       13.694149       total sum                     
+2          73.787132       13.352471       excluding marked processes    
+2          31.000000       5.567764        Unweighted events, alpha=2.926134
+  => Total parameter prop_binmll_bin2[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+3          74.884522       10.121516       total sum                     
+3          60.219379       9.719900        excluding marked processes    
+3          38.000000       6.164414        Unweighted events, alpha=1.970645
+  => Total parameter prop_binmll_bin3[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+4          46.575663       8.181600        total sum                     
+4          43.303284       8.071750        excluding marked processes    
+4          29.000000       5.385165        Unweighted events, alpha=1.606057
+  => Total parameter prop_binmll_bin4[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+5          26.946894       6.064424        total sum                     
+5          26.946894       6.064424        excluding marked processes    
+5          20.000000       4.472136        Unweighted events, alpha=1.347345
+  => Total parameter prop_binmll_bin5[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+6          14.728829       4.157878        total sum                     
+6          14.728829       4.157878        excluding marked processes    
+6          13.000000       3.605551        Unweighted events, alpha=1.132987
+  => Total parameter prop_binmll_bin6[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+7          11.882050       2.905171        total sum                     
+7          11.882050       2.905171        excluding marked processes    
+7          17.000000       4.123106        Unweighted events, alpha=0.698944
+  => Total parameter prop_binmll_bin7[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+8          8.074773        3.112208        total sum                     
+8          8.074773        3.112208        excluding marked processes    
+8          7.000000        2.645751        Unweighted events, alpha=1.153539
+  => Total parameter prop_binmll_bin8[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+9          14.486914       4.222306        total sum                     
+9          14.486914       4.222306        excluding marked processes    
+9          12.000000       3.464102        Unweighted events, alpha=1.207243
+  => Total parameter prop_binmll_bin9[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+10         9.960258        3.094392        total sum                     
+10         9.960258        3.094392        excluding marked processes    
+10         10.000000       3.162278        Unweighted events, alpha=0.996026
+  => Total parameter prop_binmll_bin10[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+Computing results starting from observation (a-posteriori)
+
+ -- AsymptoticLimits ( CLs ) --
+Expected  2.5%: r < 0.8258
+Expected 16.0%: r < 1.1228
+Expected 50.0%: r < 1.6016
+Expected 84.0%: r < 2.3612
+Expected 97.5%: r < 3.4099
+
+Done in 0.00 min (cpu), 0.00 min (real)
+hnl_M5_Vp00547722557505_mu_dc.txt
+ <<< Combine >>> 
+>>> including systematics
+Will use a-priori expected background instead of a-posteriori one.
+>>> method used is AsymptoticLimits
+>>> random number generator seed is 123456
+Channel mll will use autoMCStats with settings: event-threshold=0, include-signal=0, hist-mode=1
+============================================================
+Analysing bin errors for: prop_binmll
+Poisson cut-off: 0
+Processes excluded for sums: M5_Vp00547722557505
+============================================================
+Bin        Contents        Error           Notes                         
+0          182.713836      20.757375       total sum                     
+0          175.637704      20.606025       excluding marked processes    
+0          73.000000       8.544004        Unweighted events, alpha=2.502929
+  => Total parameter prop_binmll_bin0[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+1          180.605299      18.528966       total sum                     
+1          166.545906      18.192453       excluding marked processes    
+1          84.000000       9.165151        Unweighted events, alpha=2.150063
+  => Total parameter prop_binmll_bin1[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+2          92.124838       13.939407       total sum                     
+2          73.787132       13.352471       excluding marked processes    
+2          31.000000       5.567764        Unweighted events, alpha=2.971769
+  => Total parameter prop_binmll_bin2[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+3          71.548660       10.215434       total sum                     
+3          60.219379       9.719900        excluding marked processes    
+3          38.000000       6.164414        Unweighted events, alpha=1.882859
+  => Total parameter prop_binmll_bin3[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+4          48.586022       8.355013        total sum                     
+4          43.303284       8.071750        excluding marked processes    
+4          29.000000       5.385165        Unweighted events, alpha=1.675380
+  => Total parameter prop_binmll_bin4[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+5          26.946894       6.064424        total sum                     
+5          26.946894       6.064424        excluding marked processes    
+5          20.000000       4.472136        Unweighted events, alpha=1.347345
+  => Total parameter prop_binmll_bin5[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+6          14.728829       4.157878        total sum                     
+6          14.728829       4.157878        excluding marked processes    
+6          13.000000       3.605551        Unweighted events, alpha=1.132987
+  => Total parameter prop_binmll_bin6[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+7          11.882050       2.905171        total sum                     
+7          11.882050       2.905171        excluding marked processes    
+7          17.000000       4.123106        Unweighted events, alpha=0.698944
+  => Total parameter prop_binmll_bin7[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+8          8.074773        3.112208        total sum                     
+8          8.074773        3.112208        excluding marked processes    
+8          7.000000        2.645751        Unweighted events, alpha=1.153539
+  => Total parameter prop_binmll_bin8[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+9          14.486914       4.222306        total sum                     
+9          14.486914       4.222306        excluding marked processes    
+9          12.000000       3.464102        Unweighted events, alpha=1.207243
+  => Total parameter prop_binmll_bin9[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+10         9.960258        3.094392        total sum                     
+10         9.960258        3.094392        excluding marked processes    
+10         10.000000       3.162278        Unweighted events, alpha=0.996026
+  => Total parameter prop_binmll_bin10[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+Computing results starting from observation (a-posteriori)
+
+ -- AsymptoticLimits ( CLs ) --
+Expected  2.5%: r < 0.9323
+Expected 16.0%: r < 1.2641
+Expected 50.0%: r < 1.8359
+Expected 84.0%: r < 2.7653
+Expected 97.5%: r < 4.1851
+
+Done in 0.00 min (cpu), 0.00 min (real)
+hnl_M5_Vp00707106781187_mu_dc.txt
+ <<< Combine >>> 
+>>> including systematics
+Will use a-priori expected background instead of a-posteriori one.
+>>> method used is AsymptoticLimits
+>>> random number generator seed is 123456
+Channel mll will use autoMCStats with settings: event-threshold=0, include-signal=0, hist-mode=1
+============================================================
+Analysing bin errors for: prop_binmll
+Poisson cut-off: 0
+Processes excluded for sums: M5_Vp00707106781187
+============================================================
+Bin        Contents        Error           Notes                         
+0          179.926553      20.650623       total sum                     
+0          175.637704      20.606025       excluding marked processes    
+0          73.000000       8.544004        Unweighted events, alpha=2.464747
+  => Total parameter prop_binmll_bin0[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+1          179.039222      18.339850       total sum                     
+1          166.545906      18.192453       excluding marked processes    
+1          84.000000       9.165151        Unweighted events, alpha=2.131419
+  => Total parameter prop_binmll_bin1[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+2          91.994162       13.644944       total sum                     
+2          73.787132       13.352471       excluding marked processes    
+2          31.000000       5.567764        Unweighted events, alpha=2.967554
+  => Total parameter prop_binmll_bin2[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+3          77.093025       10.088624       total sum                     
+3          60.219379       9.719900        excluding marked processes    
+3          38.000000       6.164414        Unweighted events, alpha=2.028764
+  => Total parameter prop_binmll_bin3[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+4          47.635269       8.187241        total sum                     
+4          43.303284       8.071750        excluding marked processes    
+4          29.000000       5.385165        Unweighted events, alpha=1.642595
+  => Total parameter prop_binmll_bin4[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+5          26.946894       6.064424        total sum                     
+5          26.946894       6.064424        excluding marked processes    
+5          20.000000       4.472136        Unweighted events, alpha=1.347345
+  => Total parameter prop_binmll_bin5[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+6          14.728829       4.157878        total sum                     
+6          14.728829       4.157878        excluding marked processes    
+6          13.000000       3.605551        Unweighted events, alpha=1.132987
+  => Total parameter prop_binmll_bin6[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+7          11.882050       2.905171        total sum                     
+7          11.882050       2.905171        excluding marked processes    
+7          17.000000       4.123106        Unweighted events, alpha=0.698944
+  => Total parameter prop_binmll_bin7[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+8          8.074773        3.112208        total sum                     
+8          8.074773        3.112208        excluding marked processes    
+8          7.000000        2.645751        Unweighted events, alpha=1.153539
+  => Total parameter prop_binmll_bin8[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+9          14.486914       4.222306        total sum                     
+9          14.486914       4.222306        excluding marked processes    
+9          12.000000       3.464102        Unweighted events, alpha=1.207243
+  => Total parameter prop_binmll_bin9[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+10         9.960258        3.094392        total sum                     
+10         9.960258        3.094392        excluding marked processes    
+10         10.000000       3.162278        Unweighted events, alpha=0.996026
+  => Total parameter prop_binmll_bin10[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+Computing results starting from observation (a-posteriori)
+
+ -- AsymptoticLimits ( CLs ) --
+Expected  2.5%: r < 0.7529
+Expected 16.0%: r < 1.0140
+Expected 50.0%: r < 1.4492
+Expected 84.0%: r < 2.1193
+Expected 97.5%: r < 3.0397
+
+Done in 0.00 min (cpu), 0.00 min (real)
+hnl_M5_Vp00836660026534_mu_dc.txt
+ <<< Combine >>> 
+>>> including systematics
+Will use a-priori expected background instead of a-posteriori one.
+>>> method used is AsymptoticLimits
+>>> random number generator seed is 123456
+Channel mll will use autoMCStats with settings: event-threshold=0, include-signal=0, hist-mode=1
+============================================================
+Analysing bin errors for: prop_binmll
+Poisson cut-off: 0
+Processes excluded for sums: M5_Vp00836660026534
+============================================================
+Bin        Contents        Error           Notes                         
+0          179.295760      20.642091       total sum                     
+0          175.637704      20.606025       excluding marked processes    
+0          73.000000       8.544004        Unweighted events, alpha=2.456106
+  => Total parameter prop_binmll_bin0[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+1          178.246822      18.321793       total sum                     
+1          166.545906      18.192453       excluding marked processes    
+1          84.000000       9.165151        Unweighted events, alpha=2.121986
+  => Total parameter prop_binmll_bin1[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+2          92.747694       13.636003       total sum                     
+2          73.787132       13.352471       excluding marked processes    
+2          31.000000       5.567764        Unweighted events, alpha=2.991861
+  => Total parameter prop_binmll_bin2[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+3          75.897080       10.039028       total sum                     
+3          60.219379       9.719900        excluding marked processes    
+3          38.000000       6.164414        Unweighted events, alpha=1.997292
+  => Total parameter prop_binmll_bin3[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+4          46.525296       8.151783        total sum                     
+4          43.303284       8.071750        excluding marked processes    
+4          29.000000       5.385165        Unweighted events, alpha=1.604321
+  => Total parameter prop_binmll_bin4[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+5          26.946894       6.064424        total sum                     
+5          26.946894       6.064424        excluding marked processes    
+5          20.000000       4.472136        Unweighted events, alpha=1.347345
+  => Total parameter prop_binmll_bin5[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+6          14.728829       4.157878        total sum                     
+6          14.728829       4.157878        excluding marked processes    
+6          13.000000       3.605551        Unweighted events, alpha=1.132987
+  => Total parameter prop_binmll_bin6[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+7          11.882050       2.905171        total sum                     
+7          11.882050       2.905171        excluding marked processes    
+7          17.000000       4.123106        Unweighted events, alpha=0.698944
+  => Total parameter prop_binmll_bin7[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+8          8.074773        3.112208        total sum                     
+8          8.074773        3.112208        excluding marked processes    
+8          7.000000        2.645751        Unweighted events, alpha=1.153539
+  => Total parameter prop_binmll_bin8[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+9          14.486914       4.222306        total sum                     
+9          14.486914       4.222306        excluding marked processes    
+9          12.000000       3.464102        Unweighted events, alpha=1.207243
+  => Total parameter prop_binmll_bin9[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+10         9.960258        3.094392        total sum                     
+10         9.960258        3.094392        excluding marked processes    
+10         10.000000       3.162278        Unweighted events, alpha=0.996026
+  => Total parameter prop_binmll_bin10[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+Computing results starting from observation (a-posteriori)
+
+ -- AsymptoticLimits ( CLs ) --
+Expected  2.5%: r < 0.7651
+Expected 16.0%: r < 1.0360
+Expected 50.0%: r < 1.4727
+Expected 84.0%: r < 2.1477
+Expected 97.5%: r < 3.0671
+
+Done in 0.00 min (cpu), 0.00 min (real)
+hnl_M5_Vp01_mu_dc.txt
+ <<< Combine >>> 
+>>> including systematics
+Will use a-priori expected background instead of a-posteriori one.
+>>> method used is AsymptoticLimits
+>>> random number generator seed is 123456
+Channel mll will use autoMCStats with settings: event-threshold=0, include-signal=0, hist-mode=1
+============================================================
+Analysing bin errors for: prop_binmll
+Poisson cut-off: 0
+Processes excluded for sums: M5_Vp01
+============================================================
+Bin        Contents        Error           Notes                         
+0          178.502665      20.634465       total sum                     
+0          175.637704      20.606025       excluding marked processes    
+0          73.000000       8.544004        Unweighted events, alpha=2.445242
+  => Total parameter prop_binmll_bin0[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+1          178.489244      18.327200       total sum                     
+1          166.545906      18.192453       excluding marked processes    
+1          84.000000       9.165151        Unweighted events, alpha=2.124872
+  => Total parameter prop_binmll_bin1[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+2          89.432047       13.591660       total sum                     
+2          73.787132       13.352471       excluding marked processes    
+2          31.000000       5.567764        Unweighted events, alpha=2.884905
+  => Total parameter prop_binmll_bin2[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+3          73.358129       9.993665        total sum                     
+3          60.219379       9.719900        excluding marked processes    
+3          38.000000       6.164414        Unweighted events, alpha=1.930477
+  => Total parameter prop_binmll_bin3[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+4          48.248955       8.197112        total sum                     
+4          43.303284       8.071750        excluding marked processes    
+4          29.000000       5.385165        Unweighted events, alpha=1.663757
+  => Total parameter prop_binmll_bin4[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+5          26.946894       6.064424        total sum                     
+5          26.946894       6.064424        excluding marked processes    
+5          20.000000       4.472136        Unweighted events, alpha=1.347345
+  => Total parameter prop_binmll_bin5[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+6          14.728829       4.157878        total sum                     
+6          14.728829       4.157878        excluding marked processes    
+6          13.000000       3.605551        Unweighted events, alpha=1.132987
+  => Total parameter prop_binmll_bin6[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+7          11.882050       2.905171        total sum                     
+7          11.882050       2.905171        excluding marked processes    
+7          17.000000       4.123106        Unweighted events, alpha=0.698944
+  => Total parameter prop_binmll_bin7[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+8          8.074773        3.112208        total sum                     
+8          8.074773        3.112208        excluding marked processes    
+8          7.000000        2.645751        Unweighted events, alpha=1.153539
+  => Total parameter prop_binmll_bin8[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+9          14.486914       4.222306        total sum                     
+9          14.486914       4.222306        excluding marked processes    
+9          12.000000       3.464102        Unweighted events, alpha=1.207243
+  => Total parameter prop_binmll_bin9[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+10         9.960258        3.094392        total sum                     
+10         9.960258        3.094392        excluding marked processes    
+10         10.000000       3.162278        Unweighted events, alpha=0.996026
+  => Total parameter prop_binmll_bin10[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+Computing results starting from observation (a-posteriori)
+
+ -- AsymptoticLimits ( CLs ) --
+Expected  2.5%: r < 0.9092
+Expected 16.0%: r < 1.2245
+Expected 50.0%: r < 1.7500
+Expected 84.0%: r < 2.5592
+Expected 97.5%: r < 3.6706
+
+Done in 0.00 min (cpu), 0.00 min (real)
+hnl_M8_Vp00244948974278_mu_dc.txt
+ <<< Combine >>> 
+>>> including systematics
+Will use a-priori expected background instead of a-posteriori one.
+>>> method used is AsymptoticLimits
+>>> random number generator seed is 123456
+Channel mll will use autoMCStats with settings: event-threshold=0, include-signal=0, hist-mode=1
+============================================================
+Analysing bin errors for: prop_binmll
+Poisson cut-off: 0
+Processes excluded for sums: M8_Vp00244948974278
+============================================================
+Bin        Contents        Error           Notes                         
+0          177.221842      20.621252       total sum                     
+0          175.637704      20.606025       excluding marked processes    
+0          73.000000       8.544004        Unweighted events, alpha=2.427696
+  => Total parameter prop_binmll_bin0[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+1          170.119493      18.231425       total sum                     
+1          166.545906      18.192453       excluding marked processes    
+1          84.000000       9.165151        Unweighted events, alpha=2.025232
+  => Total parameter prop_binmll_bin1[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+2          80.600574       13.454380       total sum                     
+2          73.787132       13.352471       excluding marked processes    
+2          31.000000       5.567764        Unweighted events, alpha=2.600019
+  => Total parameter prop_binmll_bin2[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+3          70.628036       9.931999        total sum                     
+3          60.219379       9.719900        excluding marked processes    
+3          38.000000       6.164414        Unweighted events, alpha=1.858633
+  => Total parameter prop_binmll_bin3[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+4          55.044929       8.361179        total sum                     
+4          43.303284       8.071750        excluding marked processes    
+4          29.000000       5.385165        Unweighted events, alpha=1.898101
+  => Total parameter prop_binmll_bin4[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+5          37.106093       6.395878        total sum                     
+5          26.946894       6.064424        excluding marked processes    
+5          20.000000       4.472136        Unweighted events, alpha=1.855305
+  => Total parameter prop_binmll_bin5[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+6          19.986616       4.406288        total sum                     
+6          14.728829       4.157878        excluding marked processes    
+6          13.000000       3.605551        Unweighted events, alpha=1.537432
+  => Total parameter prop_binmll_bin6[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+7          12.284311       2.932888        total sum                     
+7          11.882050       2.905171        excluding marked processes    
+7          17.000000       4.123106        Unweighted events, alpha=0.722607
+  => Total parameter prop_binmll_bin7[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+8          8.074773        3.112208        total sum                     
+8          8.074773        3.112208        excluding marked processes    
+8          7.000000        2.645751        Unweighted events, alpha=1.153539
+  => Total parameter prop_binmll_bin8[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+9          14.486914       4.222306        total sum                     
+9          14.486914       4.222306        excluding marked processes    
+9          12.000000       3.464102        Unweighted events, alpha=1.207243
+  => Total parameter prop_binmll_bin9[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+10         9.960258        3.094392        total sum                     
+10         9.960258        3.094392        excluding marked processes    
+10         10.000000       3.162278        Unweighted events, alpha=0.996026
+  => Total parameter prop_binmll_bin10[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+Computing results starting from observation (a-posteriori)
+
+ -- AsymptoticLimits ( CLs ) --
+Expected  2.5%: r < 0.6271
+Expected 16.0%: r < 0.8491
+Expected 50.0%: r < 1.2070
+Expected 84.0%: r < 1.7651
+Expected 97.5%: r < 2.5168
+
+Done in 0.00 min (cpu), 0.00 min (real)
+hnl_M8_Vp00282842712475_mu_dc.txt
+ <<< Combine >>> 
+>>> including systematics
+Will use a-priori expected background instead of a-posteriori one.
+>>> method used is AsymptoticLimits
+>>> random number generator seed is 123456
+Channel mll will use autoMCStats with settings: event-threshold=0, include-signal=0, hist-mode=1
+============================================================
+Analysing bin errors for: prop_binmll
+Poisson cut-off: 0
+Processes excluded for sums: M8_Vp00282842712475
+============================================================
+Bin        Contents        Error           Notes                         
+0          176.863743      20.618182       total sum                     
+0          175.637704      20.606025       excluding marked processes    
+0          73.000000       8.544004        Unweighted events, alpha=2.422791
+  => Total parameter prop_binmll_bin0[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+1          170.211232      18.233452       total sum                     
+1          166.545906      18.192453       excluding marked processes    
+1          84.000000       9.165151        Unweighted events, alpha=2.026324
+  => Total parameter prop_binmll_bin1[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+2          80.673772       13.456589       total sum                     
+2          73.787132       13.352471       excluding marked processes    
+2          31.000000       5.567764        Unweighted events, alpha=2.602380
+  => Total parameter prop_binmll_bin2[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+3          65.077882       9.820617        total sum                     
+3          60.219379       9.719900        excluding marked processes    
+3          38.000000       6.164414        Unweighted events, alpha=1.712576
+  => Total parameter prop_binmll_bin3[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+4          51.797816       8.281943        total sum                     
+4          43.303284       8.071750        excluding marked processes    
+4          29.000000       5.385165        Unweighted events, alpha=1.786132
+  => Total parameter prop_binmll_bin4[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+5          33.818856       6.289379        total sum                     
+5          26.946894       6.064424        excluding marked processes    
+5          20.000000       4.472136        Unweighted events, alpha=1.690943
+  => Total parameter prop_binmll_bin5[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+6          19.529196       4.382802        total sum                     
+6          14.728829       4.157878        excluding marked processes    
+6          13.000000       3.605551        Unweighted events, alpha=1.502246
+  => Total parameter prop_binmll_bin6[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+7          13.474742       3.012356        total sum                     
+7          11.882050       2.905171        excluding marked processes    
+7          17.000000       4.123106        Unweighted events, alpha=0.792632
+  => Total parameter prop_binmll_bin7[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+8          8.074773        3.112208        total sum                     
+8          8.074773        3.112208        excluding marked processes    
+8          7.000000        2.645751        Unweighted events, alpha=1.153539
+  => Total parameter prop_binmll_bin8[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+9          14.486914       4.222306        total sum                     
+9          14.486914       4.222306        excluding marked processes    
+9          12.000000       3.464102        Unweighted events, alpha=1.207243
+  => Total parameter prop_binmll_bin9[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+10         9.960258        3.094392        total sum                     
+10         9.960258        3.094392        excluding marked processes    
+10         10.000000       3.162278        Unweighted events, alpha=0.996026
+  => Total parameter prop_binmll_bin10[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+Computing results starting from observation (a-posteriori)
+
+ -- AsymptoticLimits ( CLs ) --
+Expected  2.5%: r < 0.8621
+Expected 16.0%: r < 1.1657
+Expected 50.0%: r < 1.6719
+Expected 84.0%: r < 2.4716
+Expected 97.5%: r < 3.6043
+
+Done in 0.00 min (cpu), 0.00 min (real)
+hnl_M8_Vp00316227766017_mu_dc.txt
+ <<< Combine >>> 
+>>> including systematics
+Will use a-priori expected background instead of a-posteriori one.
+>>> method used is AsymptoticLimits
+>>> random number generator seed is 123456
+Channel mll will use autoMCStats with settings: event-threshold=0, include-signal=0, hist-mode=1
+============================================================
+Analysing bin errors for: prop_binmll
+Poisson cut-off: 0
+Processes excluded for sums: M8_Vp00316227766017
+============================================================
+Bin        Contents        Error           Notes                         
+0          180.173505      20.651373       total sum                     
+0          175.637704      20.606025       excluding marked processes    
+0          73.000000       8.544004        Unweighted events, alpha=2.468130
+  => Total parameter prop_binmll_bin0[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+1          172.270920      18.256707       total sum                     
+1          166.545906      18.192453       excluding marked processes    
+1          84.000000       9.165151        Unweighted events, alpha=2.050844
+  => Total parameter prop_binmll_bin1[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+2          78.381096       13.424137       total sum                     
+2          73.787132       13.352471       excluding marked processes    
+2          31.000000       5.567764        Unweighted events, alpha=2.528422
+  => Total parameter prop_binmll_bin2[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+3          67.152380       9.864333        total sum                     
+3          60.219379       9.719900        excluding marked processes    
+3          38.000000       6.164414        Unweighted events, alpha=1.767168
+  => Total parameter prop_binmll_bin3[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+4          51.955776       8.289722        total sum                     
+4          43.303284       8.071750        excluding marked processes    
+4          29.000000       5.385165        Unweighted events, alpha=1.791578
+  => Total parameter prop_binmll_bin4[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+5          34.385825       6.312906        total sum                     
+5          26.946894       6.064424        excluding marked processes    
+5          20.000000       4.472136        Unweighted events, alpha=1.719291
+  => Total parameter prop_binmll_bin5[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+6          16.787036       4.258608        total sum                     
+6          14.728829       4.157878        excluding marked processes    
+6          13.000000       3.605551        Unweighted events, alpha=1.291310
+  => Total parameter prop_binmll_bin6[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+7          12.715706       2.964380        total sum                     
+7          11.882050       2.905171        excluding marked processes    
+7          17.000000       4.123106        Unweighted events, alpha=0.747983
+  => Total parameter prop_binmll_bin7[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+8          8.074773        3.112208        total sum                     
+8          8.074773        3.112208        excluding marked processes    
+8          7.000000        2.645751        Unweighted events, alpha=1.153539
+  => Total parameter prop_binmll_bin8[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+9          14.486914       4.222306        total sum                     
+9          14.486914       4.222306        excluding marked processes    
+9          12.000000       3.464102        Unweighted events, alpha=1.207243
+  => Total parameter prop_binmll_bin9[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+10         9.960258        3.094392        total sum                     
+10         9.960258        3.094392        excluding marked processes    
+10         10.000000       3.162278        Unweighted events, alpha=0.996026
+  => Total parameter prop_binmll_bin10[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+Computing results starting from observation (a-posteriori)
+
+ -- AsymptoticLimits ( CLs ) --
+Expected  2.5%: r < 1.0077
+Expected 16.0%: r < 1.3739
+Expected 50.0%: r < 1.9844
+Expected 84.0%: r < 2.9731
+Expected 97.5%: r < 4.4439
+
+Done in 0.00 min (cpu), 0.00 min (real)
+hnl_M8_Vp004472135955_mu_dc.txt
+ <<< Combine >>> 
+>>> including systematics
+Will use a-priori expected background instead of a-posteriori one.
+>>> method used is AsymptoticLimits
+>>> random number generator seed is 123456
+Channel mll will use autoMCStats with settings: event-threshold=0, include-signal=0, hist-mode=1
+============================================================
+Analysing bin errors for: prop_binmll
+Poisson cut-off: 0
+Processes excluded for sums: M8_Vp004472135955
+============================================================
+Bin        Contents        Error           Notes                         
+0          175.637704      20.606025       total sum                     
+0          175.637704      20.606025       excluding marked processes    
+0          73.000000       8.544004        Unweighted events, alpha=2.405996
+  => Total parameter prop_binmll_bin0[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+1          170.182984      18.232819       total sum                     
+1          166.545906      18.192453       excluding marked processes    
+1          84.000000       9.165151        Unweighted events, alpha=2.025988
+  => Total parameter prop_binmll_bin1[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+2          82.319947       13.481722       total sum                     
+2          73.787132       13.352471       excluding marked processes    
+2          31.000000       5.567764        Unweighted events, alpha=2.655482
+  => Total parameter prop_binmll_bin2[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+3          67.006270       9.858336        total sum                     
+3          60.219379       9.719900        excluding marked processes    
+3          38.000000       6.164414        Unweighted events, alpha=1.763323
+  => Total parameter prop_binmll_bin3[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+4          59.824081       8.474255        total sum                     
+4          43.303284       8.071750        excluding marked processes    
+4          29.000000       5.385165        Unweighted events, alpha=2.062899
+  => Total parameter prop_binmll_bin4[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+5          30.988458       6.197708        total sum                     
+5          26.946894       6.064424        excluding marked processes    
+5          20.000000       4.472136        Unweighted events, alpha=1.549423
+  => Total parameter prop_binmll_bin5[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+6          19.998565       4.407332        total sum                     
+6          14.728829       4.157878        excluding marked processes    
+6          13.000000       3.605551        Unweighted events, alpha=1.538351
+  => Total parameter prop_binmll_bin6[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+7          13.916171       3.044307        total sum                     
+7          11.882050       2.905171        excluding marked processes    
+7          17.000000       4.123106        Unweighted events, alpha=0.818598
+  => Total parameter prop_binmll_bin7[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+8          8.074773        3.112208        total sum                     
+8          8.074773        3.112208        excluding marked processes    
+8          7.000000        2.645751        Unweighted events, alpha=1.153539
+  => Total parameter prop_binmll_bin8[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+9          14.486914       4.222306        total sum                     
+9          14.486914       4.222306        excluding marked processes    
+9          12.000000       3.464102        Unweighted events, alpha=1.207243
+  => Total parameter prop_binmll_bin9[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+10         9.960258        3.094392        total sum                     
+10         9.960258        3.094392        excluding marked processes    
+10         10.000000       3.162278        Unweighted events, alpha=0.996026
+  => Total parameter prop_binmll_bin10[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+Computing results starting from observation (a-posteriori)
+
+ -- AsymptoticLimits ( CLs ) --
+Expected  2.5%: r < 0.6304
+Expected 16.0%: r < 0.8571
+Expected 50.0%: r < 1.2227
+Expected 84.0%: r < 1.7831
+Expected 97.5%: r < 2.5616
+
+Done in 0.00 min (cpu), 0.00 min (real)
+hnl_M8_Vp00547722557505_mu_dc.txt
+ <<< Combine >>> 
+>>> including systematics
+Will use a-priori expected background instead of a-posteriori one.
+>>> method used is AsymptoticLimits
+>>> random number generator seed is 123456
+Channel mll will use autoMCStats with settings: event-threshold=0, include-signal=0, hist-mode=1
+============================================================
+Analysing bin errors for: prop_binmll
+Poisson cut-off: 0
+Processes excluded for sums: M8_Vp00547722557505
+============================================================
+Bin        Contents        Error           Notes                         
+0          178.062584      20.629803       total sum                     
+0          175.637704      20.606025       excluding marked processes    
+0          73.000000       8.544004        Unweighted events, alpha=2.439213
+  => Total parameter prop_binmll_bin0[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+1          171.801708      18.250789       total sum                     
+1          166.545906      18.192453       excluding marked processes    
+1          84.000000       9.165151        Unweighted events, alpha=2.045258
+  => Total parameter prop_binmll_bin1[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+2          81.045471       13.461666       total sum                     
+2          73.787132       13.352471       excluding marked processes    
+2          31.000000       5.567764        Unweighted events, alpha=2.614370
+  => Total parameter prop_binmll_bin2[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+3          69.469244       9.909463        total sum                     
+3          60.219379       9.719900        excluding marked processes    
+3          38.000000       6.164414        Unweighted events, alpha=1.828138
+  => Total parameter prop_binmll_bin3[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+4          52.196265       8.291530        total sum                     
+4          43.303284       8.071750        excluding marked processes    
+4          29.000000       5.385165        Unweighted events, alpha=1.799871
+  => Total parameter prop_binmll_bin4[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+5          37.405712       6.402044        total sum                     
+5          26.946894       6.064424        excluding marked processes    
+5          20.000000       4.472136        Unweighted events, alpha=1.870286
+  => Total parameter prop_binmll_bin5[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+6          19.964180       4.404219        total sum                     
+6          14.728829       4.157878        excluding marked processes    
+6          13.000000       3.605551        Unweighted events, alpha=1.535706
+  => Total parameter prop_binmll_bin6[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+7          12.684714       2.960094        total sum                     
+7          11.882050       2.905171        excluding marked processes    
+7          17.000000       4.123106        Unweighted events, alpha=0.746160
+  => Total parameter prop_binmll_bin7[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+8          8.074773        3.112208        total sum                     
+8          8.074773        3.112208        excluding marked processes    
+8          7.000000        2.645751        Unweighted events, alpha=1.153539
+  => Total parameter prop_binmll_bin8[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+9          14.486914       4.222306        total sum                     
+9          14.486914       4.222306        excluding marked processes    
+9          12.000000       3.464102        Unweighted events, alpha=1.207243
+  => Total parameter prop_binmll_bin9[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+10         9.960258        3.094392        total sum                     
+10         9.960258        3.094392        excluding marked processes    
+10         10.000000       3.162278        Unweighted events, alpha=0.996026
+  => Total parameter prop_binmll_bin10[0.00,-7.00,7.00] to be gaussian constrained
+------------------------------------------------------------
+Computing results starting from observation (a-posteriori)
+
+ -- AsymptoticLimits ( CLs ) --
+Expected  2.5%: r < 0.6848
+Expected 16.0%: r < 0.9261
+Expected 50.0%: r < 1.3281
+Expected 84.0%: r < 1.9581
+Expected 97.5%: r < 2.8277
+
+Done in 0.00 min (cpu), 0.00 min (real)
