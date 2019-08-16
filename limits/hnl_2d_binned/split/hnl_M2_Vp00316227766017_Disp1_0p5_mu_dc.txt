@@ -1,0 +1,21 @@
+max     1     number of categories
+jmax    2     number of samples minus one
+kmax    *     number of nuisance parameters
+---------------------------------------------------------
+shapes *   * hnl_mll_combine_input_aug_15.root $CHANNEL/$PROCESS $CHANNEL/$PROCESS_$SYSTEMATIC
+---------------------------------------------------------
+bin                              Disp1_0p5
+observation                      291.43
+-----------------------------------------------------------------
+bin                              Disp1_0p5                     Disp1_0p5                     Disp1_0p5                     
+process                          0                       1                       2                       
+process                          M2_Vp00316227766017	 conversions             non-prompt              
+rate                             0.00					 291.43                  263.20                  
+-------------------------------------------------------------------------------------------------------------------
+lumi                     lnN     1.026                   1.026                   1.026                   
+norm_conv                lnN     -                       1.1                     -                       
+norm_fr                  lnN     -                       -                       1.2                     
+norm_vv                  lnN     -                       -                       -                       
+norm_sig                 lnN     1.2                     -                       -                       
+xs_M2_Vp00316227766017	 lnN     1.05                    -                       -                       
+Disp1_0p5 autoMCStats 0                                                                                          

@@ -1,0 +1,19 @@
+max     1     number of categories
+jmax    2     number of samples minus one
+kmax    *     number of nuisance parameters
+---------------------------------------------------------
+shapes *   * hnl_mll_combine_input_aug_14.root $CHANNEL/$PROCESS $CHANNEL/$PROCESS_$SYSTEMATIC
+---------------------------------------------------------
+bin                              mll
+observation                      2037
+-----------------------------------------------------------------
+bin                              mll                     mll                     mll                 
+process                          0                       1                       2                   
+process                          dummy_sig				 conversions             non-prompt          
+rate                             0.01					 615.07                  1626.87              
+-----------------------------------------------------------------------------------------------------
+lumi                     lnN     1.026                   1.026                   1.026               
+norm_sig                 lnN     1.2                     -                       -                 
+norm_conv                lnN     -                       1.1                     -                 
+norm_fr                  lnN     -                       -                       1.2                 
+mll autoMCStats 0                                                                                          
