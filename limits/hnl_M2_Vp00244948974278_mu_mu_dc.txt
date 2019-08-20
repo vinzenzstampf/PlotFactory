@@ -1,0 +1,26 @@
+max     3     number of categories
+jmax    3     number of samples minus one
+kmax    *     number of nuisance parameters
+---------------------------------------------------------
+shapes *             Disp1_0p5     hnl_mll_combine_input_aug_15.root Disp1_0p5/$PROCESS Disp1_0p5/$PROCESS_$SYSTEMATIC
+shapes *             Disp2_0p5_10  hnl_mll_combine_input_aug_15.root Disp2_0p5_10/$PROCESS Disp2_0p5_10/$PROCESS_$SYSTEMATIC
+shapes *             Disp3_10      hnl_mll_combine_input_aug_15.root Disp3_10/$PROCESS Disp3_10/$PROCESS_$SYSTEMATIC
+---------------------------------------------------------
+bin                  Disp1_0p5          Disp2_0p5_10         Disp3_10
+observation          235.00 			252.00 			     25.00 
+-----------------------------------------------------------------
+bin                              Disp1_0p5               Disp1_0p5               Disp1_0p5               Disp1_0p5               Disp2_0p5_10            Disp2_0p5_10            Disp2_0p5_10            Disp2_0p5_10            Disp3_10                Disp3_10                Disp3_10                Disp3_10                
+process                          0                       1                       2                       3                       0                       1                       2                       3                       0                       1                       2                       3                       
+process                          M2_Vp00244948974278	 conversions             non-prompt              VV                      M2_Vp00244948974278	 conversions             non-prompt              VV                      M2_Vp00244948974278	 conversions             non-prompt              VV
+rate                             2.00					 6.00					 2.00					  252.00					 3.00					 234.00					 5.00					  235.00					 4.00					 2.00					 2.00					 264.00
+-------------------------------------------------------------------------------------------------------------------
+lumi                     lnN     1.026                   1.026                   -                       1.026                   1.026                   1.026                   -                       1.026                   1.026                   1.026                   -                       1.026                   
+norm_conv                lnN     -                       1.1                     -                       -                       -                       1.1                     -                       -                       -                       1.1                     -                       -                       
+norm_vv                  lnN     -                       -                       -                       1.1                     -                       -                       -                       1.1                     -                       -                       -                       1.1                     
+norm_fr_d1               lnN     -                       -                       1.2                     -                       -                       -                       -                       -                       -                       -                       -                       -                       
+norm_fr_d2               lnN     -                       -                       -                       -                       -                       -                       1.2                     -                       -                       -                       -                       -                       
+norm_fr_d3               lnN     -                       -                       -                       -                       -                       -                       -                       -                       -                       -                       1.2                     -                       
+norm_sig                 lnN     1.2                     -                       -                       -                       1.2                     -                       -                       -                       1.2                     -                       -                       -                       
+Disp2_0p5_10 autoMCStats 0 0 1
+Disp1_0p5 autoMCStats 0 0 1
+Disp3_10 autoMCStats 0 0 1
