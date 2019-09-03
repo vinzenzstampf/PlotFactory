@@ -200,7 +200,7 @@ class dataCards(object):
                 h_dict[h_name] = h
 
             if not has_signals: 
-                h_dict['dummy_sig'] = dc(h_dict['conversions'])
+                h_dict['dummy_sig'] = h_dict['conversions']
                 h_dict['dummy_sig'].SetName('dummy_sig')
                 # h_dict['dummy_sig'].Scale(0.01/h_dict['dummy_sig'].Integral())
 
