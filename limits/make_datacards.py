@@ -1,9 +1,12 @@
 '''
-###########################################################
-## IN ORDER TO RUN THIS CODE EXECUTE: dc = dataCards(CH) ##
-## WHERE CH = 'mmm', eem_OS', ...                        ##
-## THEN EXCUTE dc.make_inputs() TO GENERATE THE DC       ##
-###########################################################
+#########################################################################
+## FIRST SOURCE THE COMPATIBLE ROOT VERSION:                           ##
+## (FOR RUNNING THE DIFFERENT SCRIPTS ALWAYS START A NEW BASH SESSION) ##
+## cd /t3home/vstampf/CMSSW_9_4_6_patch1/src/; cmsenv; cd -            ##
+## IN ORDER TO RUN THIS CODE EXECUTE:  DC = dataCards(CH)              ##
+## WHERE CH = 'mmm', eem_OS', ...                                      ##
+## THEN EXCUTE DC.make_inputs() TO GENERATE THE DC                     ##
+#########################################################################
 '''
 import ROOT as rt
 from collections import OrderedDict

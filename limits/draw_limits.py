@@ -1,10 +1,11 @@
 '''
-############################################################################
-## IN ORDER TO RUN THIS CODE EXECUTE:                                     ##
-source /cvmfs/sft.cern.ch/lcg/views/LCG_94/x86_64-slc6-gcc8-opt/setup.sh  ##
-(THE shapely.geometry PACKAGE NEEDS A NEWER python VERSION)               ##
-THEN RUN: draw_signals(CH), WHERE CH = 'mmm', eem_OS', ...                ##
-############################################################################
+###############################################################################
+## IN ORDER TO RUN THIS CODE EXECUTE:                                        ##
+## (FOR RUNNING THE DIFFERENT SCRIPTS ALWAYS START A NEW BASH SESSION)       ##
+## source /cvmfs/sft.cern.ch/lcg/views/LCG_94/x86_64-slc6-gcc8-opt/setup.sh  ##
+## (THE shapely.geometry PACKAGE NEEDS A NEWER python VERSION)               ##
+## THEN RUN: draw_signals(CH), WHERE CH = 'mmm', eem_OS', ...                ##
+###############################################################################
 '''
 #!/usr/bin/env python
 from os import environ as env
