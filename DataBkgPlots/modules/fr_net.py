@@ -106,7 +106,8 @@ def root2array_PoolProcess(input_array):
 def createArrays(features, branches, path_to_NeuralNet, faketype = 'DoubleFake', channel = 'mmm', multiprocess = True):
     #define basic environmental parameters
     hostname        = gethostname()
-    analysis_dir    = '/home/dehuazhu/SESSD/4_production/'
+    # analysis_dir    = '/home/dehuazhu/SESSD/4_production/'
+    analysis_dir    = '/work/dezhu/4_production/'
     channel         = channel
     sample_dict     = {}
 
@@ -838,7 +839,8 @@ def path_to_NeuralNet(faketype ='nonprompt',channel = 'mmm'):
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v31_DropoutWholeRange/'
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v32_DropoutM12_80/'
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v33_CutDR0102_relaxRelIso4/'
-            path_to_NeuralNet = 'NN/mmm_nonprompt_v34_IncludeDZ/'
+            # path_to_NeuralNet = 'NN/mmm_nonprompt_v34_IncludeDZ/'
+            path_to_NeuralNet = 'NN/mmm_nonprompt_vs_v0/'
         
         if channel == 'eee':
             path_to_NeuralNet = 'NN/eee_nonprompt_v1/'
@@ -864,7 +866,7 @@ def path_to_NeuralNet(faketype ='nonprompt',channel = 'mmm'):
 
 if __name__ == '__main__':
     hostname        = gethostname()
-    analysis_dir    = '/home/dehuazhu/SESSD/4_production/'
+    analysis_dir    = '/work/dezhu/4_production/'
 
     pf.setpfstyle()
 # define input parameters
