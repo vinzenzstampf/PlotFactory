@@ -53,12 +53,14 @@ def SR(channel):
 
     'l1_pt > 5 '              ,
     'abs(l1_eta) < 2.4 '       ,
+    'abs(l1_dxy) > 0.01 '      , ## VS::EDIT::17Sep19: add this
     # 'abs(l1_dxy) > 0.002 '      ,
     # 'abs(l1_dxy) > 0.01 '      ,
     # 'abs(l1_dz) < 5',
 
     'l2_pt > 5 '               ,
     'abs(l2_eta) < 2.4 '       ,
+    'abs(l2_dxy) > 0.01 '      , ## VS::EDIT::17Sep19: add this
     # 'abs(l2_dxy) > 0.002 '       ,
     # 'abs(l2_dxy) > 0.01 '       ,
     # 'abs(l2_dz) < 5',
@@ -79,12 +81,13 @@ def SR(channel):
     # '(hnl_w_vis_m > 50. && hnl_w_vis_m < 80.) ', # true SR
     
     # '!(nbj == 0)', # activate for SR orthogonal
-    '!(hnl_w_vis_m > 50. && hnl_w_vis_m < 80.) ', # activate for SR orthogonal (sideband)
+    '!(hnl_w_vis_m > 45. && hnl_w_vis_m < 85.) ', # activate for SR orthogonal (sideband) ## VS::EDIT::17Sep19: update to >45 and <85
     # '((!(nbj == 0)) || (!(hnl_w_vis_m > 50. && hnl_w_vis_m < 80.)))', #activate to train on all orthogonal regions
     # '((!(hnl_w_vis_m > 50. && hnl_w_vis_m < 81.)) && hnl_w_vis_m > 110) ', # activate for right sideband (train)
     # '((!(hnl_w_vis_m > 50. && hnl_w_vis_m < 81.)) && hnl_w_vis_m < 110) ', # activate for left sideband (test)
     
     ## auxiliary selections
+    'hnl_dr_12 < 1 ' , ## VS::EDIT::17Sep19: add this
     'hnl_dr_01 > 0.3',
     'hnl_dr_02 > 0.3',
     'hnl_m_12 < 80', # because this is the mass range our analysis is aiming for (and get rid of the Z peak)
@@ -247,7 +250,8 @@ def MR_nonprompt(channel):
         # '(hnl_w_vis_m > 50. && hnl_w_vis_m < 80.) ', 
         
         # '!(nbj == 0)', # activate for SR orthogonal
-        '!(hnl_w_vis_m > 50. && hnl_w_vis_m < 80.) ', # activate for SR orthogonal
+        # '!(hnl_w_vis_m > 50. && hnl_w_vis_m < 80.) ', # activate for SR orthogonal
+        '!(hnl_w_vis_m > 45. && hnl_w_vis_m < 85.) ', # activate for SR orthogonal # 17Sep19; VS::EDIT
         
         ])
 

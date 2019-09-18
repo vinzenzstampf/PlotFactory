@@ -346,7 +346,10 @@ def train(features,branches,path_to_NeuralNet,newArrays = False, faketype = 'Dou
 
     # plot the models
     # https://keras.io/visualization/
-    plot_model(model, show_shapes=True, show_layer_names=True, to_file=path_to_NeuralNet + 'model.png')
+    # set_trace()
+    # FIXME .png doesn't work; use .eps
+    # plot_model(model, show_shapes=True, show_layer_names=True, to_file=path_to_NeuralNet + 'model.png')
+    plot_model(model, show_shapes=True, show_layer_names=True, to_file=path_to_NeuralNet + 'model.eps')
 
     # normalize inputs FIXME! do it, but do it wisely # try also standard scaler!
     # https://scikit-learn.org/stable/auto_examples/preprocessing/plot_all_scaling.html#sphx-glr-auto-examples-preprocessing-plot-all-scaling-py
@@ -366,6 +369,10 @@ def train(features,branches,path_to_NeuralNet,newArrays = False, faketype = 'Dou
 
     # train, give the classifier a head start
     # early stopping
+    # requires keras 2.2.3 or higher; https://stackoverflow.com/questions/52466932/restore-best-weights-issue-keras-early-stopping
+    # LCG release with keras 2.2.4 and root 6.16: http://lcginfo.cern.ch/release/96rc1/;
+    #    source /cvmfs/sft.cern.ch/lcg/views/LCG_96rc1/x86_64-slc6-gcc8-opt/setup.sh
+    #    source /cvmfs/sft.cern.ch/lcg/views/LCG_96rc1/x86_64-centos7-gcc8-opt/setup.sh
     es = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=50, restore_best_weights=True)
 
     # train only the classifier. beta is set at 0 and the discriminator is not trained
@@ -378,12 +385,14 @@ def train(features,branches,path_to_NeuralNet,newArrays = False, faketype = 'Dou
     # history = model.fit(xx, Y, batch_size = 1000, epochs=100, validation_split=0.5, callbacks=[es])  
 
     # plot loss function trends for train and validation sample
+    # FIXME not compatible with lcg version?!
+    '''
     plt.plot(history.history['loss'], label='train')
     plt.plot(history.history['val_loss'], label='test')
     plt.legend()
     plt.savefig(path_to_NeuralNet + 'loss_function_history.pdf')
     plt.clf()
-
+    '''
     # calculate predictions on the data sample
     print 'predicting on ', data.shape[0], 'events'
     x = pd.DataFrame(data, columns=features)
@@ -407,8 +416,11 @@ def train(features,branches,path_to_NeuralNet,newArrays = False, faketype = 'Dou
 
     # let sklearn do the heavy lifting and compute the ROC curves for you
     fpr, tpr, wps = roc_curve(data.target, data.ml_fr) 
+    # FIXME not compatible with lcg version?!
+    '''
     plt.plot(fpr, tpr)
     plt.savefig(path_to_NeuralNet + 'roc.pdf')
+    '''
 
     # save model and weights
     # model.save('modules/net_model_DF.h5')
@@ -840,7 +852,8 @@ def path_to_NeuralNet(faketype ='nonprompt',channel = 'mmm'):
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v32_DropoutM12_80/'
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v33_CutDR0102_relaxRelIso4/'
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v34_IncludeDZ/'
-            path_to_NeuralNet = 'NN/mmm_nonprompt_vs_v0/'
+            path_to_NeuralNet = 'NN/mmm_nonprompt_vs_v1/'
+            # path_to_NeuralNet = 'NN/mmm_nonprompt_vs_v0/'
         
         if channel == 'eee':
             path_to_NeuralNet = 'NN/eee_nonprompt_v1/'
@@ -914,7 +927,7 @@ if __name__ == '__main__':
             features,
             branches,
             path_to_NeuralNet,
-            newArrays = True,
+            newArrays = False,
             faketype = faketype,
             channel = channel,	
             multiprocess = True,
