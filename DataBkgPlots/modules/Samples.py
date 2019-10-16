@@ -35,7 +35,7 @@ def createSampleLists(analysis_dir='',
             # data_dir = 'root://t3dcachedb.psi.ch:1094///pnfs/psi.ch/cms/trivcat/store/user/dezhu/2_ntuples/HN3Lv2.0/mmm/data/'
             data_dir = analysis_dir + 'production_20190411_Data_mmm/ntuples'
             bkg_dir = 'production_20190411_Bkg_mmm/ntuples/'
-            sig_dir = 'signal/ntuples'
+            sig_dir = analysis_dir + 'production_20190411_Signal_mmm/ntuples'
             DY_dir = analysis_dir + bkg_dir
         if 'starseeker' in server:
             data_dir = analysis_dir+'production_20190411_Data_mmm/ntuples'

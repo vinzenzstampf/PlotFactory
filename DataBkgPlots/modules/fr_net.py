@@ -927,7 +927,7 @@ if __name__ == '__main__':
             features,
             branches,
             path_to_NeuralNet,
-            newArrays = False,
+            newArrays = True,
             faketype = faketype,
             channel = channel,	
             multiprocess = True,

@@ -11,13 +11,18 @@ from modules.DDE import DDE
 from modules.binning import binning_dimuonmass
 from modules.nn import run_nn 
 import modules.fr_net as fr_net
+from socket import gethostname
 # from CMGTools.RootTools.DataMC.Histogram import Histogram
 from pdb import set_trace
 
 from ROOT import ROOT, RDataFrame, TH1F, TFile, TTree, TTreeFormula, gInterpreter, gROOT, gSystem
 
 # Enable ROOT's implicit multi-threading for all objects that provide an internal parallelisation mechanism
-ROOT.EnableImplicitMT()
+hostname = gethostname()
+if "lxplus" in hostname or "t3ui" in hostname:
+    ROOT.EnableImplicitMT(18)
+if "starseeker" in hostname:
+    ROOT.EnableImplicitMT()
 
 def initHist(hist, vcfg):
     hist.Sumw2()

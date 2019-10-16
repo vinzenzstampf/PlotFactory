@@ -4,6 +4,7 @@ from collections import namedtuple
 from operator import itemgetter
 from ROOT import gROOT as gr
 from multiprocessing import Pool, Process, cpu_count
+from datetime import datetime
 import modules.fr_net as fr_net
 
 from shutil import copyfile, copytree
@@ -64,8 +65,8 @@ int_lumi = 41530.0 # pb ### (all eras),
 
 def prepareRegions(channel):
     regions = []
-    regions.append(Region('SR',channel,'SR'))
-    # regions.append(Region('MR_nonprompt',channel,'SR'))
+    # regions.append(Region('SR',channel,'SR'))
+    regions.append(Region('MR_nonprompt',channel,'SR'))
     # regions.append(Region('MR_nonprompt_disp1',channel,'SR_disp1'))
     # regions.append(Region('MR_nonprompt_disp2',channel,'SR_disp2'))
     # regions.append(Region('MR_nonprompt_disp3',channel,'SR_disp3'))
@@ -293,10 +294,15 @@ def producePlots(promptLeptonType, L1L2LeptonType, option = None, multiprocess =
             print "Output directory created. "
             print "Output directory: %s"%(regionDir)
         else:
+            today   = datetime.now()
+            date    = today.strftime('%y%m%d')
+            hour    = str(today.hour)
+            minit   = str(today.minute)
+            regionDir += '_' + minit
             # print "Output directory: ", regionDir, "already exists, overwriting it!"
             print "Output directory already exists, overwriting it! "
             print "Output directory: %s"%(regionDir)
-            os.system("rm -rf %s"%(regionDir))
+            # os.system("rm -rf %s"%(regionDir))
             os.system("mkdir %s"%(regionDir))
         
         if "starseeker" in hostname:
@@ -306,11 +312,11 @@ def producePlots(promptLeptonType, L1L2LeptonType, option = None, multiprocess =
             copyfile(cmsBaseDir+'/src/PlotFactory/DataBkgPlots/modules/Samples.py', regionDir+'/Samples.py')
             copyfile(cmsBaseDir+'/src/PlotFactory/DataBkgPlots/modules/fr_net.py', regionDir+'/fr_net.py')
         else:
-            copyfile(cmsBaseDir+'/src/CMGTools/HNL/PlotFactory/DataBkgPlots/0_cfg_hn3l_'+channel+'.py', regionDir+'/plot_cfg.py')
-            copyfile(cmsBaseDir+'/src/CMGTools/HNL/PlotFactory/DataBkgPlots/master/plot_cfg_hn3l.py', regionDir+'/plot_cfg_base.py')
-            copyfile(cmsBaseDir+'/src/CMGTools/HNL/PlotFactory/DataBkgPlots/modules/Selections.py', regionDir+'/Selections.py')
+                copyfile(os.getcwd() + '/0_cfg_hn3l_'+channel+'.py', regionDir+'/plot_cfg.py')
+                copyfile(os.getcwd() + '/master/plot_cfg_hn3l.py', regionDir+'/plot_cfg_base.py')
+                copyfile(os.getcwd() + '/modules/Selections.py', regionDir+'/Selections.py')
 
-        print 'cfg files stored in "',plotDir + region.name + '/"'
+        print 'cfg files stored in "',regionDir + '/"'
 
         if not os.path.exists(regionDir + '/pdf/'):
             os.mkdir(regionDir + '/pdf/')
@@ -337,7 +343,7 @@ def producePlots(promptLeptonType, L1L2LeptonType, option = None, multiprocess =
         total_weight, 
         sample_dict, 
         make_plots=True,
-        multiprocess=True,
+        multiprocess=False,
         useNeuralNetwork=True,
         dataframe=dataframe,
         server=hostname,
