@@ -137,9 +137,9 @@ class dataCards(object):
                 print >> f, 'norm_sig                 lnN     1.2                     -                       -                       '\
                                                              '1.2                     -                       -                       '\
                                                              '1.2                     -                       -                       '
-            print >> f, 'disp1 autoMCStats 0 0 1'
-            print >> f, 'disp2 autoMCStats 0 0 1'
-            print >> f, 'disp3 autoMCStats 0 0 1'
+            print >> f, disp_bins[0] + ' autoMCStats 0 0 1'
+            print >> f, disp_bins[1] + ' autoMCStats 0 0 1'
+            print >> f, disp_bins[2] + ' autoMCStats 0 0 1'
      
         f.close()
 
