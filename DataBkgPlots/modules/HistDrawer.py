@@ -3,7 +3,7 @@ import os
 import copy
 
 from math import log10, floor
-from ROOT import TCanvas, TPaveText, TBox, gStyle, gROOT, kTRUE, kFALSE, gErrorIgnoreLevel, kWarning
+from ROOT import TCanvas, TPaveText, TBox, gStyle, gROOT, kTRUE, kFALSE, gErrorIgnoreLevel, kWarning, TFile
 from modules.Stack import Stack
 
 from modules.CMS_lumi import CMS_lumi
@@ -201,6 +201,35 @@ class HistDrawer:
             os.mkdir(plot_dir + '/png/linear/')
             os.mkdir(plot_dir + '/png/log/')
         plotname = plot_name if plot_name else plot.name
+
+        #VS 10/30/19: dump all histo's in a root file (=datacard)
+        s_pad  = can.GetPrimitive('can_1')
+        s_list = pad.GetListOfPrimitives()
+
+        datacard = TFile.Open(plot_dir + '/root/' + plotname  + '.datacard.root', 'recreate')
+        datacard.cd()
+
+        for s_h in s_list:
+            s_h_name = s_h.GetName()
+            if 'HN3L' in s_h_name:
+                s_h_name = re.sub('.*HN3L_M_', 'M', s_h_name)
+                s_h_name = re.sub('_V_0', '_V', s_h_name)
+                s_h_name = re.sub('_mu_massiveAndCKM_LO', '_maj', s_h_name)
+                s_h_name = re.sub('_mu_Dirac_massiveAndCKM_LO', '_dir', s_h_name)
+                s_h_name = re.sub('_mu_Dirac_cc_massiveAndCKM_LO', '_dir_cc', s_h_name)
+                s_h_name = re.sub('_e_massiveAndCKM_LO', '_maj', s_h_name)
+                s_h_name = re.sub('_e_Dirac_massiveAndCKM_LO', '_dir', s_h_name)
+                s_h_name = re.sub('_e_Dirac_cc_massiveAndCKM_LO', '_dir_cc', s_h_name)
+                s_h.SetName(s_h_name)
+                s_h.Write()
+            elif 'data' in s_h_name:
+                s_h.SetName('data_obs')
+                s_h.Write()
+            else: s_h.Write() # for the stack
+
+        datacard.ls()
+        datacard.Close()
+
         can.SaveAs(plot_dir + '/pdf/linear/'  + plotname  + '.pdf')
         can.SaveAs(plot_dir + '/root/linear/' + plotname  + '.root')
         can.SaveAs(plot_dir + '/png/linear/'  + plotname  + '.png')

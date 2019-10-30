@@ -227,10 +227,11 @@ def producePlots(promptLeptonType, L1L2LeptonType, multiprocess = False, datafra
 
     sample_dict = createSamples(channel,analysis_dir, total_weight, server=hostname)
 
-    handle = os.popen('echo $CMSSW_BASE')
-    line = handle.read()
-    handle.close()
-    cmsBaseDir = line.strip('\n')
+    # handle = os.popen('echo $CMSSW_BASE')
+    # line = handle.read()
+    # handle.close()
+    # cmsBaseDir = line.strip('\n')
+    cmsBaseDir = os.environ['CMSSW_BASE']
  
 
     for region in regions:
@@ -255,10 +256,10 @@ def producePlots(promptLeptonType, L1L2LeptonType, multiprocess = False, datafra
             copyfile(cmsBaseDir+'/src/PlotFactory/DataBkgPlots/master/plot_cfg_hn3l.py', regionDir+'/plot_cfg_base.py')
             copyfile(cmsBaseDir+'/src/PlotFactory/DataBkgPlots/modules/Selections.py', regionDir+'/Selections.py')
         else:
-            if not cmsBaseDir: cmsBaseDir = os.getcwd() 
-            copyfile(cmsBaseDir+'/0_cfg_hn3l_'+channel+'.py', regionDir+'/plot_cfg.py')
-            copyfile(cmsBaseDir+'/master/plot_cfg_hn3l.py', regionDir+'/plot_cfg_base.py')
-            copyfile(cmsBaseDir+'/modules/Selections.py', regionDir+'/Selections.py')
+            # if not cmsBaseDir: cmsBaseDir = os.environ['CMSSW_BASE'] + 'src/CMGTools/HNL/PlotFactory/DataBkgPlots/' 
+            copyfile(os.getcwd() +'/0_cfg_hn3l_'+channel+'.py', regionDir+'/plot_cfg.py')
+            copyfile(os.getcwd() +'/master/plot_cfg_hn3l.py', regionDir+'/plot_cfg_base.py')
+            copyfile(os.getcwd() +'/modules/Selections.py', regionDir+'/Selections.py')
 
         print 'cfg files stored in "',plotDir + region.name + '/"'
 
