@@ -33,7 +33,7 @@ def get_signals(verbose=False):
     # reorganize lines to each signal
     signals = OrderedDict()
 
-    Mass = None; V = None
+    Mass = None; V = None; DIRAC = False
     for line in array:
 
         mode = None
@@ -41,7 +41,12 @@ def get_signals(verbose=False):
         if '_mu_' in line:  mode = 'mu' 
         if '_tau_' in line: mode = 'tau'
         # DIRAC samples for later
-        if 'Dirac' in line: continue
+
+        if mode != None:
+            if 'Dirac' in line: mode += '_dir'
+            else:               mode += '_maj'
+
+        # if 'M_20' in line: set_trace()
 
         line = line.strip()
         line = re.sub('HN3L_', '', line)
@@ -56,7 +61,7 @@ def get_signals(verbose=False):
         v    = re.sub('mu.*', '', v)
         v    = re.sub('tau.*', '', v)
         v    = re.sub('p', '.', v)
-        v    = re.sub('M.V', '', v)
+        v    = re.sub('M.*V', '', v)
         Mass, V = mass, v
 
         try: signals['M' + Mass + '_V' + V + '_' + mode]['mass'] = float(mass)
@@ -106,19 +111,23 @@ def get_lim_dict(ch='mem', verbose=False):
 
     # reorganize lines to each signal
     lim_dict = OrderedDict()
-
+    
+    Masses = []
     Mass = None; V = None; mode = None
     for line in array:
         line = line.strip()
         if line == '': continue
 
-        mode = 'mu'
+        mode = 'mu_maj'
         if '_e_' in line:   mode = 'e'  
         if '_mu_' in line:  mode = 'mu' 
         if '_tau_' in line: mode = 'tau'
 
         if 'hnl' in line:
+            if 'Dirac' in line: re.sub('maj', 'dir', mode)
             mass = re.sub(r'.*M([0-9])_V.*',r'\1', line)
+            if len(mass) > 2: mass = re.sub(r'.*M([0-9][0-9])_V.*',r'\1', line)
+            Masses.append(mass)
             v    = re.sub('.*Vp', '', line)
             v    = re.sub('_.*', '', v)
             v    = '0.' + v
@@ -184,7 +193,9 @@ def draw_limits(ch='mmm', twoD=False, verbose=False):
     set_trace()
 
     ixs = OrderedDict()
-    for m in [2, 5, 8]:
+    # for m in [2, 5, 8]:
+    for m in [1, 2, 4, 5, 6, 8, 10, 20]:
+    # for m in [10, 20]:
         ixs['M%d' %m] = OrderedDict()
 
         plt.clf()
@@ -211,7 +222,7 @@ def draw_limits(ch='mmm', twoD=False, verbose=False):
             y_ep2s[i] = abs(y_ep2s[i] - y_exp[i]) 
             y_em1s[i] = abs(y_em1s[i] - y_exp[i]) 
             y_em2s[i] = abs(y_em2s[i] - y_exp[i]) 
-            
+        
         exp = rt.TGraph           (len(b_V2), np.array(b_V2), np.array(y_exp))
         gr1 = rt.TGraphAsymmErrors(len(b_V2), np.array(b_V2), np.array(y_exp), np.array(x_err), np.array(x_err), np.array(y_em1s), np.array(y_ep1s))
         gr2 = rt.TGraphAsymmErrors(len(b_V2), np.array(b_V2), np.array(y_exp), np.array(x_err), np.array(x_err), np.array(y_em2s), np.array(y_ep2s))
@@ -227,11 +238,13 @@ def draw_limits(ch='mmm', twoD=False, verbose=False):
 
         rt.gStyle.SetOptStat(0000)
         B_V2 = np.logspace(-6, -3, 10, base=10)
-        B_Y  = np.logspace(-2, 4, 10, base=10)
+        # B_Y  = np.logspace(-2, 4, 10, base=10)
+        B_Y  = np.logspace(-4, 4, 10, base=10)
         r1g = rt.TGraph           (len(B_V2), np.array(B_V2), np.ones(len(B_V2)))
         r1g.SetLineColor(rt.kRed+1); r1g.SetLineWidth(1)
         framer = rt.TH2F('framer', 'framer', len(B_V2)-1, B_V2, len(B_Y)-1, B_Y)
-        framer.GetYaxis().SetRangeUser(0.01,10000)
+        # framer.GetYaxis().SetRangeUser(0.01,10000)
+        framer.GetYaxis().SetRangeUser(0.0001,10000)
         framer.GetXaxis().SetRangeUser(0.000001, 0.001)
         framer.GetXaxis().SetTitleOffset(1.8)
 
@@ -257,7 +270,7 @@ def draw_limits(ch='mmm', twoD=False, verbose=False):
         if 'mem' in ch or ch == 'mmm': plt.xlabel(r'${|V_{\mu N}|}^2$')
         if 'eem' in ch or ch == 'eee': plt.xlabel(r'${|V_{e N}|}^2$')
         plt.rc('font', family='serif')
-        plt.axis([1e-06, 0.001, 0.1, 50000])
+        plt.axis([1e-06, 0.001, 0.0001, 10000])
         plt.ylabel('r')
         plt.xscale('log')
         plt.yscale('log')
@@ -279,9 +292,9 @@ def draw_limits(ch='mmm', twoD=False, verbose=False):
         can.Modified(); can.Update()
         r1g.Draw('same')
         can.Modified(); can.Update()
-        can.SaveAs('/t3home/vstampf/eos/plots/limits/outputs/mmm18_Oct29/mmm_M%d_20Aug_%s_root.pdf' %(m, ch))
-        can.SaveAs('/t3home/vstampf/eos/plots/limits/outputs/mmm18_Oct29/mmm_M%d_20Aug_%s_root.png' %(m, ch))
-        can.SaveAs('/t3home/vstampf/eos/plots/limits/outputs/mmm18_Oct29/mmm_M%d_20Aug_%s_root.root' %(m, ch))
+        can.SaveAs('/t3home/vstampf/eos/plots/limits/outputs/mmm18_29Oct/mmm_M%d_31Oct_%s_root.pdf' %(m, ch))
+        can.SaveAs('/t3home/vstampf/eos/plots/limits/outputs/mmm18_29Oct/mmm_M%d_31Oct_%s_root.png' %(m, ch))
+        can.SaveAs('/t3home/vstampf/eos/plots/limits/outputs/mmm18_29Oct/mmm_M%d_31Oct_%s_root.root' %(m, ch))
 
         r1   = sg.LineString([(min(b_V2), 1), (max(b_V2), 1)])
 
@@ -335,7 +348,7 @@ def draw_limits(ch='mmm', twoD=False, verbose=False):
         ones = np.ones(len(ints_x))
         plt.scatter(ints_x, ones, s=10, c='red')
 
-        plt.savefig('/t3home/vstampf/eos/plots/limits/outputs/mmm18_Oct29/mmm_M%d_20Aug_%s.pdf' %(m, ch))
+        plt.savefig('/t3home/vstampf/eos/plots/limits/outputs/mmm18_29Oct/mmm_M%d_31Oct_%s.pdf' %(m, ch))
  
     if twoD:
         y_exp = []; x_exp = []; x_ep1s = []; y_ep1s = []; x_ep2s = []; y_ep2s = []; x_em1s = []; y_em1s = []; x_em2s = []; y_em2s = [] 
@@ -391,4 +404,4 @@ def draw_limits(ch='mmm', twoD=False, verbose=False):
         if ch in ['eee', 'eem_SS', 'eem_OS']: plt.ylabel(r'${|V_{e N}|}^2$')
         plt.yscale('log')
         plt.legend(loc='lower left')
-        plt.savefig('/t3home/vstampf/eos/plots/limits/outputs/mmm18_Oct29/limits_aug_20_%s.pdf' %ch)
+        plt.savefig('/t3home/vstampf/eos/plots/limits/outputs/mmm18_29Oct/limits_31Oct_%s.pdf' %ch)
