@@ -1,4 +1,6 @@
 # Byte-compiled / optimized / DLL files
+#
+DataBkgPlots/NN/*
 .*
 DataBkgPlots/mmm_SF1_v2_debug/
 __pycache__/

@@ -23,7 +23,8 @@ class dataCards(object):
     def __init__(self, ch):
         self.ch = ch
         self.out_folder = '/t3home/vstampf/eos/plots/limits/inputs/mmm18_29Oct/'
-        self.in_folder  = '/work/dezhu/3_figures/1_DataMC/FinalStates/2018/%s/datacard/root/linear/' %self.ch
+        # self.in_folder  = '/work/dezhu/3_figures/1_DataMC/FinalStates/2018/%s/datacard/root/linear/' %self.ch
+        self.in_folder  = '/work/dezhu/3_figures/1_DataMC/FinalStates/2018/%s/datacard/datacards/' %self.ch
     
 
     def printDataCards(self, signal_name):
@@ -159,40 +160,27 @@ class dataCards(object):
         fout = rt.TFile.Open(self.out_folder + 'hnl_mll_combine_input_%s.root' %self.ch, 'recreate')
 
         self.disp_bins = []
-        in_files = glob(self.in_folder + '*disp*.root')
+        in_files = glob(self.in_folder + '*disp*.datacard.root')
         for in_file in in_files:
             disp_bin = sub('.*disp', 'disp', in_file)
-            disp_bin = sub('\.root','', disp_bin)
+            disp_bin = sub('\.datacard\.root','', disp_bin)
             self.disp_bins.append(disp_bin)
             if verbose: print disp_bin
-            fin = rt.TFile(in_file)
-            # set_trace()
-
-            can = fin.Get('can')
-            pad = can.GetPrimitive('can_1')
-
-            h_list = pad.GetListOfPrimitives()
+            f_in = rt.TFile(in_file)
 
             h_dict = OrderedDict()
 
-            for h in h_list:#[:len(h_list)/2+1]:
-                h_name = h.GetName()
-                if 'HN3L' in h_name: 
-                    h_name = sub('.*HN3L_M_', 'M', h_name)
-                    h_name = sub('_V_0', '_V', h_name)
-                    h_name = sub('_mu_massiveAndCKM_LO', '_maj', h_name)
-                    h_name = sub('_mu_Dirac_massiveAndCKM_LO', '_dir', h_name)
-                    h_name = sub('_mu_Dirac_cc_massiveAndCKM_LO', '_dir_cc', h_name)
-                    h_name = sub('_e_massiveAndCKM_LO', '_maj', h_name)
-                    h_name = sub('_e_Dirac_massiveAndCKM_LO', '_dir', h_name)
-                    h_name = sub('_e_Dirac_cc_massiveAndCKM_LO', '_dir_cc', h_name)
-                    h.SetName(h_name)
-                    h_dict[h_name] = h
-                elif 'data' in h_name: 
-                    h.SetName('data_obs')
-                    h_dict['data_obs'] = h
+            h_list = f_in.GetListOfKeys()
 
-            stack = pad.GetPrimitive('hnl_m_12_money_%s_stack' %disp_bin)
+            for h in h_list:
+                h_name = h.GetName()
+                if '_Vp' in h_name: 
+                    h_dict[h_name] = f_in.Get(h_name)
+                elif 'data' in h_name: 
+                    h_dict['data_obs'] = f_in.Get(h_name)
+                else: continue
+
+            stack = f_in.Get('hnl_m_12_money_%s_stack' %disp_bin)
 
             for h in stack.GetHists():
                 h_name = h.GetName()
@@ -209,7 +197,6 @@ class dataCards(object):
                     print 'WARNING: negative integral for conv in', disp_bin
                 
                 h_dict[h_name] = h
-            # set_trace()
 
             if not has_signals: 
                 h_dict['dummy_sig'] = h_dict['conversions']
@@ -235,7 +222,7 @@ class dataCards(object):
 
             rates[disp_bin] = OrderedDict()
 
-            signals = [sig for sig in h_dict if 'Vp' in sig]
+            signals = [h for h in h_dict if 'Vp' in h]
 
             # set_trace()
             for s in signals:
@@ -244,12 +231,15 @@ class dataCards(object):
                 # rates[disp_bin][s]  = h_dict[s]
             rates[disp_bin]['conv']  = h_dict['conversions']
             rates[disp_bin]['fake']  = h_dict['non-prompt' ]
-            rates[disp_bin]['obs' ]  = h_dict['data_obs'   ]
-            if h_dict.has_key('VV'): self.vv = True
+            # set_trace()
        
+        fout.Close()
         signals = [sig for sig in rates[disp_bin] if 'Vp' in sig]
         self.rates = rates
-        for s in signals:
-            self.printDataCards(s)
+        # set_trace()
+        for i, s in enumerate(signals):
+            print i, s
+            if i == 11: continue
+            print rates[self.disp_bins[0]][s].Integral()#, rates[disp_bins[1][s], rates[disp_bins[2][s]
+            # self.printDataCards(s)
 
-        fout.Close()

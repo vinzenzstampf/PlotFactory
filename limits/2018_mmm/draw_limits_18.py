@@ -25,7 +25,7 @@ def get_signals(verbose=False):
     ###################################
     '''
     # read input
-    with open('signals.py', 'r') as f_in:
+    with open('signals_18.txt', 'r') as f_in:
         array = []
         for line in f_in:
             array.append(line)
@@ -40,6 +40,8 @@ def get_signals(verbose=False):
         if '_e_' in line:   mode = 'e'  
         if '_mu_' in line:  mode = 'mu' 
         if '_tau_' in line: mode = 'tau'
+        # DIRAC samples for later
+        if 'Dirac' in line: continue
 
         line = line.strip()
         line = re.sub('HN3L_', '', line)
@@ -94,9 +96,9 @@ def get_lim_dict(ch='mem', verbose=False):
     ## combine is piped to             ## 
     #####################################
     '''
-    in_file = '/t3home/vstampf/eos/plots/limits/inputs/data_cards_aug_20/limits_aug_20_%s.txt' %ch
+    in_file = '/t3home/vstampf/eos/plots/limits/inputs/mmm18_29Oct/output.txt'
     env['LIM_FILE']   = in_file
-    env['OUT_FOLDER'] = '/t3home/vstampf/eos/plots/limits/outputs/'
+    env['OUT_FOLDER'] = '/t3home/vstampf/eos/plots/limits/outputs/mmm18_29Oct/'
     with open(in_file, 'r') as f_in:
         array = []
         for line in f_in:
@@ -178,6 +180,8 @@ def draw_limits(ch='mmm', twoD=False, verbose=False):
 
     b     = np.arange(0., 11, 1)
     req1  = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+    set_trace()
 
     ixs = OrderedDict()
     for m in [2, 5, 8]:
@@ -275,9 +279,9 @@ def draw_limits(ch='mmm', twoD=False, verbose=False):
         can.Modified(); can.Update()
         r1g.Draw('same')
         can.Modified(); can.Update()
-        can.SaveAs('/t3home/vstampf/eos/plots/limits/outputs/mmm_M%d_20Aug_%s_root.pdf' %(m, ch))
-        can.SaveAs('/t3home/vstampf/eos/plots/limits/outputs/mmm_M%d_20Aug_%s_root.png' %(m, ch))
-        can.SaveAs('/t3home/vstampf/eos/plots/limits/outputs/mmm_M%d_20Aug_%s_root.root' %(m, ch))
+        can.SaveAs('/t3home/vstampf/eos/plots/limits/outputs/mmm18_Oct29/mmm_M%d_20Aug_%s_root.pdf' %(m, ch))
+        can.SaveAs('/t3home/vstampf/eos/plots/limits/outputs/mmm18_Oct29/mmm_M%d_20Aug_%s_root.png' %(m, ch))
+        can.SaveAs('/t3home/vstampf/eos/plots/limits/outputs/mmm18_Oct29/mmm_M%d_20Aug_%s_root.root' %(m, ch))
 
         r1   = sg.LineString([(min(b_V2), 1), (max(b_V2), 1)])
 
@@ -331,7 +335,7 @@ def draw_limits(ch='mmm', twoD=False, verbose=False):
         ones = np.ones(len(ints_x))
         plt.scatter(ints_x, ones, s=10, c='red')
 
-        plt.savefig('/t3home/vstampf/eos/plots/limits/outputs/mmm_M%d_20Aug_%s.pdf' %(m, ch))
+        plt.savefig('/t3home/vstampf/eos/plots/limits/outputs/mmm18_Oct29/mmm_M%d_20Aug_%s.pdf' %(m, ch))
  
     if twoD:
         y_exp = []; x_exp = []; x_ep1s = []; y_ep1s = []; x_ep2s = []; y_ep2s = []; x_em1s = []; y_em1s = []; x_em2s = []; y_em2s = [] 
@@ -387,4 +391,4 @@ def draw_limits(ch='mmm', twoD=False, verbose=False):
         if ch in ['eee', 'eem_SS', 'eem_OS']: plt.ylabel(r'${|V_{e N}|}^2$')
         plt.yscale('log')
         plt.legend(loc='lower left')
-        plt.savefig('/t3home/vstampf/eos/plots/limits/outputs/limits_aug_20_%s.pdf' %ch)
+        plt.savefig('/t3home/vstampf/eos/plots/limits/outputs/mmm18_Oct29/limits_aug_20_%s.pdf' %ch)
