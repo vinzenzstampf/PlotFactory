@@ -91,14 +91,10 @@ def createSampleLists(analysis_dir='',
 
     if dataset == '2018':
         if channel == 'mmm':
-            if 'lxplus' in server:
+            if 'lxplus' in server or 't3' in server:
                 data_dir = analysis_dir+'production_20191027_Data_mmm/'
                 bkg_dir = 'production_20191027_Bkg_mmm/'
                 sig_dir = analysis_dir + 'production_20191027_Signal_mmm/'
-            if 't3' in server:
-                data_dir = analysis_dir + 'production_20190411_Data_mmm/ntuples'
-                bkg_dir = 'production_20190411_Bkg_mmm/ntuples/'
-                sig_dir = 'signal/ntuples'
             if 'starseeker' in server:
                 data_dir = analysis_dir+'production_20191027_Data_mmm/'
                 bkg_dir = 'production_20191027_Bkg_mmm/'

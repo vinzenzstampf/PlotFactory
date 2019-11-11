@@ -209,10 +209,10 @@ def producePlots(promptLeptonType, L1L2LeptonType, dataset, option = None, multi
         import modules.fr_net as fr_net
 
 
-    if 't3ui02' in hostname:
+    if 't3ui0' in hostname:
 
         if usr == 'dezhu':   plotDirBase = '/work/dezhu/3_figures/1_DataMC/FinalStates/'
-        if usr == 'vstampf': plotDirBase = '/t3home/vstampf/eos/plots/'
+        if usr == 'vstampf': plotDirBase = '/eos/home-v/vstampf/plots/'
         if usr == 'manzoni': plotDirBase = '/t3home/manzoni/eos/'
 
     if 'lxplus' in hostname:
@@ -285,7 +285,11 @@ def producePlots(promptLeptonType, L1L2LeptonType, dataset, option = None, multi
             analysis_dir = '/eos/user/d/dezhu/HNL/4_production/2017/'
    
     if "t3ui0" in hostname:
-        analysis_dir = '/work/dezhu/4_production/'
+        # analysis_dir = '/work/dezhu/4_production/'
+        if dataset == '2017':
+            analysis_dir = '/eos/home-d/dezhu/HNL/4_production/2017/'
+        if dataset == '2018':
+            analysis_dir = '/eos/home-d/dezhu/HNL/4_production/2018/'
 
     if "starseeker" in hostname:
         if dataset == '2017':
@@ -376,7 +380,7 @@ def producePlots(promptLeptonType, L1L2LeptonType, dataset, option = None, multi
         total_weight, 
         sample_dict, 
         make_plots=True,
-        multiprocess=True,
+        multiprocess=False,
         useNeuralNetwork=True,
         dataframe=dataframe,
         server=hostname,
